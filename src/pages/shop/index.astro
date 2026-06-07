@@ -1,0 +1,33 @@
+---
+import ArchiveRow from "@components/ArchiveRow.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { products } from "@data/products";
+---
+
+<BaseLayout title="Shop" description="Perspex909 artifact shop.">
+  <section class="page-head">
+    <div class="page-head__grid">
+      <div>
+        <p class="hero__kicker">03 / Direct Order</p>
+        <h1 class="page-title">Shop</h1>
+      </div>
+      <p class="page-deck">
+        One limited apparel object for now. No checkout layer, no cart flow, just direct WhatsApp ordering.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="archive-list">
+      {products.map((product, index) => (
+        <ArchiveRow
+          number={String(index + 1).padStart(2, "0")}
+          type={product.artifactType}
+          title={product.title}
+          meta={product.priceLabel}
+          href={`/shop/${product.slug}/`}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

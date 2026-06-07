@@ -1,0 +1,33 @@
+---
+import ArchiveRow from "@components/ArchiveRow.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { releases } from "@data/releases";
+---
+
+<BaseLayout title="Releases" description="Perspex909 release archive.">
+  <section class="page-head">
+    <div class="page-head__grid">
+      <div>
+        <p class="hero__kicker">02 / Release Archive</p>
+        <h1 class="page-title">Releases</h1>
+      </div>
+      <p class="page-deck">
+        Catalog codes, artwork, notes, tracklists, credits, and official listening routes. Release pages behave like archive sheets.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="archive-list">
+      {releases.map((release, index) => (
+        <ArchiveRow
+          number={String(index + 1).padStart(2, "0")}
+          type={release.catalogCode}
+          title={release.title}
+          meta={`${release.trackCount} tracks / ${release.releaseDate}`}
+          href={`/releases/${release.slug}/`}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

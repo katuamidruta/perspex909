@@ -1,0 +1,20 @@
+---
+import type { Track } from "@data/releases";
+
+type Props = {
+  tracks: Track[];
+};
+
+const { tracks } = Astro.props;
+---
+
+<div class="tracklist" aria-label="Tracklist">
+  {tracks.map((track) => (
+    <div class="tracklist__row">
+      <span class="tracklist__number">{String(track.number).padStart(2, "0")}</span>
+      <span class="tracklist__artist">{track.artist}</span>
+      <span class="tracklist__title">{track.title}</span>
+      <span class="tracklist__duration">{track.duration ?? "--:--"}</span>
+    </div>
+  ))}
+</div>

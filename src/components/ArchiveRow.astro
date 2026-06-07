@@ -1,0 +1,18 @@
+---
+type Props = {
+  number: string;
+  type: string;
+  title: string;
+  meta: string;
+  href: string;
+};
+
+const { number, type, title, meta, href } = Astro.props;
+---
+
+<a class="archive-row" href={href}>
+  <span class="archive-row__number">{number}</span>
+  <span class="archive-row__type">{type}</span>
+  <span class="archive-row__title">{title}</span>
+  <span class="archive-row__meta">{meta}</span>
+</a>

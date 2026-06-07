@@ -1,0 +1,96 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ProductGallery from "@components/ProductGallery.astro";
+import MetaTable from "@components/MetaTable.astro";
+import { events, type ArchiveEntry } from "@data/events";
+
+export function getStaticPaths() {
+  return events.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props as { entry: ArchiveEntry };
+---
+
+<BaseLayout title={entry.title} description={entry.summary}>
+  <section class="page-head">
+    <div class="page-head__grid" data-reveal>
+      <div data-drift="-0.012">
+        <p class="hero__kicker">{entry.date} / {entry.location}</p>
+        <h1 class="page-title">{entry.title}</h1>
+      </div>
+      <div class="flyer-frame" data-parallax="0.02">
+        {entry.flyerImage.src ? (
+          <img src={entry.flyerImage.src} alt={entry.flyerImage.alt} />
+        ) : (
+          <div class="media-placeholder" role="img" aria-label={entry.flyerImage.alt}>
+            <span>{entry.flyerImage.label}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--archive-detail">
+    <div class="split" data-reveal>
+      <div class="copy-block">
+        <p class="meta-label">Archive Note</p>
+        <h2>{entry.summary}</h2>
+        {entry.description.map((paragraph) => <p>{paragraph}</p>)}
+        {entry.links.length > 0 && (
+          <div class="cta-row">
+            {entry.links.map((link) => (
+              <a class="cta" href={link.href}>{link.label}</a>
+            ))}
+          </div>
+        )}
+      </div>
+      <MetaTable
+        items={[
+          { label: "Date", value: entry.date },
+          { label: "Location", value: entry.location },
+          { label: "Tags", value: entry.tags.join(" / ") }
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="section-header" data-reveal>
+      <div>
+        <p class="section-kicker">Credits / Lineup</p>
+        <h2 class="section-title">People In The Room</h2>
+      </div>
+      <p class="section-summary">
+        Structured so event collaborators, performers, visual teams, and future credits remain readable as archive metadata.
+      </p>
+    </div>
+    <div class="archive-sections" data-reveal>
+      {entry.sections.map((section) => (
+        <section class="archive-section">
+          <h3>{section.title}</h3>
+          <ul>
+            {section.items.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header" data-reveal>
+      <div>
+        <p class="section-kicker">Flyer / Gallery Slots</p>
+        <h2 class="section-title">Drop Scans Here</h2>
+      </div>
+      <p class="section-summary">
+        Future flyer scans and event photography can be added directly to the archive data without changing this layout.
+      </p>
+    </div>
+    <div data-reveal>
+      <ProductGallery images={[entry.flyerImage, ...entry.galleryImages]} />
+    </div>
+  </section>
+</BaseLayout>

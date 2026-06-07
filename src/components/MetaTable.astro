@@ -1,0 +1,21 @@
+---
+type Item = {
+  label: string;
+  value: string;
+};
+
+type Props = {
+  items: Item[];
+};
+
+const { items } = Astro.props;
+---
+
+<dl class="meta-table">
+  {items.map((item) => (
+    <div>
+      <dt>{item.label}</dt>
+      <dd>{item.value}</dd>
+    </div>
+  ))}
+</dl>

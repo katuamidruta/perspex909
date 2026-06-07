@@ -1,0 +1,87 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import MetaTable from "@components/MetaTable.astro";
+import TracklistTable from "@components/TracklistTable.astro";
+import { releases, type Release } from "@data/releases";
+
+export function getStaticPaths() {
+  return releases.map((release) => ({
+    params: { slug: release.slug },
+    props: { release }
+  }));
+}
+
+const { release } = Astro.props as { release: Release };
+---
+
+<BaseLayout title={release.title} description={release.summary}>
+  <section class="page-head">
+    <div class="page-head__grid">
+      <div>
+        <p class="hero__kicker">{release.catalogCode} / {release.format}</p>
+        <h1 class="page-title">{release.title}</h1>
+      </div>
+      <div class="image-slab">
+        {release.coverImage ? (
+          <img src={release.coverImage} alt={release.coverAlt} />
+        ) : (
+          <div class="media-placeholder media-placeholder--cover" role="img" aria-label={release.coverAlt}>
+            <span>Release artwork</span>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="split">
+      <div class="copy-block">
+        <p class="meta-label">{release.artist} / {release.releaseDate}</p>
+        <h2>{release.trackCount} tracks from the outer edge of the room.</h2>
+        <p>{release.summary}</p>
+        {release.notes.map((note) => <p>{note}</p>)}
+        <div class="cta-row">
+          <a class="cta" href={release.links.bandcamp}>Bandcamp</a>
+          <a class="cta" href={release.links.preview}>SoundCloud Preview</a>
+        </div>
+      </div>
+      <MetaTable
+        items={[
+          { label: "Catalog", value: release.catalogCode },
+          { label: "Artist", value: release.artist },
+          { label: "Date", value: release.releaseDate },
+          { label: "Format", value: release.format },
+          { label: "Tracks", value: String(release.trackCount) }
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="section section--metal">
+    <div class="section-header">
+      <div>
+        <p class="section-kicker">Release Credits</p>
+        <h2 class="section-title">Production Notes</h2>
+      </div>
+      <p class="section-summary">
+        Credit lines are kept structured so future press, scans, and catalog exports can reuse the same data.
+      </p>
+    </div>
+    <div class="credit-list">
+      {release.credits.map((credit) => <p>{credit}</p>)}
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="section-header">
+      <div>
+        <p class="section-kicker">Tracklist Sheet</p>
+        <h2 class="section-title">36 Rows</h2>
+      </div>
+      <p class="section-summary">
+        Artist, title, and duration metadata follows the official VA01 listing.
+      </p>
+    </div>
+    <TracklistTable tracks={release.tracklist} />
+  </section>
+</BaseLayout>

@@ -1,0 +1,17 @@
+---
+import { navItems, site } from "@data/site";
+---
+
+<header class="site-header" aria-label="Site header">
+  <a class="site-mark" href="/" aria-label={`${site.name} home`}>
+    PRSPX909
+  </a>
+  <nav class="site-nav" aria-label="Primary navigation">
+    {navItems.map((item, index) => (
+      <a href={item.href}>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        {item.label}
+      </a>
+    ))}
+  </nav>
+</header>

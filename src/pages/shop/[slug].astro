@@ -1,0 +1,53 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import MetaTable from "@components/MetaTable.astro";
+import ProductGallery from "@components/ProductGallery.astro";
+import { products, type Product } from "@data/products";
+
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product }
+  }));
+}
+
+const { product } = Astro.props as { product: Product };
+const galleryImages = [product.heroImage, ...product.reviewPhotos, ...product.userPhotos];
+---
+
+<BaseLayout title={product.title} description={product.summary}>
+  <section class="page-head">
+    <div class="page-head__grid">
+      <div>
+        <p class="hero__kicker">{product.catalogCode} / {product.artifactType}</p>
+        <h1 class="page-title">{product.title}</h1>
+      </div>
+      <p class="page-deck">{product.summary}</p>
+    </div>
+  </section>
+
+  <section class="section section--metal">
+    <div class="split">
+      <ProductGallery images={galleryImages} />
+      <div class="copy-block">
+        <p class="meta-label">{product.availability} / {product.priceLabel}</p>
+        <h2>Order direct.</h2>
+        {product.description.map((paragraph) => <p>{paragraph}</p>)}
+        <div class="cta-row">
+          <a class="cta cta--signal" href={product.whatsappUrl}>Order via WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="split">
+      <div class="copy-block">
+        <p class="meta-label">Photo Support</p>
+        <h2>Prepared for fit photos and review evidence.</h2>
+        {product.editionNotes.map((note) => <p>{note}</p>)}
+      </div>
+      <MetaTable items={[...product.specs, ...product.credits]} />
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,34 @@
+---
+type Image = {
+  src?: string;
+  alt: string;
+  label?: string;
+  credit?: string;
+};
+
+type Props = {
+  images: Image[];
+};
+
+const { images } = Astro.props;
+---
+
+<div class="artifact-gallery">
+  {images.map((image, index) => (
+    <figure class={index === 0 ? "artifact-gallery__item is-primary" : "artifact-gallery__item"}>
+      {image.src ? (
+        <img src={image.src} alt={image.alt} loading={index === 0 ? "eager" : "lazy"} />
+      ) : (
+        <div class="media-placeholder" role="img" aria-label={image.alt}>
+          <span>{image.label ?? "Image slot"}</span>
+        </div>
+      )}
+      {(image.label || image.credit) && (
+        <figcaption>
+          {image.label}
+          {image.credit && <span>{image.credit}</span>}
+        </figcaption>
+      )}
+    </figure>
+  ))}
+</div>

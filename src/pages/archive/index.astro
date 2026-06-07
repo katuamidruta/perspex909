@@ -1,0 +1,65 @@
+---
+import ArchiveRow from "@components/ArchiveRow.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { events } from "@data/events";
+---
+
+<BaseLayout title="Archive" description="Perspex events, campouts, collaborations, flyers, and historical activity.">
+  <section class="page-head page-head--archive">
+    <div class="page-head__grid" data-reveal>
+      <div>
+        <p class="hero__kicker">01 / Events, Flyers, Field Memory</p>
+        <h1 class="page-title">Archive</h1>
+      </div>
+      <p class="page-deck">
+        Campouts, collaborations, flyer evidence, visual installations, and historical Perspex activities collected as a cultural record.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--archive-index">
+    <div class="archive-card-grid">
+      {events.map((entry) => (
+        <a class="archive-card" href={`/archive/${entry.slug}/`} data-reveal>
+          <div class="archive-card__flyer" data-parallax="0.018">
+            {entry.flyerImage.src ? (
+              <img src={entry.flyerImage.src} alt={entry.flyerImage.alt} loading="lazy" />
+            ) : (
+              <div class="media-placeholder" role="img" aria-label={entry.flyerImage.alt}>
+                <span>{entry.flyerImage.label}</span>
+              </div>
+            )}
+          </div>
+          <div class="archive-card__body">
+            <p class="meta-label">{entry.date} / {entry.location}</p>
+            <h2>{entry.title}</h2>
+            <p>{entry.summary}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="section-header" data-reveal>
+      <div>
+        <p class="section-kicker">Archive Sheet</p>
+        <h2 class="section-title">Index Rows</h2>
+      </div>
+      <p class="section-summary">
+        A compact scan of event dates, locations, and detail pages for future flyer and photo documentation.
+      </p>
+    </div>
+    <div class="archive-list" data-reveal>
+      {events.map((entry, index) => (
+        <ArchiveRow
+          number={String(index + 1).padStart(2, "0")}
+          type={entry.date}
+          title={entry.title}
+          meta={entry.location}
+          href={`/archive/${entry.slug}/`}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

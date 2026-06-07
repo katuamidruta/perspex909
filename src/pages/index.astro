@@ -1,0 +1,134 @@
+---
+import ArchiveRow from "@components/ArchiveRow.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { articles } from "@data/articles";
+import { events } from "@data/events";
+import { products } from "@data/products";
+import { releases } from "@data/releases";
+import { site } from "@data/site";
+
+const va01 = releases[0];
+const tee = products[0];
+const heroVideo =
+  "https://perspex909.com/wp-content/uploads/2024/12/WhatsApp-Video-2024-12-09-at-13.03.19.mp4";
+
+const rows = [
+  {
+    number: "01",
+    type: "Archive",
+    title: events[0].title,
+    meta: events[0].date,
+    href: `/archive/${events[0].slug}/`,
+  },
+  {
+    number: "02",
+    type: "Release",
+    title: va01.title,
+    meta: `${va01.catalogCode} / ${va01.trackCount} tracks`,
+    href: `/releases/${va01.slug}/`,
+  },
+  {
+    number: "03",
+    type: "Shop",
+    title: tee.title,
+    meta: tee.priceLabel,
+    href: `/shop/${tee.slug}/`,
+  },
+  {
+    number: "04",
+    type: articles[0].type,
+    title: articles[0].title,
+    meta: "Manifesto / Now",
+    href: articles[0].href,
+  },
+];
+---
+
+<BaseLayout title={site.displayName} description={site.description}>
+  <section class="video-hero home-chapter">
+    <video
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      src={heroVideo}
+      data-parallax="-0.035"></video>
+    <div class="video-hero__grain" aria-hidden="true"></div>
+    <div class="video-hero__copy" data-reveal>
+      <!-- <p class="hero__kicker">Indonesia / Underground Transmission</p> -->
+      <!-- <img class="video-hero__logo" src="/logo.png" alt="PERSPEX909" /> -->
+      <p class="video-hero__deck"></p>
+    </div>
+  </section>
+
+  <section class="scroll-panel scroll-panel--black home-chapter">
+    <div class="scroll-panel__number" data-drift="-0.018">01</div>
+    <div class="scroll-panel__copy" data-reveal>
+      <p class="section-kicker">Index Rhythm</p>
+      <h2>perspex909.</h2>
+      <p>
+        Perspex stands as a monolith of creativity, pushing boundaries and
+        embracing new forms of collaboration across music, art, and design.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--paper section--torn home-chapter">
+    <div class="section-header" data-reveal>
+      <div>
+        <p class="section-kicker">Primary Pillar</p>
+        <h2 class="section-title">Archive First</h2>
+      </div>
+      <p class="section-summary">
+        Events, flyers, locations, collaborators, stage notes, and future photo
+        drops form the spine of the site.
+      </p>
+    </div>
+    <div class="archive-list archive-list--slow" data-reveal>
+      {
+        events.map((event, index) => (
+          <ArchiveRow
+            number={String(index + 1).padStart(2, "0")}
+            type={event.date}
+            title={event.title}
+            meta={event.location}
+            href={`/archive/${event.slug}/`}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="scroll-panel scroll-panel--metal home-chapter">
+    <div class="scroll-panel__number" data-drift="0.02">02</div>
+    <div class="scroll-panel__copy" data-reveal>
+      <p class="section-kicker">Release Document</p>
+      <h2>VA01 stays in the archive bloodstream.</h2>
+      <p>
+        Thirty-six tracks are indexed as a cultural document, with official
+        listening paths and full metadata treated like a sleeve sheet.
+      </p>
+      <div class="cta-row">
+        <a class="cta" href={`/releases/${va01.slug}/`}>Open VA01</a>
+        <a class="cta" href={va01.links.preview}>SoundCloud Preview</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--index-grid home-chapter">
+    <div class="section-header" data-reveal>
+      <div>
+        <p class="section-kicker">Current Index</p>
+        <h2 class="section-title">Entry Points</h2>
+      </div>
+      <p class="section-summary">
+        A compact route through the world: event evidence, release archive, one
+        apparel object, and the founding statement.
+      </p>
+    </div>
+    <div class="archive-list archive-list--slow" data-reveal>
+      {rows.map((row) => <ArchiveRow {...row} />)}
+    </div>
+  </section>
+</BaseLayout>
