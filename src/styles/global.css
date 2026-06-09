@@ -885,6 +885,20 @@ body.is-loaded .site-loader {
   text-transform: uppercase;
 }
 
+.soundcloud-embed {
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.soundcloud-embed iframe {
+  display: block;
+}
+
+.soundcloud-footer {
+  padding: 14px;
+  border-top: 1px solid var(--line);
+}
+
 .credit-list {
   columns: 2 280px;
   column-gap: 28px;

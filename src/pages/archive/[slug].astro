@@ -12,6 +12,7 @@ export function getStaticPaths() {
 }
 
 const { entry } = Astro.props as { entry: ArchiveEntry };
+const realGalleryImages = entry.galleryImages.filter((img) => img.src);
 ---
 
 <BaseLayout title={entry.title} description={entry.summary}>
@@ -42,7 +43,7 @@ const { entry } = Astro.props as { entry: ArchiveEntry };
         {entry.links.length > 0 && (
           <div class="cta-row">
             {entry.links.map((link) => (
-              <a class="cta" href={link.href}>{link.label}</a>
+              <a class="cta" href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
             ))}
           </div>
         )}
@@ -79,18 +80,50 @@ const { entry } = Astro.props as { entry: ArchiveEntry };
     </div>
   </section>
 
-  <section class="section">
-    <div class="section-header" data-reveal>
-      <div>
-        <p class="section-kicker">Flyer / Gallery Slots</p>
-        <h2 class="section-title">Drop Scans Here</h2>
+  {entry.soundcloudUrl && (
+    <section class="section section--metal">
+      <div class="section-header" data-reveal>
+        <div>
+          <p class="section-kicker">Transmission / Recording</p>
+          <h2 class="section-title">Listen</h2>
+        </div>
+        <p class="section-summary">
+          Set recordings archived from the event. Full playlist on SoundCloud.
+        </p>
       </div>
-      <p class="section-summary">
-        Future flyer scans and event photography can be added directly to the archive data without changing this layout.
-      </p>
-    </div>
-    <div data-reveal>
-      <ProductGallery images={[entry.flyerImage, ...entry.galleryImages]} />
-    </div>
-  </section>
+      <div class="soundcloud-embed" data-reveal>
+        <iframe
+          width="100%"
+          height="450"
+          scrolling="no"
+          frameborder="no"
+          allow="autoplay"
+          src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(entry.soundcloudUrl)}&color=%23e73737&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true`}
+          title={`${entry.title} — SoundCloud Playlist`}
+        ></iframe>
+        <div class="soundcloud-footer">
+          <a href={entry.soundcloudUrl} target="_blank" rel="noopener noreferrer" class="cta">
+            Open Full Playlist on SoundCloud
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {realGalleryImages.length > 0 && (
+    <section class="section">
+      <div class="section-header" data-reveal>
+        <div>
+          <p class="section-kicker">Gallery</p>
+          <h2 class="section-title">Event Archive</h2>
+        </div>
+        <p class="section-summary">
+          Photography and visual documentation from the event.
+        </p>
+      </div>
+      <div data-reveal>
+        <ProductGallery images={realGalleryImages} />
+      </div>
+    </section>
+  )}
 </BaseLayout>

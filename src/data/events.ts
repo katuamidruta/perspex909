@@ -28,6 +28,7 @@ export type ArchiveEntry = {
   sections: ArchiveSection[];
   links: ArchiveLink[];
   tags: string[];
+  soundcloudUrl?: string;
 };
 
 const gallerySlots = (title: string): ArchiveImage[] =>
@@ -47,10 +48,11 @@ export const events: ArchiveEntry[] = [
     summary: "Three days and two nights of sound without limits.",
     description: ["Join us for 3 days & 2 nights of sound without limits."],
     flyerImage: {
-      alt: "Placeholder flyer scan for Nightspacer x Perspex",
-      label: "Flyer scan"
+      src: "/archive/nightspacer-x-perspex.png",
+      alt: "Nightspacer x Perspex — event flyer, Ciherang August 2025",
+      label: "Event Flyer"
     },
-    galleryImages: gallerySlots("Nightspacer x Perspex"),
+    galleryImages: [],
     sections: [
       { title: "Lighting & Multimedia", items: ["Convert"] },
       { title: "Live Visual Installation", items: ["Glasoon"] },
@@ -59,12 +61,8 @@ export const events: ArchiveEntry[] = [
         items: ["Black O Society", "Convert", "Obscura Signal", "Para Studio", "Ruang Bavr"]
       }
     ],
-    links: [
-      {
-        label: "SoundCloud Preview",
-        href: "https://soundcloud.com/prspx-909/sets/nightspacer-x-perspex-ciherang"
-      }
-    ],
+    links: [],
+    soundcloudUrl: "https://soundcloud.com/prspx-909/sets/nightspacer-x-perspex-ciherang",
     tags: ["campout", "collaboration", "sound", "visual installation"]
   },
   {
