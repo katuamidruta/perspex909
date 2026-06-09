@@ -1,0 +1,34 @@
+---
+type Props = {
+  src: string;
+  label: string;
+  poster?: string;
+  index: number;
+};
+
+const { src, label, poster, index } = Astro.props;
+const shortLabel = label.replace(/^(Reel\s\d+|Portal Reel\s\d+)\s?—?\s?/i, "").trim() || label;
+---
+
+<div class="reel-item" data-reel>
+  <video
+    src={src}
+    poster={poster}
+    playsinline
+    preload="none"
+    aria-label={label}
+  ></video>
+  <div class="reel-overlay" aria-hidden="true">
+    {poster && <img src={poster} alt="" class="reel-overlay__thumb" />}
+    <div class="reel-overlay__scrim"></div>
+    <button class="reel-play" type="button" aria-label={`Play ${label}`}>
+      <svg width="22" height="24" viewBox="0 0 22 24" fill="none" aria-hidden="true">
+        <path d="M2 2L20 12L2 22V2Z" fill="currentColor"/>
+      </svg>
+    </button>
+    <p class="reel-label">
+      <span class="reel-label__index">{String(index + 1).padStart(2, "0")}</span>
+      {shortLabel}
+    </p>
+  </div>
+</div>

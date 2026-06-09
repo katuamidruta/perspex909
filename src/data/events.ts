@@ -80,17 +80,11 @@ export const events: ArchiveEntry[] = [
     summary: "The ritual returns to the forest, from sunset to sunrise.",
     description: ["The ritual returns to the forest.", "From sunset to sunrise."],
     flyerImage: {
-      src: "/archive/campout2-1.jpg",
+      src: "/archive/campout2-2.jpg",
       alt: "Campout Vol. II — event documentation, Tibuan Waterfall Campground, November 2025",
-      label: "Event Photo 01"
+      label: "Event Photo"
     },
-    galleryImages: [
-      {
-        src: "/archive/campout2-2.jpg",
-        alt: "Campout Vol. II — event documentation 02",
-        label: "Event Photo 02"
-      }
-    ],
+    galleryImages: [],
     sections: [
       {
         title: "Featuring",

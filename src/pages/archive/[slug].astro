@@ -2,6 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ProductGallery from "@components/ProductGallery.astro";
 import MetaTable from "@components/MetaTable.astro";
+import ReelPlayer from "@components/ReelPlayer.astro";
 import { events, type ArchiveEntry } from "@data/events";
 
 export function getStaticPaths() {
@@ -138,17 +139,8 @@ const realGalleryImages = entry.galleryImages.filter((img) => img.src);
         </p>
       </div>
       <div class="reels-grid" data-reveal>
-        {entry.videos.map((video) => (
-          <div class="reel-item">
-            <video
-              src={video.src}
-              poster={video.poster}
-              playsinline
-              controls
-              preload="none"
-              aria-label={video.label}
-            ></video>
-          </div>
+        {entry.videos.map((video, i) => (
+          <ReelPlayer src={video.src} label={video.label} poster={video.poster} index={i} />
         ))}
       </div>
     </section>

@@ -37,11 +37,17 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 18px 18px,
     radial-gradient(circle at 82% 4%, rgba(73, 52, 95, 0.34), transparent 32rem),
     var(--color-night);
   color: var(--color-white);
+}
+
+main {
+  flex: 1;
 }
 
 body::before {
@@ -250,6 +256,8 @@ body.is-loaded .site-loader {
   margin-top: 72px;
   border-top: 1px solid var(--line);
   border-bottom: 0;
+  background: var(--color-white);
+  color: var(--color-ink);
 }
 
 .site-footer p {
@@ -921,11 +929,13 @@ body.is-loaded .site-loader {
 }
 
 .reel-item {
+  position: relative;
   flex: 0 0 260px;
   aspect-ratio: 9 / 16;
   background: #0d0d0d;
   border: 1px solid var(--line);
   overflow: hidden;
+  cursor: pointer;
 }
 
 .reel-item video {
@@ -935,6 +945,88 @@ body.is-loaded .site-loader {
   object-fit: cover;
 }
 
+.reel-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.25s ease;
+}
+
+.reel-item.is-playing .reel-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.reel-overlay__thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.reel-overlay__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.18) 50%, rgba(0,0,0,0.32) 100%);
+}
+
+.reel-play {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--color-white);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-white);
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+  padding: 0;
+}
+
+.reel-play:hover {
+  background: var(--color-signal);
+  border-color: var(--color-signal);
+  transform: scale(1.08);
+}
+
+.reel-play svg {
+  margin-left: 3px;
+}
+
+.reel-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 10px 12px;
+  font-family: var(--font-display);
+  font-size: var(--text-meta);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--color-white) 72%, transparent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reel-label__index {
+  color: var(--color-signal);
+  font-size: 10px;
+}
+
 /* Footer logo */
 .footer-logo-link {
   display: flex;
@@ -942,9 +1034,8 @@ body.is-loaded .site-loader {
 }
 
 .footer-logo {
-  height: 36px;
+  height: 52px;
   width: auto;
-  opacity: 0.9;
 }
 
 /* About page logo */
