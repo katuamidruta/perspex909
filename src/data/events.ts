@@ -9,6 +9,12 @@ export type ArchiveImage = {
   label: string;
 };
 
+export type ArchiveVideo = {
+  src: string;
+  label: string;
+  poster?: string;
+};
+
 export type ArchiveSection = {
   title: string;
   items: string[];
@@ -25,17 +31,12 @@ export type ArchiveEntry = {
   description: string[];
   flyerImage: ArchiveImage;
   galleryImages: ArchiveImage[];
+  videos?: ArchiveVideo[];
   sections: ArchiveSection[];
   links: ArchiveLink[];
   tags: string[];
   soundcloudUrl?: string;
 };
-
-const gallerySlots = (title: string): ArchiveImage[] =>
-  Array.from({ length: 6 }, (_, index) => ({
-    alt: `Placeholder gallery slot ${index + 1} for ${title}`,
-    label: `Gallery ${String(index + 1).padStart(2, "0")}`
-  }));
 
 export const events: ArchiveEntry[] = [
   {
@@ -49,10 +50,14 @@ export const events: ArchiveEntry[] = [
     description: ["Join us for 3 days & 2 nights of sound without limits."],
     flyerImage: {
       src: "/archive/nightspacer-x-perspex.png",
-      alt: "Nightspacer x Perspex — event flyer, Ciherang August 2025",
+      alt: "Nightspacer x Perspex — event flyer, Ciherang, August 2025",
       label: "Event Flyer"
     },
     galleryImages: [],
+    videos: [
+      { src: "/archive/CIHERANG-AUG-1.mp4", label: "Reel 01 — Ciherang August 2025" },
+      { src: "/archive/CIHERANG-AUG-2.mp4", label: "Reel 02 — Ciherang August 2025" }
+    ],
     sections: [
       { title: "Lighting & Multimedia", items: ["Convert"] },
       { title: "Live Visual Installation", items: ["Glasoon"] },
@@ -75,10 +80,17 @@ export const events: ArchiveEntry[] = [
     summary: "The ritual returns to the forest, from sunset to sunrise.",
     description: ["The ritual returns to the forest.", "From sunset to sunrise."],
     flyerImage: {
-      alt: "Placeholder flyer scan for Campout Vol. II",
-      label: "Flyer scan"
+      src: "/archive/campout2-1.jpg",
+      alt: "Campout Vol. II — event documentation, Tibuan Waterfall Campground, November 2025",
+      label: "Event Photo 01"
     },
-    galleryImages: gallerySlots("Campout Vol. II"),
+    galleryImages: [
+      {
+        src: "/archive/campout2-2.jpg",
+        alt: "Campout Vol. II — event documentation 02",
+        label: "Event Photo 02"
+      }
+    ],
     sections: [
       {
         title: "Featuring",
@@ -118,10 +130,18 @@ export const events: ArchiveEntry[] = [
       "This New Year's Eve collaboration brought Perspex sound into a larger festival environment while maintaining experimental roots, underground culture and emotional intensity."
     ],
     flyerImage: {
-      alt: "Placeholder flyer scan for Entering 2026 Portal",
-      label: "Flyer scan"
+      src: "/archive/PortalNYE-1.png",
+      alt: "Entering 2026 Portal — New Year's Eve event flyer, December 2025",
+      label: "Event Flyer"
     },
-    galleryImages: gallerySlots("Entering 2026 Portal"),
+    galleryImages: [],
+    videos: [
+      { src: "/archive/PortalNYE-1.mp4", label: "Portal Reel 01" },
+      { src: "/archive/PortalNYE-2.mp4", label: "Portal Reel 02" },
+      { src: "/archive/PortalNYE-3.mp4", label: "Portal Reel 03" },
+      { src: "/archive/PortalNYE-4.mp4", label: "Portal Reel 04" },
+      { src: "/archive/PortalNYE-5.mp4", label: "Portal Reel 05" }
+    ],
     sections: [
       {
         title: "Sumbu Stage",

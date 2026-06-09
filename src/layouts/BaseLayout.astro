@@ -39,7 +39,9 @@ const pageTitle = title === site.displayName ? title : `${title} / ${site.displa
       <slot />
     </main>
     <footer class="site-footer">
-      <p>PERSPEX909</p>
+      <a href="/" class="footer-logo-link" aria-label="PERSPEX909 home">
+        <img src="/logo.png" alt="PERSPEX909" class="footer-logo" />
+      </a>
       <div>
         <a href={site.bandcampUrl}>Bandcamp</a>
         <a href={site.instagramUrl}>Instagram</a>

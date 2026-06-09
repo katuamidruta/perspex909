@@ -4,21 +4,25 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 
 <BaseLayout title="Manifesto" description="Perspex909 manifesto and platform direction." theme="paper">
   <section class="page-head">
-    <div class="page-head__grid">
+    <div class="page-head__grid" data-reveal>
       <div>
         <p class="hero__kicker">00 / Manifesto</p>
         <h1 class="page-title">Transmission Desk</h1>
       </div>
-      <p class="page-deck">
-        Perspex909 is an independent electronic music platform from Indonesia: part magazine, part label archive, part release portal, part artifact shop, part event and flyer index.
-      </p>
+      <div class="about-logo-frame">
+        <img src="/logo.png" alt="PERSPEX909" class="about-logo" />
+      </div>
     </div>
   </section>
 
   <section class="section">
-    <div class="split">
+    <div class="split" data-reveal>
       <div class="copy-block">
+        <p class="meta-label">Platform</p>
         <h2>Sound, vision, and expression without boundaries.</h2>
+        <p>
+          Perspex909 is an independent electronic music platform from Indonesia: part magazine, part label archive, part release portal, part artifact shop, part event and flyer index.
+        </p>
         <p>
           Perspex909 documents underground sound, physical releases, visual culture, and the fragments that usually disappear into feeds.
         </p>
@@ -47,6 +51,38 @@ import BaseLayout from "@layouts/BaseLayout.astro";
           <dd>Bandcamp</dd>
         </div>
       </dl>
+    </div>
+  </section>
+
+  <section class="section section--metal">
+    <div class="section-header" data-reveal>
+      <div>
+        <p class="section-kicker">Visual Culture</p>
+        <h2 class="section-title">Archive Fragments</h2>
+      </div>
+      <p class="section-summary">
+        A selection of images from the Perspex field archive. Shot documentation, event residue, and atmospheric evidence.
+      </p>
+    </div>
+    <div class="visual-archive" data-reveal>
+      <div class="visual-archive__item">
+        <img src="/archive/random1-6.jpg" alt="Perspex — archive documentation" loading="lazy" />
+      </div>
+      <div class="visual-archive__item">
+        <img src="/archive/random1-1.jpg" alt="Perspex — archive documentation" loading="lazy" />
+      </div>
+      <div class="visual-archive__item">
+        <img src="/archive/random1-2.jpg" alt="Perspex — archive documentation" loading="lazy" />
+      </div>
+      <div class="visual-archive__item">
+        <img src="/archive/random1-3.jpg" alt="Perspex — archive documentation" loading="lazy" />
+      </div>
+      <div class="visual-archive__item">
+        <img src="/archive/random1-4.jpg" alt="Perspex — archive documentation" loading="lazy" />
+      </div>
+      <div class="visual-archive__item">
+        <img src="/archive/random1-5.jpg" alt="Perspex — archive documentation" loading="lazy" />
+      </div>
     </div>
   </section>
 </BaseLayout>

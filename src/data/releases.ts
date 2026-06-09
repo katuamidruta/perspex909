@@ -23,6 +23,7 @@ export type Release = {
     bandcamp: string;
     preview: string;
   };
+  galleryImages?: Array<{ src: string; alt: string }>;
   relatedProducts: string[];
   tracklist: Track[];
 };
@@ -37,7 +38,15 @@ export const releases: Release[] = [
     releaseDate: "2024-12-09",
     format: "Digital compilation",
     trackCount: 36,
-    coverAlt: "Placeholder slot for Various Artists Vol. 01 release artwork",
+    coverImage: "/archive/prod1-1.jpg",
+    coverAlt: "Various Artists Vol. 01 — release artwork",
+    galleryImages: [
+      { src: "/archive/prod1-2.jpg", alt: "VA01 — release documentation" },
+      { src: "/archive/prod1-3.jpg", alt: "VA01 — release documentation" },
+      { src: "/archive/prod1-4.jpg", alt: "VA01 — release documentation" },
+      { src: "/archive/prod1-6.jpg", alt: "VA01 — release documentation" },
+      { src: "/archive/prod1-7.jpg", alt: "VA01 — release documentation" }
+    ],
     summary:
       "Thirty-six tracks from Perspex orbit: club pressure, rupture, rebuild, and post-floor transmissions documented as VA01.",
     notes: [

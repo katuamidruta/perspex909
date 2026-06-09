@@ -46,39 +46,37 @@ export const products: Product[] = [
       "No checkout is implemented here. Orders move directly through WhatsApp so sizing, stock, and delivery can be handled person to person."
     ],
     heroImage: {
-      alt: "Placeholder slot for the Limited Unisex PRSPX Tee hero product photo",
-      label: "Product hero image"
+      src: "/archive/shirt1-1.jpg",
+      alt: "Limited Unisex PRSPX Tee — product photo",
+      label: "Product photo"
     },
     reviewPhotos: [
       {
-        alt: "Placeholder slot for PRSPX tee review photo 1",
-        label: "Review photo 01"
+        src: "/archive/shirt1-2.jpg",
+        alt: "PRSPX Tee — review photo 01",
+        label: "Review 01"
       },
       {
-        alt: "Placeholder slot for PRSPX tee review photo 2",
-        label: "Review photo 02"
+        src: "/archive/shirt1-3.jpg",
+        alt: "PRSPX Tee — review photo 02",
+        label: "Review 02"
       }
     ],
     userPhotos: [
       {
-        alt: "Placeholder slot for user-submitted PRSPX tee photo 1",
-        label: "User photo 01"
+        src: "/archive/shirt1-4.jpg",
+        alt: "PRSPX Tee — fit photo 01",
+        label: "Fit 01"
       },
       {
-        alt: "Placeholder slot for user-submitted PRSPX tee photo 2",
-        label: "User photo 02"
+        src: "/archive/shirt1-5.jpg",
+        alt: "PRSPX Tee — fit photo 02",
+        label: "Fit 02"
       },
       {
-        alt: "Placeholder slot for user-submitted PRSPX tee photo 3",
-        label: "User photo 03"
-      },
-      {
-        alt: "Placeholder slot for user-submitted PRSPX tee photo 4",
-        label: "User photo 04"
-      },
-      {
-        alt: "Placeholder slot for user-submitted PRSPX tee photo 5",
-        label: "User photo 05"
+        src: "/archive/shirt1-6.jpg",
+        alt: "PRSPX Tee — fit photo 03",
+        label: "Fit 03"
       }
     ],
     specs: [
@@ -88,12 +86,12 @@ export const products: Product[] = [
       { label: "Checkout", value: "Direct WhatsApp order" }
     ],
     credits: [
-      { label: "Photo", value: "Photo by @guampardd" },
-      { label: "Model", value: "Model @6rutal6rat" }
+      { label: "Photo", value: "@guampardd" },
+      { label: "Model", value: "@6rutal6rat" }
     ],
     editionNotes: [
-      "Gallery support is prepared for one hero image, review photographs, and up to five user-submitted photos.",
-      "Drop final product and fit photos into the existing image fields without changing the page layout."
+      "Six field photographs by @guampardd featuring @6rutal6rat.",
+      "Orders are handled person to person via WhatsApp — sizing, stock, and delivery details confirmed before shipping."
     ],
     whatsappUrl:
       "https://wa.me/000000000000?text=Hi%20Perspex%2C%20I%20want%20to%20order%20the%20Limited%20Unisex%20PRSPX%20Tee."

@@ -72,6 +72,27 @@ const { release } = Astro.props as { release: Release };
     </div>
   </section>
 
+  {release.galleryImages && release.galleryImages.length > 0 && (
+    <section class="section">
+      <div class="section-header" data-reveal>
+        <div>
+          <p class="section-kicker">Visual Document</p>
+          <h2 class="section-title">Release Archive</h2>
+        </div>
+        <p class="section-summary">
+          Photography and print documentation from the release.
+        </p>
+      </div>
+      <div class="artifact-gallery" data-reveal>
+        {release.galleryImages.map((img, i) => (
+          <figure class={i === 0 ? "artifact-gallery__item is-primary" : "artifact-gallery__item"}>
+            <img src={img.src} alt={img.alt} loading="lazy" />
+          </figure>
+        ))}
+      </div>
+    </section>
+  )}
+
   <section class="section section--paper">
     <div class="section-header">
       <div>
