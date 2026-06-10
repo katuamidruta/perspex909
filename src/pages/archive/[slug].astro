@@ -140,7 +140,7 @@ const realGalleryImages = entry.galleryImages.filter((img) => img.src);
       </div>
       <div class="reels-grid" data-reveal>
         {entry.videos.map((video, i) => (
-          <ReelPlayer src={video.src} label={video.label} poster={video.poster} index={i} />
+          <ReelPlayer youtubeId={video.youtubeId} label={video.label} index={i} />
         ))}
       </div>
     </section>

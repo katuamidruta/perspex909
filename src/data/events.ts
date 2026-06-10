@@ -10,9 +10,8 @@ export type ArchiveImage = {
 };
 
 export type ArchiveVideo = {
-  src: string;
+  youtubeId: string;
   label: string;
-  poster?: string;
 };
 
 export type ArchiveSection = {
@@ -49,14 +48,14 @@ export const events: ArchiveEntry[] = [
     summary: "Three days and two nights of sound without limits.",
     description: ["Join us for 3 days & 2 nights of sound without limits."],
     flyerImage: {
-      src: "/archive/nightspacer-x-perspex.png",
+      src: "/archive/nightspacer-x-perspex.webp",
       alt: "Nightspacer x Perspex — event flyer, Ciherang, August 2025",
       label: "Event Flyer"
     },
     galleryImages: [],
     videos: [
-      { src: "/archive/CIHERANG-AUG-1.mp4", label: "Reel 01 — Ciherang August 2025" },
-      { src: "/archive/CIHERANG-AUG-2.mp4", label: "Reel 02 — Ciherang August 2025" }
+      { youtubeId: "dWe98fos33A", label: "Reel 01 — Ciherang August 2025" },
+      { youtubeId: "fs6pc7NOq8o", label: "Reel 02 — Ciherang August 2025" }
     ],
     sections: [
       { title: "Lighting & Multimedia", items: ["Convert"] },
@@ -80,7 +79,7 @@ export const events: ArchiveEntry[] = [
     summary: "The ritual returns to the forest, from sunset to sunrise.",
     description: ["The ritual returns to the forest.", "From sunset to sunrise."],
     flyerImage: {
-      src: "/archive/campout2-2.jpg",
+      src: "/archive/campout2-2.webp",
       alt: "Campout Vol. II — event documentation, Tibuan Waterfall Campground, November 2025",
       label: "Event Photo"
     },
@@ -124,17 +123,17 @@ export const events: ArchiveEntry[] = [
       "This New Year's Eve collaboration brought Perspex sound into a larger festival environment while maintaining experimental roots, underground culture and emotional intensity."
     ],
     flyerImage: {
-      src: "/archive/PortalNYE-1.png",
+      src: "/archive/PortalNYE-1.webp",
       alt: "Entering 2026 Portal — New Year's Eve event flyer, December 2025",
       label: "Event Flyer"
     },
     galleryImages: [],
     videos: [
-      { src: "/archive/PortalNYE-1.mp4", label: "Portal Reel 01" },
-      { src: "/archive/PortalNYE-2.mp4", label: "Portal Reel 02" },
-      { src: "/archive/PortalNYE-3.mp4", label: "Portal Reel 03" },
-      { src: "/archive/PortalNYE-4.mp4", label: "Portal Reel 04" },
-      { src: "/archive/PortalNYE-5.mp4", label: "Portal Reel 05" }
+      { youtubeId: "SHYedt95ZnU", label: "Portal Reel 01" },
+      { youtubeId: "E5gSY3IxGwQ", label: "Portal Reel 02" },
+      { youtubeId: "EtSjMNwOeTY", label: "Portal Reel 03" },
+      { youtubeId: "Kr8HWULuBz4", label: "Portal Reel 04" },
+      { youtubeId: "4lk_baLjrtw", label: "Portal Reel 05" }
     ],
     sections: [
       {

@@ -46,35 +46,35 @@ export const products: Product[] = [
       "No checkout is implemented here. Orders move directly through WhatsApp so sizing, stock, and delivery can be handled person to person."
     ],
     heroImage: {
-      src: "/archive/shirt1-1.jpg",
+      src: "/archive/shirt1-1.webp",
       alt: "Limited Unisex PRSPX Tee — product photo",
       label: "Product photo"
     },
     reviewPhotos: [
       {
-        src: "/archive/shirt1-2.jpg",
+        src: "/archive/shirt1-2.webp",
         alt: "PRSPX Tee — review photo 01",
         label: "Review 01"
       },
       {
-        src: "/archive/shirt1-3.jpg",
+        src: "/archive/shirt1-3.webp",
         alt: "PRSPX Tee — review photo 02",
         label: "Review 02"
       }
     ],
     userPhotos: [
       {
-        src: "/archive/shirt1-4.jpg",
+        src: "/archive/shirt1-4.webp",
         alt: "PRSPX Tee — fit photo 01",
         label: "Fit 01"
       },
       {
-        src: "/archive/shirt1-5.jpg",
+        src: "/archive/shirt1-5.webp",
         alt: "PRSPX Tee — fit photo 02",
         label: "Fit 02"
       },
       {
-        src: "/archive/shirt1-6.jpg",
+        src: "/archive/shirt1-6.webp",
         alt: "PRSPX Tee — fit photo 03",
         label: "Fit 03"
       }

@@ -1,25 +1,18 @@
 ---
 type Props = {
-  src: string;
+  youtubeId: string;
   label: string;
-  poster?: string;
   index: number;
 };
 
-const { src, label, poster, index } = Astro.props;
-const shortLabel = label.replace(/^(Reel\s\d+|Portal Reel\s\d+)\s?—?\s?/i, "").trim() || label;
+const { youtubeId, label, index } = Astro.props;
+const thumbUrl = `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`;
+const shortLabel = label.replace(/^(Portal\s)?Reel\s\d+\s?—?\s?/i, "").trim() || label;
 ---
 
-<div class="reel-item" data-reel>
-  <video
-    src={src}
-    poster={poster}
-    playsinline
-    preload="none"
-    aria-label={label}
-  ></video>
+<div class="reel-item" data-reel data-yt={youtubeId}>
   <div class="reel-overlay" aria-hidden="true">
-    {poster && <img src={poster} alt="" class="reel-overlay__thumb" />}
+    <img src={thumbUrl} alt="" class="reel-overlay__thumb" fetchpriority={index < 2 ? "high" : "auto"} />
     <div class="reel-overlay__scrim"></div>
     <button class="reel-play" type="button" aria-label={`Play ${label}`}>
       <svg width="22" height="24" viewBox="0 0 22 24" fill="none" aria-hidden="true">

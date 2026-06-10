@@ -679,6 +679,12 @@ body.is-loaded .site-loader {
   min-height: 240px;
   object-fit: cover;
   filter: grayscale(0.35) contrast(1.15);
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+
+.artifact-gallery__item:hover img {
+  filter: grayscale(0) contrast(1.05);
+  transform: scale(1.04);
 }
 
 .artifact-gallery figcaption {
@@ -792,6 +798,12 @@ body.is-loaded .site-loader {
   min-height: 360px;
   object-fit: cover;
   filter: grayscale(0.3) contrast(1.18);
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+
+.image-slab:hover img {
+  filter: grayscale(0) contrast(1.05);
+  transform: scale(1.04);
 }
 
 .flyer-frame {
@@ -806,6 +818,16 @@ body.is-loaded .site-loader {
   width: 100%;
   height: 100%;
   min-height: 460px;
+}
+
+.flyer-frame img {
+  transition: filter 0.5s ease, transform 0.5s ease;
+  filter: grayscale(0.15) contrast(1.1);
+}
+
+.flyer-frame:hover img {
+  filter: grayscale(0) contrast(1.02);
+  transform: scale(1.03);
 }
 
 .archive-card-grid {
@@ -1071,6 +1093,12 @@ body.is-loaded .site-loader {
   min-height: 240px;
   object-fit: cover;
   filter: grayscale(0.3) contrast(1.15);
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+
+.visual-archive__item:hover img {
+  filter: grayscale(0) contrast(1.05);
+  transform: scale(1.04);
 }
 
 .visual-archive__item:first-child {
