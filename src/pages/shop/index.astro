@@ -2,6 +2,9 @@
 import ArchiveRow from "@components/ArchiveRow.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import { products } from "@data/products";
+
+const featured = products[0];
+const rest = products.slice(1);
 ---
 
 <BaseLayout title="Shop" description="Perspex909 artifact shop.">
@@ -18,16 +21,42 @@ import { products } from "@data/products";
   </section>
 
   <section class="section">
-    <div class="archive-list">
-      {products.map((product, index) => (
-        <ArchiveRow
-          number={String(index + 1).padStart(2, "0")}
-          type={product.artifactType}
-          title={product.title}
-          meta={product.priceLabel}
-          href={`/shop/${product.slug}/`}
-        />
-      ))}
+    <div class="split" data-reveal>
+      <div class="copy-block">
+        <p class="meta-label">{featured.artifactType} / {featured.priceLabel} / {featured.availability}</p>
+        <h2>{featured.title}</h2>
+        <p>{featured.summary}</p>
+        <div class="cta-row">
+          <a class="cta" href={`/shop/${featured.slug}/`}>Open Artifact</a>
+        </div>
+      </div>
+      {featured.heroImage.src && (
+        <div class="image-slab">
+          <img src={featured.heroImage.src} alt={featured.heroImage.alt} loading="lazy" />
+        </div>
+      )}
     </div>
   </section>
+
+  {rest.length > 0 && (
+    <section class="section section--paper">
+      <div class="section-header" data-reveal>
+        <div>
+          <p class="section-kicker">Catalog</p>
+          <h2 class="section-title">Index Rows</h2>
+        </div>
+      </div>
+      <div class="archive-list" data-reveal>
+        {rest.map((product, index) => (
+          <ArchiveRow
+            number={String(index + 2).padStart(2, "0")}
+            type={product.artifactType}
+            title={product.title}
+            meta={product.priceLabel}
+            href={`/shop/${product.slug}/`}
+          />
+        ))}
+      </div>
+    </section>
+  )}
 </BaseLayout>

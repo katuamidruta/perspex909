@@ -24,6 +24,7 @@ const pageTitle = title === site.displayName ? title : `${title} / ${site.displa
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/png" href="/logo-loading.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
   </head>
@@ -54,6 +55,41 @@ const pageTitle = title === site.displayName ? title : `${title} / ${site.displa
       window.addEventListener("load", () => {
         document.body.classList.add("is-loaded");
       });
+
+      // Background/hero videos: attach the source lazily as each enters the
+      // viewport, so heavy below-fold clips never download until they're near.
+      // Poster stands in for save-data and reduced-motion users.
+      const conn = navigator.connection || {};
+      const saveData = conn.saveData === true;
+      const bgVideos = document.querySelectorAll("[data-bg-video]");
+
+      if (bgVideos.length && !reduceMotion && !saveData) {
+        const attachVideo = (video) => {
+          const src = video.getAttribute("data-src");
+          if (!src || video.src) return;
+          video.src = src;
+          video.load();
+          const attempt = video.play();
+          if (attempt && attempt.catch) attempt.catch(() => {});
+        };
+
+        if ("IntersectionObserver" in window) {
+          const videoObserver = new IntersectionObserver(
+            (entries, obs) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  attachVideo(entry.target);
+                  obs.unobserve(entry.target);
+                }
+              });
+            },
+            { rootMargin: "300px 0px" }
+          );
+          bgVideos.forEach((video) => videoObserver.observe(video));
+        } else {
+          bgVideos.forEach(attachVideo);
+        }
+      }
 
       const revealTargets = document.querySelectorAll("[data-reveal]");
 

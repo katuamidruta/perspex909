@@ -2,6 +2,9 @@
 import ArchiveRow from "@components/ArchiveRow.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import { releases } from "@data/releases";
+
+const featured = releases[0];
+const rest = releases.slice(1);
 ---
 
 <BaseLayout title="Releases" description="Perspex909 release archive.">
@@ -17,17 +20,47 @@ import { releases } from "@data/releases";
     </div>
   </section>
 
-  <section class="section">
-    <div class="archive-list">
-      {releases.map((release, index) => (
-        <ArchiveRow
-          number={String(index + 1).padStart(2, "0")}
-          type={release.catalogCode}
-          title={release.title}
-          meta={`${release.trackCount} tracks / ${release.releaseDate}`}
-          href={`/releases/${release.slug}/`}
-        />
-      ))}
+  <section class="section section--video release-feature">
+    <video
+      class="panel-video"
+      muted
+      loop
+      playsinline
+      preload="none"
+      poster={featured.coverImage}
+      data-src="/archive/compilation.mp4"
+      data-bg-video></video>
+    <div class="panel-video__scrim" aria-hidden="true"></div>
+    <div class="release-feature__copy" data-reveal>
+      <p class="section-kicker">{featured.catalogCode} / {featured.trackCount} tracks / {featured.releaseDate}</p>
+      <h2 class="section-title">{featured.title}</h2>
+      <p>{featured.summary}</p>
+      <div class="cta-row">
+        <a class="cta" href={`/releases/${featured.slug}/`}>Open {featured.catalogCode}</a>
+        <a class="cta" href={featured.links.preview}>SoundCloud Preview</a>
+      </div>
     </div>
   </section>
+
+  {rest.length > 0 && (
+    <section class="section section--paper">
+      <div class="section-header" data-reveal>
+        <div>
+          <p class="section-kicker">Catalog</p>
+          <h2 class="section-title">Index Rows</h2>
+        </div>
+      </div>
+      <div class="archive-list" data-reveal>
+        {rest.map((release, index) => (
+          <ArchiveRow
+            number={String(index + 2).padStart(2, "0")}
+            type={release.catalogCode}
+            title={release.title}
+            meta={`${release.trackCount} tracks / ${release.releaseDate}`}
+            href={`/releases/${release.slug}/`}
+          />
+        ))}
+      </div>
+    </section>
+  )}
 </BaseLayout>

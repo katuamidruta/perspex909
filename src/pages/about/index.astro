@@ -1,17 +1,27 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
+import GalleryMarquee from "@components/GalleryMarquee.astro";
+
+const fragments = [
+  { src: "/archive/random1-6.webp", size: "tall" },
+  { src: "/archive/random1-7.webp", size: "wide" },
+  { src: "/archive/random1-1.webp", size: "short" },
+  { src: "/archive/random1-8.webp", size: "base" },
+  { src: "/archive/random1-2.webp", size: "tall" },
+  { src: "/archive/random1-9.webp", size: "wide" },
+  { src: "/archive/random1-3.webp", size: "short" },
+  { src: "/archive/random1-10.webp", size: "base" },
+  { src: "/archive/random1-4.webp", size: "tall" },
+  { src: "/archive/random1-11.webp", size: "wide" },
+  { src: "/archive/random1-5.webp", size: "short" }
+];
 ---
 
 <BaseLayout title="Manifesto" description="Perspex909 manifesto and platform direction." theme="paper">
   <section class="page-head">
-    <div class="page-head__grid" data-reveal>
-      <div>
-        <p class="hero__kicker">00 / Manifesto</p>
-        <h1 class="page-title">Transmission Desk</h1>
-      </div>
-      <div class="about-logo-frame">
-        <img src="/logo.png" alt="PERSPEX909" class="about-logo" />
-      </div>
+    <div class="page-head__center" data-reveal>
+      <p class="hero__kicker">00 / Manifesto</p>
+      <h1 class="about-logo-head"><img src="/logo.png" alt="PERSPEX909" class="about-logo" /></h1>
     </div>
   </section>
 
@@ -54,7 +64,7 @@ import BaseLayout from "@layouts/BaseLayout.astro";
     </div>
   </section>
 
-  <section class="section section--metal">
+  <section class="section section--paper">
     <div class="section-header" data-reveal>
       <div>
         <p class="section-kicker">Visual Culture</p>
@@ -64,25 +74,6 @@ import BaseLayout from "@layouts/BaseLayout.astro";
         A selection of images from the Perspex field archive. Shot documentation, event residue, and atmospheric evidence.
       </p>
     </div>
-    <div class="visual-archive" data-reveal>
-      <div class="visual-archive__item">
-        <img src="/archive/random1-6.webp" alt="Perspex — archive documentation" loading="lazy" />
-      </div>
-      <div class="visual-archive__item">
-        <img src="/archive/random1-1.webp" alt="Perspex — archive documentation" loading="lazy" />
-      </div>
-      <div class="visual-archive__item">
-        <img src="/archive/random1-2.webp" alt="Perspex — archive documentation" loading="lazy" />
-      </div>
-      <div class="visual-archive__item">
-        <img src="/archive/random1-3.webp" alt="Perspex — archive documentation" loading="lazy" />
-      </div>
-      <div class="visual-archive__item">
-        <img src="/archive/random1-4.webp" alt="Perspex — archive documentation" loading="lazy" />
-      </div>
-      <div class="visual-archive__item">
-        <img src="/archive/random1-5.webp" alt="Perspex — archive documentation" loading="lazy" />
-      </div>
-    </div>
+    <GalleryMarquee images={fragments} alt="Perspex — archive documentation" />
   </section>
 </BaseLayout>

@@ -1,5 +1,6 @@
 ---
 import ArchiveRow from "@components/ArchiveRow.astro";
+import GalleryMarquee from "@components/GalleryMarquee.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import { articles } from "@data/articles";
 import { events } from "@data/events";
@@ -9,8 +10,28 @@ import { site } from "@data/site";
 
 const va01 = releases[0];
 const tee = products[0];
-const heroVideo =
-  "https://perspex909.com/wp-content/uploads/2024/12/WhatsApp-Video-2024-12-09-at-13.03.19.mp4";
+const heroVideo = "/hero.mp4";
+
+// Mixed field + release fragments. `size` drives the staggered "messy" marquee.
+// Size is assigned per item (not via nth-child) so the duplicated loop stays seamless.
+const galleryImages = [
+  { src: "/archive/random1-1.webp", size: "tall" },
+  { src: "/archive/prod1-1.webp", size: "wide" },
+  { src: "/archive/random1-2.webp", size: "short" },
+  { src: "/archive/random1-3.webp", size: "base" },
+  { src: "/archive/random1-4.webp", size: "tall" },
+  { src: "/archive/prod1-2.webp", size: "wide" },
+  { src: "/archive/random1-5.webp", size: "short" },
+  { src: "/archive/random1-6.webp", size: "base" },
+  { src: "/archive/random1-7.webp", size: "tall" },
+  { src: "/archive/prod1-3.webp", size: "wide" },
+  { src: "/archive/random1-8.webp", size: "short" },
+  { src: "/archive/random1-9.webp", size: "base" },
+  { src: "/archive/random1-10.webp", size: "tall" },
+  { src: "/archive/prod1-4.webp", size: "wide" },
+  { src: "/archive/random1-11.webp", size: "short" },
+  { src: "/archive/shirt1-1.webp", size: "base" },
+];
 
 const rows = [
   {
@@ -47,19 +68,15 @@ const rows = [
 <BaseLayout title={site.displayName} description={site.description}>
   <section class="video-hero home-chapter">
     <video
-      autoplay
       muted
       loop
       playsinline
-      preload="metadata"
-      src={heroVideo}
+      preload="none"
+      poster="/archive/random1-1.webp"
+      data-src={heroVideo}
+      data-bg-video
       data-parallax="-0.035"></video>
     <div class="video-hero__grain" aria-hidden="true"></div>
-    <div class="video-hero__copy" data-reveal>
-      <!-- <p class="hero__kicker">Indonesia / Underground Transmission</p> -->
-      <!-- <img class="video-hero__logo" src="/logo.png" alt="PERSPEX909" /> -->
-      <p class="video-hero__deck"></p>
-    </div>
   </section>
 
   <section class="scroll-panel scroll-panel--black home-chapter">
@@ -100,7 +117,34 @@ const rows = [
     </div>
   </section>
 
+  <section class="section section--metal home-chapter">
+    <div class="section-header" data-reveal>
+      <div>
+        <p class="section-kicker">Visual Evidence</p>
+        <h2 class="section-title">Field Archive</h2>
+      </div>
+      <p class="section-summary">
+        Documentation from campouts, club rooms, and collaborations — the
+        residue that usually disappears into feeds.
+      </p>
+    </div>
+    <GalleryMarquee images={galleryImages} />
+    <div class="cta-row" data-reveal>
+      <a class="cta" href="/archive/">Open Full Archive</a>
+    </div>
+  </section>
+
   <section class="scroll-panel scroll-panel--metal home-chapter">
+    <video
+      class="panel-video"
+      muted
+      loop
+      playsinline
+      preload="none"
+      poster="/archive/prod1-1.webp"
+      data-src="/archive/compilation.mp4"
+      data-bg-video></video>
+    <div class="panel-video__scrim" aria-hidden="true"></div>
     <div class="scroll-panel__number" data-drift="0.02">02</div>
     <div class="scroll-panel__copy" data-reveal>
       <p class="section-kicker">Release Document</p>

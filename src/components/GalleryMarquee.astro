@@ -1,0 +1,19 @@
+---
+type Item = { src: string; size?: string };
+type Props = { images: Item[]; alt?: string };
+
+const { images, alt = "Perspex — archive fragment" } = Astro.props;
+---
+
+<div class="gallery-marquee" data-reveal>
+  <div class="gallery-marquee__track">
+    {[...images, ...images].map((img, i) => (
+      <div
+        class={`gallery-marquee__item gm--${img.size ?? "base"}`}
+        aria-hidden={i >= images.length ? "true" : undefined}
+      >
+        <img src={img.src} alt={i < images.length ? alt : ""} loading="lazy" />
+      </div>
+    ))}
+  </div>
+</div>

@@ -83,7 +83,12 @@ export const events: ArchiveEntry[] = [
       alt: "Campout Vol. II — event documentation, Tibuan Waterfall Campground, November 2025",
       label: "Event Photo"
     },
-    galleryImages: [],
+    galleryImages: [
+      { src: "/archive/campout1-3.webp", alt: "Campout Vol. II — event documentation", label: "Campout Vol. II" },
+      { src: "/archive/campout1-1.webp", alt: "Campout Vol. II — event documentation", label: "Campout Vol. II" },
+      { src: "/archive/campout1-2.webp", alt: "Campout Vol. II — event documentation", label: "Campout Vol. II" },
+      { src: "/archive/campout1-4.webp", alt: "Campout Vol. II — event documentation", label: "Campout Vol. II" }
+    ],
     sections: [
       {
         title: "Featuring",

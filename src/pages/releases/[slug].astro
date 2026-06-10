@@ -15,6 +15,18 @@ const { release } = Astro.props as { release: Release };
 ---
 
 <BaseLayout title={release.title} description={release.summary}>
+  <section class="release-reel">
+    <video
+      class="release-reel__video"
+      muted
+      loop
+      playsinline
+      preload="none"
+      poster={release.coverImage}
+      data-src="/archive/compilation.mp4"
+      data-bg-video></video>
+  </section>
+
   <section class="page-head">
     <div class="page-head__grid">
       <div>
