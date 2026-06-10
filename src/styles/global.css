@@ -1356,6 +1356,20 @@ body.is-loaded .site-loader {
     padding-bottom: 56px;
   }
 
+  /* Keep section 2 tall on mobile so the frosted sticky-reveal over the pinned
+     hero stays visible, and lighten the blur for smoother scroll. */
+  .scroll-panel--black {
+    min-height: 84svh;
+    -webkit-backdrop-filter: blur(16px) saturate(1.05);
+    backdrop-filter: blur(16px) saturate(1.05);
+  }
+
+  /* Drop the fixed blend-mode grain on mobile — a full-screen overlay with
+     mix-blend-mode forces a recomposite on every scroll frame. */
+  body::before {
+    display: none;
+  }
+
   /* Flatten the marquee stagger on mobile so it doesn't sprawl vertically. */
   .gm--wide {
     margin-top: 18px;
