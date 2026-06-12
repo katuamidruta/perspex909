@@ -125,7 +125,7 @@ export const events: ArchiveEntry[] = [
     summary: "Two stages, different tempos, and Perspex sound inside a larger festival environment.",
     description: [
       "Two stages. Different tempos.",
-      "This New Year's Eve collaboration brought Perspex sound into a larger festival environment while maintaining experimental roots, underground culture and emotional intensity."
+      "This New Year's Eve collaboration brought Perspex sound into a larger festival environment while maintaining experimental roots, club culture and emotional intensity."
     ],
     flyerImage: {
       src: "/archive/PortalNYE-1.webp",

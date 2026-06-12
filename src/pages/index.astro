@@ -74,7 +74,16 @@ const rows = [
       preload="none"
       poster="/archive/random1-1.webp"
       data-src={heroVideo}
-      data-bg-video></video>
+      data-bg-video
+      data-no-mobile></video>
+    <picture class="video-hero__gif" aria-hidden="true">
+      <source srcset="/hero.gif" media="(max-width: 800px)" />
+      <img
+        src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+        alt=""
+        decoding="async"
+      />
+    </picture>
     <div class="video-hero__grain" aria-hidden="true"></div>
   </section>
 

@@ -86,6 +86,7 @@ const ogImageURL = new URL(image, Astro.site);
 
       if (bgVideos.length && !reduceMotion && !saveData) {
         const attachVideo = (video) => {
+          if (compactViewport && video.hasAttribute("data-no-mobile")) return;
           const src = video.getAttribute("data-src");
           if (!src || video.src) return;
           video.src = src;
