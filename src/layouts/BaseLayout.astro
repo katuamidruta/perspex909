@@ -65,17 +65,15 @@ const ogImageURL = new URL(image, Astro.site);
         <img src="/logo.png" alt="PERSPEX909" class="footer-logo" />
       </a>
       <span class="footer-copy">2026 &copy; PRSPX. All Rights Reserved.</span>
-      <div class="footer-right">
-        <div>
-          <a href={site.bandcampUrl}>Bandcamp</a>
-          <a href={site.instagramUrl}>Instagram</a>
-        </div>
-        <div class="site-credit">
-          <img src="/kucingdigital.png" alt="kucingdigital" class="site-credit__logo" />
-          <span>built by kucingdigital</span>
-        </div>
+      <div>
+        <a href={site.bandcampUrl}>Bandcamp</a>
+        <a href={site.instagramUrl}>Instagram</a>
       </div>
     </footer>
+    <div class="site-credit">
+      <img src="/kucingdigital.png" alt="kucingdigital" class="site-credit__logo" />
+      <span>built by kucingdigital</span>
+    </div>
     <script is:inline>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const compactViewport = window.matchMedia("(max-width: 800px)").matches;
