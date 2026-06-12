@@ -90,11 +90,11 @@ const rows = [
   <section class="scroll-panel scroll-panel--black home-chapter">
     <div class="scroll-panel__number" data-drift="-0.018">01</div>
     <div class="scroll-panel__copy" data-reveal>
-      <p class="section-kicker">Index Rhythm</p>
+      <p class="section-kicker">Transmission Log</p>
       <h2>perspex909.</h2>
       <p>
-        Perspex stands as a monolith of creativity, pushing boundaries and
-        embracing new forms of collaboration across music, art, and design.
+        Raw sound, physical records, and visual culture from Indonesia — built
+        as an archive first so nothing disappears into a feed.
       </p>
     </div>
   </section>
@@ -102,7 +102,7 @@ const rows = [
   <section class="section section--paper section--torn home-chapter">
     <div class="section-header" data-reveal>
       <div>
-        <p class="section-kicker">Primary Pillar</p>
+        <p class="section-kicker">Event Index</p>
         <h2 class="section-title">Archive First</h2>
       </div>
     </div>
@@ -127,10 +127,6 @@ const rows = [
         <p class="section-kicker">Visual Evidence</p>
         <h2 class="section-title">Field Archive</h2>
       </div>
-      <p class="section-summary">
-        Documentation from campouts, club rooms, and collaborations — the
-        residue that usually disappears into feeds.
-      </p>
     </div>
     <GalleryMarquee images={galleryImages} />
     <div class="cta-row" data-reveal>
@@ -170,10 +166,6 @@ const rows = [
         <p class="section-kicker">Where To</p>
         <h2 class="section-title">Entry Points</h2>
       </div>
-      <p class="section-summary">
-        A compact route through the world: event evidence, release archive, one
-        apparel object, and the founding statement.
-      </p>
     </div>
     <div class="archive-list archive-list--slow" data-reveal>
       {rows.map((row) => <ArchiveRow {...row} />)}
