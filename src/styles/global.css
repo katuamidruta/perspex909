@@ -271,12 +271,18 @@ body.is-loaded .site-loader {
   opacity: 0.55;
 }
 
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
 .site-credit {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 6px;
-  padding: 8px var(--margin);
 }
 
 .site-credit__logo {
