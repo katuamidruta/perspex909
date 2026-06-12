@@ -258,7 +258,6 @@ body.is-loaded .site-loader {
   border-bottom: 0;
   background: var(--color-paper);
   color: var(--color-ink);
-  flex-wrap: wrap;
 }
 
 .footer-copy {
@@ -270,14 +269,10 @@ body.is-loaded .site-loader {
 }
 
 .site-credit {
-  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 7px;
-  padding-top: 14px;
-  margin-top: 6px;
-  border-top: 1px solid var(--line);
+  margin-top: 40px;
   opacity: 0.35;
 }
 
