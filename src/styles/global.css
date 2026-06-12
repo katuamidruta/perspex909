@@ -275,6 +275,11 @@ body.is-loaded .site-loader {
   opacity: 0.5;
 }
 
+.footer-copy__dev {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 .footer-copy__devlogo {
   height: 16px;
   width: auto;
