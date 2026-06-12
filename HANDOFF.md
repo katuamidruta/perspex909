@@ -6,28 +6,22 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). Sing
 
 ## Status
 
-- **Last pushed commit:** `e9c9ce2` — "Index + archive cleanup: section-summary removal, mobile 100svh sections, footer gap fix"
+- **Last pushed commit:** `432cb5d` — "Releases, shop, about + index cleanup: section-summary removal, copy/kicker fixes"
 - **All changes committed and pushed. Working tree is clean.**
 
 ## What this session did (most recent first)
 
-1. **Archive cleanup** — Removed all `section-summary` elements from `archive/[slug].astro` (People In The Room, Listen, Event Archive, Field Footage) and from `archive/index.astro` (Index Rows). Matches pattern established on index page.
-2. **`section--archive-detail` whitespace fix** — Split CSS rule: `section--archive-index` keeps `min-height: 88svh`, `section--archive-detail` now `min-height: auto`. Eliminates the large black gap in sparse events (nightspacer only has 1 short paragraph).
-3. **Index page improvements:**
-   - ARCHIVE FIRST: removed `section-summary` (redundant with event list)
-   - FIELD ARCHIVE CTA: `cta` → `cta cta--signal` (red filled, more prominent)
-   - Entry Points kicker: "Current Index" → "Where To"
-4. **Footer gap** — `.site-footer` `margin-top: 72px` → `0` (sections already have `padding-bottom: clamp(110px,18vh,220px)`)
-5. **Mobile section height** — `.home-chapter` mobile override changed from `min-height: auto` → `min-height: 100svh` (one section = one screen). `.scroll-panel--black` mobile `84svh` → `100svh`. Archive index/detail intentionally kept `auto` on mobile (document pages, variable content).
-6. **Mobile hero square** — `.video-hero` on mobile: `min-height: 100vw; height: 100vw` so the 1:1 hero.gif shows as a square (no crop).
-7. **Committed hero.gif + "underground" removal** from previous session (`a9867f1`).
+1. **Index remaining section-summary** — Removed `section-summary` from "Field Archive" and "Entry Points" that were missed last session.
+2. **Index copy + kickers** — Replaced "monolith of creativity, pushing boundaries..." (generic) with "Raw sound, physical records, and visual culture from Indonesia — built as an archive first so nothing disappears into a feed." Kicker "Index Rhythm" → "Transmission Log", "Primary Pillar" → "Event Index".
+3. **Releases `[slug].astro`** — Removed 3x `section-summary`, dropped redundant "Release Credits" kicker, renamed "Visual Document" → "Field Prints", Bandcamp CTA → `cta--signal`.
+4. **Shop `[slug].astro`** — Kicker "Photo Support" → "Field Document", h2 "Prepared for fit photos and review evidence." → "Shot on location. No studio."
+5. **About `index.astro`** — Removed `section-summary` from Archive Fragments, meta table "Checkout: Bandcamp" → "Bandcamp / WhatsApp".
 
 ## Open / next
 
-- **Shop, Releases, About pages** — User wants to review + improve these pages next. Same approach as index + archive: remove section-summary where redundant, improve kickers, check footer gap, surface design suggestions.
-- User said they want to **upload new files** for shop, release, and about — wait for those assets before making content changes.
 - **Verify mobile layout** in real device after `min-height: 100svh` changes — sections should feel one-per-screen.
 - Optional: nightspacer description + summary are almost identical in `events.ts`. When user has editorial content, update description to be retrospective/historical rather than an invitation.
+- Optional: `products.ts` editionNotes[1] repeats what description[1] says (both mention WhatsApp) — consolidate when ready.
 
 ## Content constraint
 
