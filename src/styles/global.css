@@ -271,17 +271,25 @@ body.is-loaded .site-loader {
   opacity: 0.55;
 }
 
-.footer-copy__sep {
-  opacity: 0.5;
+.site-credit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px var(--margin);
+  opacity: 0.25;
 }
 
-.footer-copy__dev {
-  text-transform: none;
-}
-
-.footer-copy__devlogo {
-  height: 16px;
+.site-credit__logo {
+  height: 12px;
   width: auto;
+}
+
+.site-credit span {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: none;
 }
 
 .site-footer p {

@@ -64,17 +64,16 @@ const ogImageURL = new URL(image, Astro.site);
       <a href="/" class="footer-logo-link" aria-label="PERSPEX909 home">
         <img src="/logo.png" alt="PERSPEX909" class="footer-logo" />
       </a>
-      <span class="footer-copy">
-        2026 &copy; PRSPX. All Rights Reserved.
-        <span class="footer-copy__sep">&times;</span>
-        <img src="/kucingdigital.png" alt="kucingdigital" class="footer-copy__devlogo" />
-        <span class="footer-copy__dev">built by kucingdigital</span>
-      </span>
+      <span class="footer-copy">2026 &copy; PRSPX. All Rights Reserved.</span>
       <div>
         <a href={site.bandcampUrl}>Bandcamp</a>
         <a href={site.instagramUrl}>Instagram</a>
       </div>
     </footer>
+    <div class="site-credit">
+      <img src="/kucingdigital.png" alt="kucingdigital" class="site-credit__logo" />
+      <span>built by kucingdigital</span>
+    </div>
     <script is:inline>
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const compactViewport = window.matchMedia("(max-width: 800px)").matches;
