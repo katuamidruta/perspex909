@@ -261,31 +261,23 @@ body.is-loaded .site-loader {
 }
 
 .footer-copy {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.45;
+  opacity: 0.55;
 }
 
-.site-credit {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 40px;
-  opacity: 0.35;
+.footer-copy__sep {
+  opacity: 0.5;
 }
 
-.site-credit__logo {
-  height: 14px;
+.footer-copy__devlogo {
+  height: 16px;
   width: auto;
-}
-
-.site-credit span {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
 }
 
 .site-footer p {
