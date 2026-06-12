@@ -253,7 +253,7 @@ body.is-loaded .site-loader {
 }
 
 .site-footer {
-  margin-top: 72px;
+  margin-top: 0;
   border-top: 1px solid var(--line);
   border-bottom: 0;
   background: var(--color-paper);
@@ -857,9 +857,12 @@ body.is-loaded .site-loader {
     #050505;
 }
 
-.section--archive-index,
-.section--archive-detail {
+.section--archive-index {
   min-height: 88svh;
+}
+
+.section--archive-detail {
+  min-height: auto;
 }
 
 .page-head__grid {
@@ -1354,12 +1357,23 @@ body.is-loaded .site-loader {
     grid-template-columns: 1fr;
   }
 
-  .home-chapter,
+  .home-chapter {
+    min-height: 100svh;
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
   .section--archive-index,
   .section--archive-detail {
     min-height: auto;
     padding-top: 56px;
     padding-bottom: 56px;
+  }
+
+  /* Mobile hero: square 1:1 container so the gif shows at its native ratio. */
+  .video-hero {
+    min-height: 100vw;
+    height: 100vw;
   }
 
   /* Mobile hero mirrors desktop: keep the sticky reveal + dark overlay/grain,
@@ -1385,7 +1399,7 @@ body.is-loaded .site-loader {
   /* Keep section 2 tall on mobile so the frosted sticky-reveal over the pinned
      hero stays visible, and lighten the blur for smoother scroll. */
   .scroll-panel--black {
-    min-height: 84svh;
+    min-height: 100svh;
     -webkit-backdrop-filter: blur(16px) saturate(1.05);
     backdrop-filter: blur(16px) saturate(1.05);
   }

@@ -65,9 +65,6 @@ const realGalleryImages = entry.galleryImages.filter((img) => img.src);
         <p class="section-kicker">Credits / Lineup</p>
         <h2 class="section-title">People In The Room</h2>
       </div>
-      <p class="section-summary">
-        Structured so event collaborators, performers, visual teams, and future credits remain readable as archive metadata.
-      </p>
     </div>
     <div class="archive-sections" data-reveal>
       {entry.sections.map((section) => (
@@ -88,9 +85,6 @@ const realGalleryImages = entry.galleryImages.filter((img) => img.src);
           <p class="section-kicker">Transmission / Recording</p>
           <h2 class="section-title">Listen</h2>
         </div>
-        <p class="section-summary">
-          Set recordings archived from the event. Full playlist on SoundCloud.
-        </p>
       </div>
       <div class="soundcloud-embed" data-reveal>
         <iframe
@@ -117,9 +111,6 @@ const realGalleryImages = entry.galleryImages.filter((img) => img.src);
           <p class="section-kicker">Gallery</p>
           <h2 class="section-title">Event Archive</h2>
         </div>
-        <p class="section-summary">
-          Photography and visual documentation from the event.
-        </p>
       </div>
       <div data-reveal>
         <ProductGallery images={realGalleryImages} />
@@ -134,9 +125,6 @@ const realGalleryImages = entry.galleryImages.filter((img) => img.src);
           <p class="section-kicker">Visual Record</p>
           <h2 class="section-title">Field Footage</h2>
         </div>
-        <p class="section-summary">
-          Short-form documentation captured on the ground.
-        </p>
       </div>
       <div class="reels-grid" data-reveal>
         {entry.videos.map((video, i) => (
