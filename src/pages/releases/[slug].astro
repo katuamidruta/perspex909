@@ -91,7 +91,7 @@ const { release } = Astro.props as { release: Release };
       <div class="artifact-gallery" data-reveal>
         {release.galleryImages.map((img, i) => (
           <figure class={i === 0 ? "artifact-gallery__item is-primary" : "artifact-gallery__item"}>
-            <img src={img.src} alt={img.alt} loading="lazy" />
+            <img src={img.src} alt={img.alt} />
           </figure>
         ))}
       </div>
