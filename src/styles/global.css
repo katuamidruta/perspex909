@@ -72,6 +72,10 @@
      metal has a hard horizon, dark ground below and bright sky above. A
      smooth ramp between them reads as plastic. Hue sits near 210 deg — a
      neutral grey reads as concrete, warm reads as cheap gold. */
+  /* Two different metals, not one.
+
+     FLAT MIRROR: a hard horizon at 50%. Polished sheet reflecting an
+     environment — bright sky above the break, dark ground below. */
   --chrome: linear-gradient(
     180deg,
     #8f979e 0%,
@@ -80,6 +84,31 @@
     #5b636b 50.1%,
     #8d959d 66%,
     #cdd4da 100%
+  );
+
+     /* SCULPTURAL: bright at BOTH edges, dark through the middle. Reads as
+        an extruded letterform whose top and bottom bevels catch light — a
+        solid object rather than a mirror. Smooth on purpose: a curved
+        surface falls off gradually, only a flat one breaks hard. */
+  --chrome-sculpt: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #d8dbde 20%,
+    #757a81 48%,
+    #a8a9ad 62%,
+    #f0f2f5 85%,
+    #ffffff 100%
+  );
+
+  /* BEZEL: lit from the top-left, shadowed at 70%, catching again at the
+     far corner — what a metal rim does around a physical print. */
+  --chrome-bezel: linear-gradient(
+    145deg,
+    #d8dbde 0%,
+    #757a81 30%,
+    #a8a9ad 50%,
+    #3a3a48 70%,
+    #c0c4cc 100%
   );
 }
 

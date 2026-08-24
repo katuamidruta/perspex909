@@ -115,7 +115,9 @@
    ========================================================================= */
 
 .deck {
-  background: var(--color-night);
+  /* Not pure #000: a drop-shadow cast onto absolute black is invisible, and
+     sculptural chrome needs a ground to sit on. This is still read as black. */
+  background: #08080a;
 }
 
 .deck .stage {
@@ -170,19 +172,19 @@
   display: inline-block;
   margin-right: 0.24em;
   opacity: var(--v);
-  filter: blur(calc((1 - var(--v)) * 34px));
+  filter: blur(calc((1 - var(--v)) * 34px))
+          drop-shadow(0 2px 5px rgba(0, 0, 0, 0.75));
   transform: translate3d(0, calc((1 - var(--v)) * 26px), 0);
   will-change: opacity, filter, transform;
 
-  /* Chrome, clipped to the glyphs. The gradient is 240% of the line box, so
-     driving background-position from --local sweeps the horizon down through
-     the letters exactly while this statement holds the stage. A static
-     gradient is a picture of metal; a moving one reads as metal. */
-  background-image: var(--chrome);
-  /* 180%, not more: a taller gradient pushes the horizon out of frame at the
-     ends of the sweep, leaving the words flatly bright then flatly dark. At
-     180% the break stays inside the glyphs the whole way through. */
-  background-size: 100% 180%;
+  /* Sculptural chrome, clipped to the glyphs: bright at both edges, dark
+     through the middle, so each letter reads as a solid extruded object
+     rather than a mirror. The drop-shadow is what lifts it off the ground.
+
+     The sweep is deliberately narrow (130%, not 180%): a sculpted form does
+     not slide past itself, the LIGHT moves across a form that stays put. */
+  background-image: var(--chrome-sculpt);
+  background-size: 100% 130%;
   background-position: 0 calc(var(--local) * 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -282,6 +284,11 @@
   --sp: clamp(0, calc(var(--p) * var(--n) - var(--i)), 1);
   position: absolute;
   inset: 0;
+  /* A 3px rim of bezel gradient showing past the image: the frame trick is
+     just padding plus a gradient background. Makes each flyer read as a
+     physical print rather than a picture on a screen. */
+  padding: 3px;
+  background: var(--chrome-bezel);
   z-index: var(--i);
   opacity: var(--sp);
   transform:
