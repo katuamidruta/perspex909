@@ -1,12 +1,6 @@
-export type ArchiveLink = {
-  label: string;
-  href: string;
-};
-
 export type ArchiveImage = {
-  src?: string;
+  src: string;
   alt: string;
-  label: string;
 };
 
 export type ArchiveVideo = {
@@ -29,10 +23,8 @@ export type ArchiveEntry = {
   summary: string;
   description: string[];
   flyerImage: ArchiveImage;
-  galleryImages: ArchiveImage[];
   videos?: ArchiveVideo[];
   sections: ArchiveSection[];
-  links: ArchiveLink[];
   tags: string[];
   soundcloudUrl?: string;
 };
@@ -50,9 +42,7 @@ export const events: ArchiveEntry[] = [
     flyerImage: {
       src: "/archive/nightspacer-x-perspex.webp",
       alt: "Nightspacer x Perspex — event flyer, Ciherang, August 2025",
-      label: "Event Flyer"
     },
-    galleryImages: [],
     videos: [
       { youtubeId: "dWe98fos33A", label: "Reel 01 — Ciherang August 2025" },
       { youtubeId: "fs6pc7NOq8o", label: "Reel 02 — Ciherang August 2025" }
@@ -65,7 +55,6 @@ export const events: ArchiveEntry[] = [
         items: ["Black O Society", "Convert", "Obscura Signal", "Para Studio", "Ruang Bavr"]
       }
     ],
-    links: [],
     soundcloudUrl: "https://soundcloud.com/prspx-909/sets/nightspacer-x-perspex-ciherang",
     tags: ["campout", "collaboration", "sound", "visual installation"]
   },
@@ -81,14 +70,7 @@ export const events: ArchiveEntry[] = [
     flyerImage: {
       src: "/archive/campout2-2.webp",
       alt: "Campout Vol. II — event documentation, Tibuan Waterfall Campground, November 2025",
-      label: "Event Photo"
     },
-    galleryImages: [
-      { src: "/archive/campout1-3.webp", alt: "Campout Vol. II — event documentation", label: "Campout Vol. II" },
-      { src: "/archive/campout1-1.webp", alt: "Campout Vol. II — event documentation", label: "Campout Vol. II" },
-      { src: "/archive/campout1-2.webp", alt: "Campout Vol. II — event documentation", label: "Campout Vol. II" },
-      { src: "/archive/campout1-4.webp", alt: "Campout Vol. II — event documentation", label: "Campout Vol. II" }
-    ],
     sections: [
       {
         title: "Featuring",
@@ -112,7 +94,6 @@ export const events: ArchiveEntry[] = [
         items: ["Nightspacer Bali", "Pure! Records", "Perspex", "Obscura Signal"]
       }
     ],
-    links: [],
     tags: ["campout", "forest", "buleleng", "collaboration"]
   },
   {
@@ -130,9 +111,7 @@ export const events: ArchiveEntry[] = [
     flyerImage: {
       src: "/archive/PortalNYE-1.webp",
       alt: "Entering 2026 Portal — New Year's Eve event flyer, December 2025",
-      label: "Event Flyer"
     },
-    galleryImages: [],
     videos: [
       { youtubeId: "SHYedt95ZnU", label: "Portal Reel 01" },
       { youtubeId: "E5gSY3IxGwQ", label: "Portal Reel 02" },
@@ -150,10 +129,6 @@ export const events: ArchiveEntry[] = [
         items: ["Ambrukt (DJ Set)"]
       }
     ],
-    links: [],
     tags: ["festival", "new year", "collaboration", "live"]
   }
 ];
-
-export const getArchiveEntryBySlug = (slug: string) =>
-  events.find((entry) => entry.slug === slug);

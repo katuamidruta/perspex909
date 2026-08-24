@@ -110,6 +110,3 @@ export const releases: Release[] = [
     ]
   }
 ];
-
-export const getReleaseBySlug = (slug: string) =>
-  releases.find((release) => release.slug === slug);

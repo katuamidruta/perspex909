@@ -83,23 +83,33 @@ const ogImageURL = new URL(image, Astro.site);
         <a href={site.instagramUrl}>Instagram</a>
       </div>
     </footer>
-    <div class="site-credit" style="display:none">
-      <img
-        src="/kucingdigital.png"
-        alt="kucingdigital"
-        class="site-credit__logo"
-      />
-      <span>crafted by kucingdigital</span>
-    </div>
     <script is:inline>
       const reduceMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
-      const compactViewport = window.matchMedia("(max-width: 800px)").matches;
 
       window.addEventListener("load", () => {
         document.body.classList.add("is-loaded");
       });
+
+      // --- Header height ---------------------------------------------------
+      // Sections that pin below the header need its real height, and the
+      // header re-wraps at narrow widths. Measuring it beats guessing a
+      // breakpoint value that goes stale the moment a nav label changes.
+      const header = document.querySelector(".site-header");
+      if (header) {
+        const publishHeaderHeight = () =>
+          document.documentElement.style.setProperty(
+            "--header-h",
+            Math.round(header.getBoundingClientRect().height) + "px",
+          );
+        publishHeaderHeight();
+        if ("ResizeObserver" in window) {
+          new ResizeObserver(publishHeaderHeight).observe(header);
+        } else {
+          window.addEventListener("resize", publishHeaderHeight);
+        }
+      }
 
       // Background/hero videos: attach the source lazily as each enters the
       // viewport, so heavy below-fold clips never download until they're near.
@@ -108,9 +118,31 @@ const ogImageURL = new URL(image, Astro.site);
       const saveData = conn.saveData === true;
       const bgVideos = document.querySelectorAll("[data-bg-video]");
 
+      const posterVideos = document.querySelectorAll("[data-poster]");
+      if (posterVideos.length) {
+        const attachPoster = (video) => {
+          video.poster = video.getAttribute("data-poster");
+        };
+        if ("IntersectionObserver" in window) {
+          const posterObserver = new IntersectionObserver(
+            (entries, obs) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  attachPoster(entry.target);
+                  obs.unobserve(entry.target);
+                }
+              });
+            },
+            { rootMargin: "600px 0px" },
+          );
+          posterVideos.forEach((video) => posterObserver.observe(video));
+        } else {
+          posterVideos.forEach(attachPoster);
+        }
+      }
+
       if (bgVideos.length && !reduceMotion && !saveData) {
         const attachVideo = (video) => {
-          if (compactViewport && video.hasAttribute("data-no-mobile")) return;
           const src = video.getAttribute("data-src");
           if (!src || video.src) return;
           video.src = src;
@@ -140,16 +172,16 @@ const ogImageURL = new URL(image, Astro.site);
       // --- Reveals -------------------------------------------------------
       // Re-armable: the class comes off only once the element is fully out
       // of view, so scrolling back up replays it without mid-screen flicker.
-      const revealTargets = document.querySelectorAll("[data-reveal], [data-in]");
+      const revealTargets = document.querySelectorAll("[data-in]");
 
       if ("IntersectionObserver" in window) {
         const revealObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.intersectionRatio >= 0.15) {
-                entry.target.classList.add("is-revealed", "is-in");
+                entry.target.classList.add("is-in");
               } else if (entry.intersectionRatio === 0) {
-                entry.target.classList.remove("is-revealed", "is-in");
+                entry.target.classList.remove("is-in");
               }
             });
           },
@@ -158,9 +190,7 @@ const ogImageURL = new URL(image, Astro.site);
 
         revealTargets.forEach((target) => revealObserver.observe(target));
       } else {
-        revealTargets.forEach((target) =>
-          target.classList.add("is-revealed", "is-in"),
-        );
+        revealTargets.forEach((target) => target.classList.add("is-in"));
       }
 
       // --- Scrub engine ---------------------------------------------------
@@ -222,50 +252,6 @@ const ogImageURL = new URL(image, Astro.site);
           readout.textContent = resting;
         });
       });
-
-      // --- Legacy parallax (archive pages) --------------------------------
-      if (!reduceMotion && !compactViewport) {
-        const parallaxTargets = document.querySelectorAll(
-          "[data-parallax], [data-drift]",
-        );
-        let ticking = false;
-
-        const updateMotion = () => {
-          const viewportMiddle = window.innerHeight / 2;
-
-          parallaxTargets.forEach((target) => {
-            const rect = target.getBoundingClientRect();
-            const distance = rect.top + rect.height / 2 - viewportMiddle;
-
-            if (target.hasAttribute("data-parallax")) {
-              const strength = Number(
-                target.getAttribute("data-parallax") || "0.18",
-              );
-              target.style.transform = `translate3d(0, ${distance * strength}px, 0)`;
-            }
-
-            if (target.hasAttribute("data-drift")) {
-              const strength = Number(
-                target.getAttribute("data-drift") || "0.14",
-              );
-              target.style.transform = `translate3d(${distance * strength}px, 0, 0)`;
-            }
-          });
-
-          ticking = false;
-        };
-
-        const requestMotion = () => {
-          if (!ticking) {
-            window.requestAnimationFrame(updateMotion);
-            ticking = true;
-          }
-        };
-
-        updateMotion();
-        window.addEventListener("scroll", requestMotion, { passive: true });
-        window.addEventListener("resize", requestMotion);
-      }
 
       // Reel click-to-play (YouTube Shorts embed)
       document.querySelectorAll("[data-reel]").forEach((reel) => {

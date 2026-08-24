@@ -1,11 +1,8 @@
 ---
 import { navItems, site } from "@data/site";
 
-// The centred logo already links home, so an "INDEX" item would just repeat
-// it. Dropping it also leaves an even count that splits cleanly either side.
-const links = navItems.filter((item) => item.href !== "/");
-const half = Math.ceil(links.length / 2);
-const numbered = links.map((item, index) => ({
+const half = Math.ceil(navItems.length / 2);
+const numbered = navItems.map((item, index) => ({
   ...item,
   no: String(index + 1).padStart(2, "0"),
 }));

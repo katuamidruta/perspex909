@@ -7,10 +7,11 @@ export const site = {
   instagramUrl: "https://www.instagram.com/prspx.909/"
 };
 
+// The site is one document, so the nav points into it rather than away.
+// "/" is the logo's job; keeping it here would only repeat the mark.
 export const navItems = [
-  { label: "INDEX", href: "/" },
-  { label: "ARCHIVE", href: "/archive/" },
-  { label: "RELEASES", href: "/releases/" },
-  { label: "SHOP", href: "/shop/" },
-  { label: "ABOUT", href: "/about/" }
+  { label: "ARCHIVE", href: "#archive" },
+  { label: "RELEASE", href: "#release" },
+  { label: "SHOP", href: "#artifact" },
+  { label: "ABOUT", href: "#label" }
 ];
