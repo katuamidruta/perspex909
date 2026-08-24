@@ -30,6 +30,16 @@ const ogImageURL = new URL(image, Astro.site);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/png" href="/logo-loading.png" />
+
+    <!-- The display face carries every heading and the chrome type, so it is
+         on the critical path; the mono is metadata and can arrive late. -->
+    <link
+      rel="preload"
+      href="/fonts/archivo-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />

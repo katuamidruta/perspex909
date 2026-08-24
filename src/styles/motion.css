@@ -173,6 +173,20 @@
   filter: blur(calc((1 - var(--v)) * 34px));
   transform: translate3d(0, calc((1 - var(--v)) * 26px), 0);
   will-change: opacity, filter, transform;
+
+  /* Chrome, clipped to the glyphs. The gradient is 240% of the line box, so
+     driving background-position from --local sweeps the horizon down through
+     the letters exactly while this statement holds the stage. A static
+     gradient is a picture of metal; a moving one reads as metal. */
+  background-image: var(--chrome);
+  /* 180%, not more: a taller gradient pushes the horizon out of frame at the
+     ends of the sweep, leaving the words flatly bright then flatly dark. At
+     180% the break stays inside the glyphs the whole way through. */
+  background-size: 100% 180%;
+  background-position: 0 calc(var(--local) * 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 /* The final statement resolves and stays. */
@@ -587,8 +601,14 @@
   .deck-rack { min-height: 0; }
   .deck-line { position: relative; opacity: 1; transform: none; margin-bottom: 24px; }
 
+  /* Word-level opacity is driven by --p, which is never written when motion
+     is reduced — without this the deck statements render invisible. */
   .burn > span,
+  .deck-line > span,
   .chronicle-line > span { opacity: 1; filter: none; transform: none; }
+
+  /* Chrome still applies, just held at a fixed, legible horizon. */
+  .deck-line > span { background-position: 0 40%; }
   .bio-inner { transform: none; }
 
   .stack-table { height: auto; }

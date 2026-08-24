@@ -1,3 +1,47 @@
+/* =========================================================================
+   FACES — self-hosted, no CDN. Archivo ships as one variable file carrying
+   both a weight and a WIDTH axis; declaring it twice under two family names
+   pins that width axis, so "Archivo Expanded" is always 125% wide without
+   every call site having to set font-stretch.
+
+   Width matters here beyond taste: chrome/metal gradients need letter mass
+   to show a horizon. Narrow faces leave nowhere for the reflection to sit.
+   ========================================================================= */
+
+@font-face {
+  font-family: "Archivo Expanded";
+  src: url("/fonts/archivo-var.woff2") format("woff2-variations");
+  font-weight: 400 900;
+  font-stretch: 125%;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-var.woff2") format("woff2-variations");
+  font-weight: 400 900;
+  font-stretch: 100%;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/plexmono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/plexmono-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --color-paper: #fdfaf3;
   --color-ink: #121212;
@@ -8,8 +52,11 @@
   --color-oxidized-gold: #c9892b;
   --color-haze-violet: #49345f;
   --color-metal: #b9bdc2;
-  --font-display: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-  --font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Archivo Expanded", "Archivo", "Arial Narrow", Arial, sans-serif;
+  --font-body: "Archivo", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Metadata is set in mono on purpose: catalogue codes, dates and durations
+     are what make an archive read as a document rather than a web page. */
+  --font-meta: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --text-meta: 12px;
   --text-body: 15px;
   --text-lead: 21px;
@@ -17,6 +64,20 @@
   --text-display: clamp(60px, 13vw, 188px);
   --page-pad: clamp(16px, 2.4vw, 34px);
   --line: color-mix(in srgb, currentColor 18%, transparent);
+
+  /* CHROME. The whole illusion lives in the two stops at 49.9/50.1: real
+     metal has a hard horizon, dark ground below and bright sky above. A
+     smooth ramp between them reads as plastic. Hue sits near 210 deg — a
+     neutral grey reads as concrete, warm reads as cheap gold. */
+  --chrome: linear-gradient(
+    180deg,
+    #8f979e 0%,
+    #eef3f6 34%,
+    #d4dbe0 49.9%,
+    #5b636b 50.1%,
+    #8d959d 66%,
+    #cdd4da 100%
+  );
 }
 
 * {
@@ -256,18 +317,28 @@ body.is-loaded .site-loader {
   .site-mark img { height: 40px; }
 }
 
+/* The mark is the brand material, so it is cast in chrome rather than
+   painted flat: logo.png is RGBA, so its alpha channel masks the gradient.
+   Hovering tilts the horizon, the same gesture as turning a chrome sticker
+   in the hand. */
 .site-mark {
   display: block;
   line-height: 0;
+  background: var(--chrome);
+  background-size: 100% 180%;
+  background-position: 0 22%;
+  -webkit-mask: url("/logo.png") center / contain no-repeat;
+  mask: url("/logo.png") center / contain no-repeat;
+  transition: background-position 700ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.site-mark:hover { background-position: 0 74%; }
+
+/* Kept in the tree for its alt text and to size the mask box. */
 .site-mark img {
   width: auto;
   height: 56px;
-  /* logo.png is dark artwork (the footer is white so it reads there).
-     Inverting it is what makes it legible on the black header; the
-     brightness lift stops the thin script strokes greying out. */
-  filter: invert(1) grayscale(1) brightness(1.9) contrast(1.4);
+  opacity: 0;
 }
 
 .site-nav,
@@ -283,8 +354,10 @@ body.is-loaded .site-loader {
 
 .site-nav a,
 .site-footer a {
+  font-family: var(--font-meta);
   font-size: var(--text-meta);
-  font-weight: 800;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 .site-nav span {
@@ -507,8 +580,10 @@ body.is-loaded .site-loader {
 .meta-label {
   margin: 0;
   color: var(--color-signal);
+  font-family: var(--font-meta);
   font-size: var(--text-meta);
-  font-weight: 900;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
@@ -710,8 +785,10 @@ body.is-loaded .site-loader {
 .tracklist__duration,
 .meta-table dt {
   color: color-mix(in srgb, currentColor 58%, transparent);
+  font-family: var(--font-meta);
   font-size: var(--text-meta);
-  font-weight: 900;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
