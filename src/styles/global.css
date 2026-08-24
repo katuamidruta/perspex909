@@ -437,12 +437,15 @@ body.is-loaded .site-loader {
 
 .ledger-line,
 .release-note {
-  max-width: 68ch;
-  margin: 0 auto;
   padding: clamp(28px, 5vw, 64px) var(--page-pad);
 }
 
+/* The label's line is one centred statement; the record's note is a block
+   of prose, and it runs the full width of the section like every other
+   band on the page. */
 .ledger-line {
+  max-width: 68ch;
+  margin: 0 auto;
   font-family: var(--font-display);
   font-size: clamp(17px, 2vw, 27px);
   font-weight: 600;
@@ -457,12 +460,17 @@ body.is-loaded .site-loader {
 }
 
 .release-note .release-lead {
+  max-width: 30ch;
+  margin-bottom: 26px;
   font-family: var(--font-display);
-  font-size: clamp(19px, 2.2vw, 30px);
+  font-size: clamp(22px, 3.2vw, 46px);
   font-weight: 600;
-  line-height: 1.28;
+  line-height: 1.16;
+  letter-spacing: -0.01em;
   opacity: 1;
 }
+
+.release-note .release-lead + p { max-width: 62ch; }
 
 .release-note .release-credits {
   margin-top: 22px;

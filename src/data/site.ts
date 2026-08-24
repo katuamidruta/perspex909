@@ -4,7 +4,8 @@ export const site = {
   description: "Independent electronic transmissions from Indonesia.",
   url: "https://perspex909.com",
   bandcampUrl: "https://perspex.bandcamp.com/",
-  instagramUrl: "https://www.instagram.com/prspx.909/"
+  instagramUrl: "https://www.instagram.com/prspx.909/",
+  soundcloudUrl: "https://soundcloud.com/prspx-909"
 };
 
 // The site is one document, so the nav points into it rather than away.

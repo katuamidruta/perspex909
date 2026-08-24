@@ -4,7 +4,7 @@ import ReelPlayer from "@components/ReelPlayer.astro";
 import { events } from "@data/events";
 import { products } from "@data/products";
 import { releases } from "@data/releases";
-import { site } from "@data/site";
+import { navItems, site } from "@data/site";
 
 const va01 = releases[0];
 const tee = products[0];
@@ -102,38 +102,36 @@ const chronicleLines = [
   "Pressed to hold.",
 ];
 
-// 12 — ARTIFACT. Two columns of field photographs travelling in opposite
+// 12 — ARTIFACT OVERTURE. The same split mechanism that opens the page and
+// the release chapter, opening the last one — the tee's own photographs
+// pulled apart into a band, with the product shot holding the core.
+const teeWings = {
+  left: [tee.reviewPhotos[0], tee.userPhotos[0]],
+  right: [tee.userPhotos[1], tee.reviewPhotos[1]],
+};
+
+// 13 — ARTIFACT. Two columns of field photographs travelling in opposite
 // directions behind the order sheet.
 const teeColumns = [
   [tee.heroImage, tee.reviewPhotos[0], tee.userPhotos[0]],
   [tee.userPhotos[1], tee.reviewPhotos[1], tee.userPhotos[2]],
 ];
 
-// 13 — INDEX. Everything is one document now, so the internal rows are
-// anchors; the rest leave the site entirely.
-const indexRows = [
-  { title: "The Label", meta: "Manifesto", href: "#label" },
-  { title: "Archive", meta: `${events.length} records`, href: "#archive" },
-  {
-    title: va01.title,
-    meta: `${va01.catalogCode} / ${va01.trackCount} tracks`,
-    href: "#release",
-  },
-  { title: tee.title, meta: tee.priceLabel, href: "#artifact" },
-  { title: "Bandcamp", meta: "Buy", href: site.bandcampUrl, external: true },
-  {
-    title: "SoundCloud",
-    meta: "Listen",
-    href: va01.links.preview,
-    external: true,
-  },
-  {
-    title: "Instagram",
-    meta: "Follow",
-    href: site.instagramUrl,
-    external: true,
-  },
-].map((row, i) => ({ ...row, no: String(i + 1).padStart(2, "0") }));
+// 14 — MENU. The closing block is the same menu as the header, built from
+// the same array, so the two can never drift apart. Off-site accounts live
+// in the footer; a menu that points out of the document is not a menu.
+const menuMeta: Record<string, string> = {
+  "#archive": `${events.length} records`,
+  "#release": `${va01.catalogCode} / ${va01.trackCount} tracks`,
+  "#artifact": tee.soldOut ? "Sold out" : tee.priceLabel,
+  "#label": "Manifesto",
+};
+
+const menuRows = navItems.map((item, i) => ({
+  ...item,
+  meta: menuMeta[item.href] ?? "",
+  no: String(i + 1).padStart(2, "0"),
+}));
 ---
 
 <BaseLayout title={site.displayName} description={site.description}>
@@ -417,29 +415,33 @@ const indexRows = [
 
   {/* ---------- 10 · TRACKLIST LADDER ------------------------------- */}
   <section
-    class="section--paper ladder"
+    class="ladder runway--4"
     style={`--n:${va01.tracklist.length}`}
     data-scrub
   >
-    <div class="ladder-head">
-      <p class="section-kicker">Tracklist Sheet</p>
-      <p class="ladder-count" aria-hidden="true"></p>
-    </div>
-    <p class="sr-only">{va01.trackCount} tracks on {va01.catalogCode}</p>
-    <div class="ladder-list">
-      <span class="ladder-cursor" aria-hidden="true"></span>
-      {
-        va01.tracklist.map((track, i) => (
-          <div class="ladder-row" style={`--i:${i}`}>
-            <span class="ladder-row__no">
-              {String(track.number).padStart(2, "0")}
-            </span>
-            <span class="ladder-row__artist">{track.artist}</span>
-            <span class="ladder-row__title">{track.title}</span>
-            <span class="ladder-row__dur">{track.duration ?? "--:--"}</span>
-          </div>
-        ))
-      }
+    <div class="stage">
+      <div class="ladder-head">
+        <p class="section-kicker">Tracklist Sheet</p>
+        <p class="ladder-count" aria-hidden="true"></p>
+      </div>
+      <p class="sr-only">{va01.trackCount} tracks on {va01.catalogCode}</p>
+      <div class="ladder-window">
+        <span class="ladder-cursor" aria-hidden="true"></span>
+        <div class="ladder-list">
+          {
+            va01.tracklist.map((track, i) => (
+              <div class="ladder-row" style={`--i:${i}`}>
+                <span class="ladder-row__no">
+                  {String(track.number).padStart(2, "0")}
+                </span>
+                <span class="ladder-row__artist">{track.artist}</span>
+                <span class="ladder-row__title">{track.title}</span>
+                <span class="ladder-row__dur">{track.duration ?? "--:--"}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
     </div>
   </section>
 
@@ -479,7 +481,53 @@ const indexRows = [
     </div>
   </section>
 
-  {/* ---------- 12 · ARTIFACT --------------------------------------- */}
+  {/* ---------- 12 · ARTIFACT OVERTURE (split III) ------------------ */}
+  <section class="split-frame runway--3" data-scrub>
+    <div class="stage">
+      <div class="split-band">
+        <div class="split-wing split-wing--l">
+          {
+            teeWings.left.map((img) => (
+              <figure>
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            ))
+          }
+        </div>
+
+        <div class="split-core">
+          <img
+            src={tee.heroImage.src}
+            alt={tee.heroImage.alt}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <div class="split-wing split-wing--r">
+          {
+            teeWings.right.map((img) => (
+              <figure>
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- 13 · ARTIFACT --------------------------------------- */}
   <section class="artifact runway--3" id="artifact" data-scrub>
     <div class="stage">
       <div class="artifact-columns" aria-hidden="true">
@@ -499,12 +547,13 @@ const indexRows = [
 
       <div class="artifact-sheet">
         <p class="section-kicker">
-          {tee.artifactType} / {tee.availability} / {tee.catalogCode}
+          {tee.artifactType} / {tee.soldOut ? "Sold out" : tee.availability} /{" "}
+          {tee.catalogCode}
         </p>
         <h2 class="section-title">{tee.title}</h2>
         <p class="artifact-lead">{tee.summary}</p>
         <p class="artifact-note">{tee.description[0]}</p>
-        <p class="artifact-price">{tee.priceLabel}</p>
+        <p class="artifact-price">{tee.soldOut ? "Sold out" : tee.priceLabel}</p>
         <p class="artifact-note">{tee.description[1]}</p>
         <p class="artifact-credit">
           {
@@ -518,36 +567,32 @@ const indexRows = [
             class="cta cta--signal"
             href={tee.whatsappUrl}
             target="_blank"
-            rel="noopener noreferrer">Order via WhatsApp</a
+            rel="noopener noreferrer">{
+              tee.soldOut ? "Ask about the next run" : "Order via WhatsApp"
+            }</a
           >
         </div>
       </div>
     </div>
   </section>
 
-  {/* ---------- 13 · INDEX ------------------------------------------ */}
+  {/* ---------- 14 · MENU ------------------------------------------- */}
   <section class="section section--paper index-block" data-readout>
     <div class="section-header" data-in="up">
       <div>
-        <p class="section-kicker">Where To</p>
-        <h2 class="section-title">Entry Points</h2>
+        <p class="section-kicker">Menu</p>
+        <h2 class="section-title">Go Back In</h2>
       </div>
     </div>
 
-    <div class="index-readout">{String(indexRows.length).padStart(2, "0")}</div>
+    <div class="index-readout">{String(menuRows.length).padStart(2, "0")}</div>
 
     <div class="index-list" data-in="up" style="--d:120ms">
       {
-        indexRows.map((row) => (
-          <a
-            class="index-row"
-            href={row.href}
-            data-no={row.no}
-            target={row.external ? "_blank" : undefined}
-            rel={row.external ? "noopener noreferrer" : undefined}
-          >
+        menuRows.map((row) => (
+          <a class="index-row" href={row.href} data-no={row.no}>
             <span class="index-row__no">{row.no}</span>
-            <span class="index-row__title">{row.title}</span>
+            <span class="index-row__title">{row.label}</span>
             <span class="index-row__meta">{row.meta}</span>
           </a>
         ))

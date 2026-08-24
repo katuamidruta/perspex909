@@ -121,7 +121,8 @@
   );
 }
 
-.split-core video {
+.split-core video,
+.split-core img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -663,10 +664,12 @@
 }
 
 /* =========================================================================
-   5b. LADDER — the 36-row tracklist as a sheet being read by a head.
-   A signal line travels the list on --p, rows behind it print to full
-   contrast, and a live counter — a registered <integer> written straight
-   into a CSS counter — reads out how far the head has got.
+   5b. LADDER — thirty-six tracks pulled past a fixed head.
+   A printed table asks the reader to scan it; this one scans itself. The
+   list travels under a window held at the centre of the stage, one track
+   per 125px of scroll, and everything outside the window falls back into
+   blur — so the section reads at the speed of the record rather than the
+   speed of the page.
    ========================================================================= */
 
 @property --tn {
@@ -676,8 +679,18 @@
 }
 
 .ladder {
-  --tn: calc(var(--p) * var(--n));
-  padding: clamp(40px, 8vh, 96px) var(--page-pad);
+  /* The head sits on row round(--p × (n − 1)); the readout is that row's
+     track number, so the number and the framed row can never disagree. */
+  --tn: calc(var(--p) * (var(--n) - 1) + 1);
+  --row: clamp(50px, 7svh, 76px);
+  background: var(--color-night);
+}
+
+.ladder .stage {
+  top: var(--header-h);
+  height: calc(100svh - var(--header-h));
+  display: flex;
+  flex-direction: column;
 }
 
 .ladder-head {
@@ -685,7 +698,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: clamp(18px, 3vh, 40px);
+  padding: clamp(12px, 3vh, 34px) var(--page-pad) 0;
 }
 
 .ladder-count {
@@ -703,48 +716,81 @@
 }
 
 /* The total comes from the same --n the rows are sequenced against, so the
-   readout cannot drift out of step with the list. */
+   readout cannot drift out of step. It keeps its own colour: an opacity of
+   its own would break the parent's background-clip and paint nothing. */
 .ladder-count::after {
   counter-reset: total var(--n);
   content: " / " counter(total);
+  color: color-mix(in srgb, var(--color-white) 32%, transparent);
   font-size: 0.34em;
-  opacity: 0.4;
 }
 
-.ladder-list {
+.ladder-window {
   position: relative;
-  border-top: 1px solid rgba(18, 18, 18, 0.3);
+  flex: 1;
+  overflow: hidden;
 }
 
-/* The head itself. It never stops travelling while the section is on
-   screen, which is what keeps a plain table from reading as dead. */
+/* The head. A window rather than a line: it frames the track being read
+   and gives the blur outside it something to be outside of. */
 .ladder-cursor {
   position: absolute;
+  top: calc(50% - var(--row) / 2);
   left: 0;
   right: 0;
-  top: calc(var(--p) * 100%);
-  height: 2px;
-  background: var(--color-ink);
-  box-shadow: 0 0 18px 1px rgba(18, 18, 18, 0.35);
+  height: var(--row);
+  border-top: 1px solid rgba(255, 255, 255, 0.42);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.42);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.02) 62%,
+    transparent
+  );
   pointer-events: none;
 }
 
+.ladder-list {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  padding: 0 var(--page-pad);
+  transform: translate3d(
+    0,
+    calc(var(--row) * -0.5 - var(--p) * (var(--n) - 1) * var(--row)),
+    0
+  );
+  will-change: transform;
+}
+
 .ladder-row {
-  --passed: clamp(0, calc(var(--p) * (var(--n) + 3) - var(--i)), 1);
+  /* Signed distance from the head in units of three rows, resolved without
+     abs(): one ramp falling off each side, and the smaller of the two. */
+  --d: calc((var(--p) * (var(--n) - 1) - var(--i)) / 3);
+  --near: min(clamp(0, calc(1 - var(--d)), 1), clamp(0, calc(1 + var(--d)), 1));
+
   display: grid;
-  grid-template-columns: 54px minmax(100px, 240px) minmax(0, 1fr) 62px;
-  gap: 14px;
-  align-items: baseline;
-  padding: 9px 4px;
-  border-bottom: 1px solid rgba(18, 18, 18, 0.16);
+  grid-template-columns: 68px minmax(0, 1fr) minmax(0, 1.1fr) 74px;
+  gap: clamp(12px, 2vw, 30px);
+  align-items: center;
+  height: var(--row);
   text-transform: uppercase;
-  opacity: calc(0.26 + var(--passed) * 0.74);
+  opacity: calc(0.08 + var(--near) * 0.92);
+  filter: blur(calc((1 - var(--near)) * 4px));
+  transform: translate3d(calc((1 - var(--near)) * -20px), 0, 0);
+  will-change: opacity, filter, transform;
 }
 
 .ladder-row__artist,
 .ladder-row__title {
   font-weight: 800;
-  font-size: 15px;
+  font-size: clamp(14px, 1.5vw, 20px);
+  line-height: 1.15;
+}
+
+.ladder-row__title {
+  color: color-mix(in srgb, var(--color-white) 66%, transparent);
 }
 
 .ladder-row__no,
@@ -752,11 +798,19 @@
   font-family: var(--font-meta, var(--font-body));
   font-size: var(--text-meta);
   letter-spacing: 0.12em;
-  opacity: 0.66;
+  opacity: 0.6;
 }
 
+.ladder-row__dur { text-align: right; }
+
 @media (max-width: 800px) {
-  .ladder-row { grid-template-columns: 40px minmax(0, 1fr) 56px; }
+  .ladder-row {
+    grid-template-columns: 46px minmax(0, 1fr) 62px;
+    align-content: center;
+    gap: 4px 12px;
+    height: calc(var(--row) * 1.3);
+  }
+
   .ladder-row__title { grid-column: 2 / 3; }
 }
 
@@ -888,6 +942,7 @@
 .artifact-sheet .section-title,
 .artifact-price,
 .dossier-row--title h2,
+.ladder-count,
 .spec-grid dd {
   background-image: var(--chrome-type);
   background-size: 100% 150%;
@@ -955,12 +1010,14 @@
 .index-row__title { transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1); }
 .index-row:hover .index-row__title { transform: translateX(12px); }
 
-/* Big number, driven by whichever row the cursor is on. */
+/* Big number, driven by whichever row the cursor is on. Parked against the
+   heading rather than floated through the list: with four rows it landed
+   straight on top of their metadata. */
 .index-readout {
-  position: sticky;
-  top: 22vh;
-  float: right;
-  margin: 0 0 0 auto;
+  position: absolute;
+  top: clamp(16px, 3vh, 44px);
+  right: var(--page-pad);
+  margin: 0;
   font-family: var(--font-display);
   font-size: clamp(56px, 13vw, 200px);
   font-weight: 700;
@@ -1145,9 +1202,25 @@
   }
   .reel-strip .reel-play { opacity: 1; }
 
+  /* Nothing advances the head, so the scan becomes the table it is
+     underneath: every track legible, in order, and the readout handed the
+     total it would have counted up to. */
   .ladder { --tn: var(--n); }
+  .ladder .stage { top: 0; height: auto; }
+  .ladder-window { overflow: visible; }
   .ladder-cursor { display: none; }
-  .ladder-row { opacity: 1; }
+  .ladder-list {
+    position: static;
+    padding-bottom: clamp(24px, 5vh, 60px);
+    transform: none;
+  }
+  .ladder-row {
+    height: auto;
+    padding: 9px 0;
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
 
   .artifact .stage { height: auto; }
   .artifact-columns { position: relative; inset: 0; }

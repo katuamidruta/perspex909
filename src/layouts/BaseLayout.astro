@@ -78,8 +78,11 @@ const ogImageURL = new URL(image, Astro.site);
         <img src="/logo.png" alt="PERSPEX909" class="footer-logo" />
       </a>
       <span class="footer-copy">2026 &copy; PRSPX. All Rights Reserved.</span>
+      {/* The official accounts live here and only here — the menu points
+          into the document, never out of it. */}
       <div>
         <a href={site.bandcampUrl}>Bandcamp</a>
+        <a href={site.soundcloudUrl}>SoundCloud</a>
         <a href={site.instagramUrl}>Instagram</a>
       </div>
     </footer>

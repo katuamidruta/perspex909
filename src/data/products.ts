@@ -13,6 +13,7 @@ export type Product = {
   catalogCode: string;
   availability: string;
   priceLabel: string;
+  soldOut?: boolean;
   summary: string;
   description: string[];
   heroImage: ProductImage;
@@ -34,11 +35,13 @@ export const products: Product[] = [
     catalogCode: "PRSPX-TEE-01",
     availability: "Limited run",
     priceLabel: "350,000 IDR",
+    // The run is gone; the price stays in the data as the record of what it was.
+    soldOut: true,
     summary:
       "A limited unisex PRSPX tee for bodies moving through club rooms, campouts, and archive photographs.",
     description: [
       "One wearable artifact: a black PRSPX tee treated as field uniform, not seasonal merch.",
-      "Orders move person to person over WhatsApp, so sizing, stock, and delivery are settled before anything ships."
+      "The first run is gone. Sizing, stock and whatever comes next are settled person to person over WhatsApp."
     ],
     heroImage: {
       src: "/archive/shirt1-1.webp",

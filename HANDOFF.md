@@ -12,7 +12,7 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No U
 
 ## The page, in order
 
-Heights measured at 1440×900. Total **34,575px** (was 21,835px for the old homepage alone).
+Heights measured at 1440×900. Total **38,953px**, 43 viewports (mobile 26,698px at 390×844). The user has twice said explicitly that a longer scroll is an acceptable price for pacing — do not trim runways to save length without asking.
 
 | # | Section | Runway | Note |
 |---|---|---|---|
@@ -27,10 +27,11 @@ Heights measured at 1440×900. Total **34,575px** (was 21,835px for the old home
 | — | `interlude` | 46svh | empty and unlabelled on purpose |
 | 8 | `split-frame` `#release` | 300svh | compilation.mp4, same mechanism — the two rhyme |
 | 9 | `section--metal` | — | VA01 spec grid, release notes, credits, Bandcamp/SoundCloud |
-| 10 | `ladder` | — | **new** — the 36-row tracklist read by a travelling head |
+| 10 | `ladder` | 400svh | **new** — 36 tracks pulled past a fixed head, one per ~100px |
 | 11 | `chronicle` | 400svh | layered cross-dissolve under cycling lines |
+| — | `split-frame` | 300svh | the tee's own photographs, opening the last chapter |
 | 12 | `artifact` `#artifact` | 300svh | **new** — the tee, two photo columns, WhatsApp order |
-| 13 | `index-block` | — | entry points: four anchors, three external |
+| 13 | `index-block` | — | the menu again, built from the same `navItems` as the header |
 
 Nav and the index rows are **anchors** now (`#label`, `#archive`, `#release`, `#artifact`). `html { scroll-padding-top: var(--header-h) }` lands every one of them exactly under the header — measured at 81px on all four.
 
@@ -47,9 +48,13 @@ Nav and the index rows are **anchors** now (`#label`, `#archive`, `#release`, `#
 ### The three new choreographies
 
 - **`dossier`** — one archive record per slice of runway. The flyer box takes the poster's own 4:5 shape (measured: all three flyers are exactly 0.800) with `object-fit: contain`, so the artwork is never cropped at any window width — a cover-crop into whatever rectangle the grid left was cutting the bottom off the posters. The flyer is held on the left, the sheet writes itself out on the right: each row unrolls left-to-right on a `clip-path: inset(0 X 0 0)`, in order, like paper coming off a roll. Flyer and record drift against each other for the whole slot so the sheet never sits still. `.is-last` keeps `--dis: 0` so the section doesn't hand back an empty stage.
-- **`ladder`** — the tracklist as a document being read. An ink head travels the list on `top: calc(var(--p) * 100%)`, rows behind it print from 0.26 to full opacity, and the counter is a registered `@property --tn { syntax: "<integer>" }` computed as `calc(var(--p) * var(--n))` and written straight into `counter-reset`. **Verified in Chrome:** `--tn` reads 2 → 18 → 36 across the section. The total after the slash comes from the same `--n` the rows are sequenced against, so the readout cannot drift out of step.
+- **`ladder`** — 36 tracks pulled past a fixed head. The list travels under a window held at the centre of the pinned stage, roughly one track per 100px of scroll, and everything outside the window falls into blur, so the section reads at the speed of the record rather than the speed of the page. The counter is a registered `@property --tn { syntax: "<integer>" }` computed as `calc(var(--p) * (var(--n) - 1) + 1)` and written straight into `counter-reset` — the same rounding as the head row, so the number and the framed track can never disagree. **Verified in Chrome:** `--tn` reads 7 / 25 / 36 with the brightest row at track 7 / 25 / 36. Its `::after` carries an explicit colour, because an opacity of its own would break the parent's `background-clip` and paint nothing.
 - **`reel strip`** — seven reels on one horizontal track, advanced by `--p`. One holds the centre at full size while its neighbours sit at 0.22 opacity and 0.84 scale, so the section is scrolled through rather than clicked through. Focus is resolved without `abs()`: two `clamp()` ramps, one falling off each side, and `min()` of the pair. Measured across the runway: the head lands on reel 2 → 4 → 6 → 7 as `--p` goes 0.11 → 0.52 → 0.93 → 1, and the track travels 0 → −1956px. Under reduced motion it wraps into a plain grid with all seven reachable.
 - **`artifact`** — two columns of tee photographs travelling in opposite directions (`--p * -32%` / `--p * 32% - 32%`) behind an order sheet that fades up and keeps drifting. Measured: columns travel 0 → −845px across the runway.
+
+### Split-frame, three times
+
+The split is now the device that opens a chapter: the page (hero.mp4), the release (compilation.mp4), and the artifact (the tee's own product shot, a still rather than a clip). The archive opens with the pile instead, which is right — it *is* a pile of flyers. If a fourth ever gets added, ask whether it is opening a chapter or just repeating an effect.
 
 ## Palette
 
@@ -113,6 +118,12 @@ If the scratchpad is gone: `npm install playwright` anywhere and use `chromium.l
 - Bahasa Indonesia, ringkas, langsung fix. The user dislikes process theatre; show measured evidence and working results.
 - This is a **portfolio / pitch piece** for the user. The bar is work they could not trivially do themselves.
 - Commerce lives **off-site** on a subdomain (Shopify/Gumroad). This repo keeps the artifact's content and the WhatsApp order button, nothing more.
+
+## Menu, not entry points
+
+The closing block and the header are the same menu, both built from `navItems` in `src/data/site.ts`, so they cannot drift apart. **Off-site accounts (Bandcamp, SoundCloud, Instagram) live in the footer and only there** — the user's call, and the right one: a menu that points out of the document is not a menu. Row metadata is looked up by href in `index.astro`, so adding a nav item without metadata degrades to an empty cell rather than breaking.
+
+The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the kicker, the price slot and the menu row, and turns the WhatsApp CTA into "Ask about the next run". `priceLabel` stays in the data as the record of what it cost.
 
 ## Still open
 
