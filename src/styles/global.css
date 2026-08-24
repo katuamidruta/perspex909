@@ -65,7 +65,6 @@
   /* Height of the sticky header. Reading sections pin below it rather than
      sliding underneath, so their content stays centred in what is visible. */
   --header-h: 81px;
-  --color-metal-line: #b9bdc2;
   --line: color-mix(in srgb, currentColor 18%, transparent);
 
   /* CHROME. The whole illusion lives in the two stops at 49.9/50.1: real
