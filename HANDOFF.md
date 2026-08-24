@@ -1,99 +1,101 @@
 # Perspex909 — Session Handoff
 
-Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No UI framework. Live on **Cloudflare Workers** (static assets, `wrangler.jsonc`). Repo: `katuamidruta/perspex909`, branch `main`.
+Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No UI framework, no JS dependencies. Live on **Cloudflare Workers** (static assets, `wrangler.jsonc`). Repo `katuamidruta/perspex909`, branch `main`.
 
-> Full background is in project memory (`MEMORY.md` + files) — it auto-loads each session. This file is the quick "where we left off".
+> Background lives in project memory (`MEMORY.md` + files), auto-loaded each session. This file is "where we left off".
 
-## Status (session 5 — 2026-08-21)
+## Status (end of session 5 — 2026-08-24)
 
-- **NOT COMMITTED.** Working tree has uncommitted changes. Last commit is still `bf73a01` ("style: hide site-credit section temporarily").
-- `npx astro build` passes — 10 pages, no errors, no console errors in Chromium.
-- Dev server last on port 4326 (`npx astro dev --port 4326`).
+- **All committed, working tree clean.** Head is `0c4ccb2`; the session shipped 10 commits from `bf73a01`.
+- `npx astro build` passes — 10 pages, no console errors in Chromium.
+- Dev server last on port 4330.
 
-### Changed files
-| File | State |
-|---|---|
-| `src/styles/motion.css` | **NEW** — the whole motion layer |
-| `src/pages/index.astro` | **REWRITTEN** — 7 scroll-scrubbed sections |
-| `src/layouts/BaseLayout.astro` | scrub engine + re-armable reveals + index readout + `.grain` div + imports motion.css |
-| `src/styles/global.css` | `[data-reveal]` amplitude 34px → 88px + blur |
-| `.gitignore` | added `dev-out.log`, `mono/` |
+## The decision that drives next session: go one-page
 
-## What this session was actually about
+Multi-page was agreed earlier in the session and then **overturned by the user, correctly**. The objection had been "the shop needs per-product URLs"; the user removed that premise:
 
-User was unhappy with the site — **"motionnya kaku"**, and blunt about it: *"kesannya ngapain pake claude bikin web gituan, aku sendiri aja bisa."* Take that seriously; the bar is work they couldn't trivially do themselves.
+- Commerce moves **off-site** to a subdomain (Shopify / Gumroad / similar). Not this repo's problem.
+- **Perspex is one product.** Releases and the tee are *content*, not a catalogue. That makes this site comparable to `mono/` — a landing page for one product — not to a store.
+- The site is a **showcase / landing page**.
 
-Two reference sites were analysed **in a real browser** (Playwright + Chrome, not WebFetch — user explicitly rejected fetch as insufficient):
+So: fold `archive/`, `releases/`, `shop/`, `about/` into the homepage.
 
-1. **https://stefanvitasovic.dev/projects** — no scroll at all (page = 900px). Zero `<img>`, 4 videos + one WebGL2 canvas. No GSAP/Lenis. Only CSS transition on the page: `opacity 0.2s ease`. Its signature move: hovering one item drops **all 18 siblings to `opacity: 0.25`** and updates a big counter. One input → many outputs.
-2. **https://v0-mono-six.vercel.app/** — source is in `mono/` (gitignored, 21MB, Next+React+Tailwind). Measured: parallax is **1:1 with scroll, `damped: false`** — no lerp, no smoothing. Its actual parallax is only ±15px, *as small as ours was*.
+**How the user wants archive handled:** let it **expand downward inline**, carrying its information, rather than linking out. Each folded section can take its own scroll choreography — archive as a `split-frame`, for instance. Adapt per section; the machinery already exists.
 
-**The finding that drove everything:** "kaku" was never about easing. Perspex909's easing (`cubic-bezier(0.16,1,0.3,1)`, 1000ms) was already good. The problems were **amplitude** (drift moved things ±9px — invisible), **one-shot** reveals (`unobserve()` killed them permanently), and **scroll-only** motion (nothing responded to the cursor).
+Open question, low stakes: whether individual events still deserve shareable URLs. If this is purely a showcase, probably not.
 
-## The architecture now
-
-One pattern, borrowed from `mono/components/sections/*.tsx`:
+## Architecture
 
 ```
-<section class="runway--N" data-scrub>   ← N × 100svh of scroll runway
-  <div class="stage"> ... </div>          ← position:sticky, pinned
+<section class="split-frame runway--3" data-scrub>   ← N × 100svh runway
+  <div class="stage"> ... </div>                      ← position:sticky, pinned
 </section>
 ```
 
-`BaseLayout.astro` runs one rAF loop that writes **a single number `--p` (0→1)** onto each `[data-scrub]`. It knows nothing about what it animates. **Every choreography in `motion.css` is a pure CSS function of `--p`** — no JS per section. To add a section: add markup + a CSS block reading `var(--p)`.
+`BaseLayout.astro` runs one rAF loop that writes **a single number `--p` (0→1)** onto every `[data-scrub]`. It knows nothing about what it animates. **Every choreography in `src/styles/motion.css` is a pure CSS function of `--p`** — no per-section JS. To add a section: markup plus a CSS block reading `var(--p)`.
 
-Homepage sections: `hero-split` (3) → `deck` (2) → manifesto burn → `stack` (5) → `chronicle` (4) → `index-block` → `reel` + specs. Page is now 15,167px / 16.9 viewports.
+Homepage order (21,835px):
 
-Useful CSS idioms already in `motion.css`:
-- staged sub-progress: `--pi: clamp(0, calc((var(--p) - 0.22) / 0.78), 1)`
-- per-item sequencing: `--sp: clamp(0, calc(var(--p) * var(--n) - var(--i)), 1)`
-- in/out on one axis: `--in` / `--out` pair → `opacity: calc(var(--in) - var(--out))`
-- word-by-word blur: each word carries `--i`, parent carries `--n`
+| # | Section | Note |
+|---|---|---|
+| 1 | `split-frame` | hero.mp4 splits into a five-column band |
+| 2 | `deck` | three statements, word-burn + chrome |
+| 3 | `bio` | pinned below the header, word-burn |
+| 4 | `stack` | archive flyers deal into a pile, bezelled |
+| — | `interlude` | 46svh, empty and unlabelled on purpose |
+| 5 | `split-frame` | compilation.mp4, same mechanism — the two rhyme |
+| 6 | `spec-grid` + CTA | |
+| 7 | `chronicle` | layered cross-dissolve under cycling lines |
+| 8 | `index-block` | hover dims siblings and drives the big counter |
 
-## Later in session 5 (after the first handoff was written)
+CSS idioms already in `motion.css`:
 
-- Hero wordmark + deck text **removed** from the homepage (user: they blocked the video). Dead CSS deleted; hero clip no longer starts zoomed.
-- Stack `figcaption` (label + meta) removed; `label` kept in the data purely as image `alt`.
-- **Deck timing bug fixed.** Each line used to reach opacity 1 for a single instant — unreadable. Now fade-in 28% / **hold 44%** / fade-out 28% via a `--local` var, and the runway went `runway--2` to `runway--4` (900px of scroll per line, measured).
-- Manifesto copy replaced with a plain **bio**; kicker now "The Label".
-- **Header rebuilt**: `logo.png` centred as an image (inverted — it is dark artwork), nav split 2/2 either side, `INDEX` dropped since the logo already links home. 3-column grid, collapses to mark-on-top under 640px. Centring verified at 720/720 desktop, 195/195 mobile.
+- staged sub-progress — `--pi: clamp(0, calc((var(--p) - 0.22) / 0.78), 1)`
+- per-item sequencing — `--sp: clamp(0, calc(var(--p) * var(--n) - var(--i)), 1)`
+- appear/disappear pair — `--app` / `--dis`, then `opacity: calc(var(--app) - var(--dis))`
+- word-by-word blur — each word carries `--i` (or `--w`/`--wn` inside a line), the parent carries `--n`
 
-- **Deck reworked twice.** First fix (a fade-in / hold / fade-out plateau) made it legible but *frozen* — the user immediately flagged it as "motion mati". Now each line uses the same **word-burn** as the bio (words resolve one at a time out of 34px blur, then dissolve one at a time) while the whole line drifts continuously `translateY 60px → -60px`. `rotateX` flip dropped — it fought the per-word transforms.
-- **Bio section pinned.** Now `runway--3` + `stage`. Word timing divided by 0.7 so all 48 words land at **70%** of the runway (was 96% — i.e. no reading time at all); the last 30% is held reading time while `.bio-inner` drifts `32px → -32px`. Verified: `stageTop: 0` throughout, words 0 → 48/48 by f=0.7.
-- **Header logo** 34px → **56px** (mobile 24 → 40) and filter strengthened to `invert(1) grayscale(1) brightness(1.9) contrast(1.4)` — plain `invert` left the thin script strokes grey.
+## Rules learned the hard way — do not re-break these
 
-### Design rule learned the hard way — do not break it
+1. **A choreography must never fully freeze.** Legibility was twice "fixed" with a static hold, and both times the user read it as broken motion. Correct shape: let detail resolve and hold (opacity and blur settle) while a slow transform keeps running underneath.
+2. **Amplitude is what reads as intent.** A ±9px parallax is invisible, not subtle.
+3. **Never leave a token or rule that nothing draws.** `--color-metal` was declared and never rendered — which is exactly how Perspex's own material went missing from the site. The same trap later caught `--chrome`, `--chrome-sculpt`, `.reel` and `--color-metal-line`; each was removed the moment its consumer went.
+4. **Do not label a pause.** The interlude briefly carried "05 · RELEASE DOCUMENT"; naming what is coming spends the surprise that carries the scroll.
 
-**A choreography must never fully freeze.** Legibility was twice "fixed" by adding a static hold, and both times it read as broken motion. The correct shape is: *let the detail resolve and hold (opacity/blur settle), but keep a slow continuous transform running underneath.* Every pinned section on the homepage now follows this.
+## This session, in brief
 
-**Decision made:** site stays **multi-page**. The homepage is the one-pager that routes into it. User wants the *other* pages to eventually get the same scrub motion — that is now the main follow-up. This project is a **portfolio/pitch piece** for the user, so polish counts.
+- **Fonts self-hosted** (`public/fonts/`, no CDN). Archivo ships one variable file carrying weight *and* width axes; declaring it twice under two family names pins that axis, so `"Archivo Expanded"` is always 125% wide without every call site setting `font-stretch`. Metadata is **IBM Plex Mono**. ~120KB total; the display face is preloaded.
+- **Chrome in two places only** — deck statements (`--chrome-sculpt`: bright at both edges, dark through the middle, plus a drop-shadow) and the header logo (`logo.png` is RGBA, so its alpha masks the gradient). Archive prints wear `--chrome-bezel`.
+- **Holographic foil was tried and reverted** (`712d5c1` → `7b2a791`). Materially accurate and still worse: diffraction colour depends on viewing angle, a screen cannot sense angle, so it had to be faked from scroll position — colour shifted when the reader scrolled rather than when they moved. Wrong cause, wrong feel. Do not retry without a genuinely new idea.
+- **Grain bug fixed.** `.grain` sat at `z-index: 0` before `<main>`, sharing a paint layer with the positioned sections and losing to them on tree order; `display:none` changed the screenshot by zero bytes, so it had never rendered at all. Now `z-index: 5`. This was most of why the hero clip read as "pasted on" — shared grain is what welds separate materials into one image.
+- The hero clip is **93% a single flat grey** (measured, not guessed), so a crisp rectangle of it floated. It now has an edge falloff for depth.
+- The bio pins **below** the header via `--header-h`, so it centres in the area actually visible.
+- `.hero-split` renamed **`.split-frame`** — it is the mechanism, and it is used twice.
 
-## Open / next — in priority order
+## Page weight (measured, dev server, full scroll)
 
-1. **Mobile pass.** Only tested at 1440×900. Sticky/scrub sections are untested on phones; `runway--5` = 500svh of scroll on a small screen may be far too long. **Highest risk item.**
-2. **Fonts — still unresolved.** `--font-display` is still `"Arial Narrow", "Helvetica Neue", Arial`. **iOS and Android have no Arial Narrow**, so on phones every heading falls back to a non-condensed face and the identity collapses. User's earlier complaint "kerasa belum jadi" was diagnosed to this and it is *completely untouched*. Suggested: real display face + a **mono for metadata** (catalog codes, dates, durations) — mono is the single highest-impact typographic move for an archive site. Consider Velvetyne / Collletttivo (open source, not Google-Fonts-looking). Self-host woff2.
-3. **Other pages still run the old system** — `archive/`, `releases/`, `shop/`, `about/` use plain `data-reveal` sections. They inherited the bigger reveal + animated grain but none of the scrub choreographies.
-4. **`docs/design.md` now contradicts the build** — it says "motion restrained", "no decorative gradients". User said explicitly it can be rewritten. Not done.
-5. **Commit.** Nothing is committed yet.
+21,835px · 90 requests · media **11.4MB** · images 1.6MB · fonts 118KB. Production is roughly 13MB.
 
-## Verification tooling (already set up, reuse it)
+**Relevant to the one-page work:** folding in four more pages puts every asset on a single document. Lazy-loading already exists (`loading="lazy"`, plus `data-bg-video` with an IntersectionObserver) — keep it, extend it, and re-measure after the merge.
 
-Playwright + Chrome is installed in the scratchpad — this is what made the analysis real, use it instead of guessing:
-```
-cd <scratchpad>/browse   # npm pkg with playwright already installed
-node shoot.mjs "http://localhost:4326/" out 14   # scroll through, N screenshots
-node diag.mjs                                    # read computed --p / transforms at set offsets
-node hover.mjs                                   # hover test: sibling opacities + readout
-```
-If the scratchpad is gone: `npm install playwright` anywhere, `chromium.launch({ channel: "chrome" })`, Chrome + the browser cache are already on this machine. **Use `waitUntil: "domcontentloaded"`, not `networkidle`** — these sites never go idle.
+## Verification tooling — use it, do not guess
 
-## Content constraint
+Playwright with real Chrome is installed in the session scratchpad under `browse/`. Scripts there: `shoot.mjs` (scroll-through screenshots), `diag.mjs` (computed `--p` and transforms at set offsets), `hover.mjs`, `grain.mjs` (screenshot diff, proves an overlay actually renders), `weight.mjs` (bytes and requests).
 
-**NEVER use the word "underground"** in site copy. Use "club culture" / "raw sound".
+If the scratchpad is gone: `npm install playwright` anywhere and use `chromium.launch({ channel: "chrome" })` — Chrome and the browser cache are already on this machine. **Use `waitUntil: "domcontentloaded"`, never `networkidle`.** Measure numbers — opacity, transform, `--p`, byte diffs — rather than only looking.
 
-## Working style
+## Constraints
 
-Bahasa Indonesia, ringkas, langsung fix. User dislikes process theatre — show measured evidence and working results, not plans about plans.
+- **Never use the word "underground"** in copy. Use "club culture" or "raw sound".
+- Bahasa Indonesia, ringkas, langsung fix. The user dislikes process theatre; show measured evidence and working results.
+- This is a **portfolio / pitch piece** for the user. The bar is work they could not trivially do themselves.
+
+## Still open after the one-page work
+
+- **Mobile pass.** Never tested below 1440×900. `runway--5` is 500svh, which on a phone is likely far too long. `--header-h: 104px` for mobile is a guess — measure it. Highest-risk item.
+- `docs/design.md` still contradicts the build (it says "motion restrained", "no decorative gradients"). The user has said it can be rewritten.
+- Optional: the second `split-frame` could run in reverse — five frames converging into one — so the pair reads as bookends rather than the same effect twice. One line: invert `--pi`.
+- A WebGL liquid-metal background was offered and not taken up. If revisited: behind the **deck only**, raw WebGL2 (no library, ~5KB), driven by `--p`, gated on reduced-motion and saveData, paused off-screen, with a plain-black fallback.
 
 ## Resume prompt
 
@@ -101,22 +103,23 @@ Bahasa Indonesia, ringkas, langsung fix. User dislikes process theatre — show 
 Lanjutin project perspex909 (working dir sama, Bahasa Indonesia, ringkas, langsung fix).
 Baca HANDOFF.md di root repo dulu. Jangan pernah pakai kata "underground" di copy.
 
-Konteks: homepage udah dirombak total pakai scroll-scrub engine — satu variabel --p per
-section, semua koreografi CSS murni di src/styles/motion.css. User puas sama hasilnya.
-Build lolos tapi BELUM DI-COMMIT sama sekali.
+Sesi ini: ROMBAK JADI ONE-PAGE. Lipat archive/, releases/, shop/, about/ ke homepage.
+Keputusan ini udah final — jangan diperdebatkan lagi, alasannya ada di HANDOFF.md.
 
-ATURAN PENTING yang udah kepelajari: koreografi nggak boleh pernah benar-benar beku.
-Boleh nahan detail biar kebaca (opacity/blur settle), tapi harus selalu ada transform
-pelan yang jalan di baliknya. Dua kali salah gara-gara ini.
+Cara yang user mau:
+- Archive melebar ke bawah inline beserta informasinya, bukan nge-link keluar
+- Tiap section yang dilipat boleh dapat koreografi sendiri, misal archive pakai
+  split-frame. Sesuaikan per section, mesinnya udah ada.
+- Commerce pindah ke subdomain (Shopify/Gumroad), bukan urusan repo ini
 
-Prioritas sesi ini: [PILIH SALAH SATU]
-  (a) Commit dulu — kerjaan 2 sesi belum ke-commit, ini paling berisiko
-  (b) Mobile pass — section sticky/scrub belum pernah dites di HP sama sekali
-  (c) Font — masih Arial Narrow yang nggak ada di iOS/Android; ini project buat
-      portfolio/pitching, jadi ketemunya di HP calon klien bakal jelek
-  (d) Rombak halaman lain (archive/releases/shop/about) pakai sistem scrub yang sama
+Yang WAJIB dijaga:
+- Koreografi nggak boleh pernah benar-benar beku
+- Jangan ninggalin token/rule yang nggak ada yang pakai
+- Jangan kasih label di jeda antar section — itu ngebocorin kejutannya
 
-Playwright udah kepasang buat verifikasi visual — pakai itu, jangan nebak. Ukur angkanya
-(opacity, transform, --p) jangan cuma lihat. Caranya ada di HANDOFF.md bagian
-"Verification tooling". Dev server terakhir di port 4326.
+Habis merge, ukur ulang berat halaman pakai weight.mjs — sekarang aja produksi udah
+~13MB, jadi lazy-load harus dijaga dan diperluas.
+
+Playwright udah kepasang buat verifikasi visual. Ukur angkanya, jangan cuma dilihat.
+Caranya ada di HANDOFF.md bagian "Verification tooling".
 ```
