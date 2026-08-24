@@ -496,6 +496,47 @@
 .index-block:hover .index-readout { opacity: 0.24; }
 
 /* =========================================================================
+   INTERLUDE — a breath between two pinned chapters, and the only place the
+   page names what is coming. Short on purpose: long enough to release the
+   eye, too short to read as a section of its own.
+   ========================================================================= */
+
+.interlude {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2vw, 28px);
+  height: 46svh;
+  padding: 0 var(--page-pad);
+  background: var(--color-night);
+  /* Still drifting: a dead band between two moving chapters reads as a
+     loading gap rather than a rest. */
+  --d: calc((0.5 - var(--p)) * 40px);
+}
+
+.interlude__rule {
+  flex: 1;
+  max-width: 22vw;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-metal-line), transparent);
+  transform: translate3d(0, var(--d), 0);
+  opacity: 0.5;
+}
+
+.interlude__no,
+.interlude__label {
+  font-family: var(--font-meta);
+  font-size: var(--text-meta);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translate3d(0, var(--d), 0);
+}
+
+.interlude__no { color: var(--color-signal); }
+.interlude__label { color: color-mix(in srgb, var(--color-white) 62%, transparent); }
+
+/* =========================================================================
    7. SPECS — a hard metadata grid. The document, then the facts.
    ========================================================================= */
 
