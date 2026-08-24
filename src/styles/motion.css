@@ -183,9 +183,15 @@
 
      The sweep is deliberately narrow (130%, not 180%): a sculpted form does
      not slide past itself, the LIGHT moves across a form that stays put. */
-  background-image: var(--chrome-sculpt);
-  background-size: 100% 130%;
-  background-position: 0 calc(var(--local) * 100%);
+  background-image: var(--foil-grate), var(--foil-sheen), var(--foil-base);
+  background-size: 100% 100%, 280% 100%, 100% 130%;
+  /* The sheen travels sideways much faster than the silver moves down. That
+     mismatch is the whole illusion: diffraction colour depends on viewing
+     angle, so a screen fakes it by shifting hue as the reader moves. */
+  background-position:
+    0 0,
+    calc(var(--local) * -180%) 0,
+    0 calc(var(--local) * 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
