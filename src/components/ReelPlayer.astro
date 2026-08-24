@@ -12,7 +12,7 @@ const shortLabel = label.replace(/^(Portal\s)?Reel\s\d+\s?—?\s?/i, "").trim() 
 
 <div class="reel-item" data-reel data-yt={youtubeId}>
   <div class="reel-overlay" aria-hidden="true">
-    <img src={thumbUrl} alt="" class="reel-overlay__thumb" fetchpriority={index < 2 ? "high" : "auto"} />
+    <img src={thumbUrl} alt="" class="reel-overlay__thumb" loading="lazy" decoding="async" />
     <div class="reel-overlay__scrim"></div>
     <button class="reel-play" type="button" aria-label={`Play ${label}`}>
       <svg width="22" height="24" viewBox="0 0 22 24" fill="none" aria-hidden="true">
