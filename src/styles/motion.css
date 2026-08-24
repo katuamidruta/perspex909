@@ -246,13 +246,17 @@
   color: var(--color-white);
 }
 
-.section--paper .burn--lead { color: var(--color-ink); }
+.bio {
+  /* Same ground as the deck above it, for the same reason: a drop-shadow
+     cast onto absolute black is invisible, and chrome needs something to
+     sit on. Still reads as black. */
+  background: #08080a;
+}
 
 /* Pinned so the page cannot run ahead of the reader: the sentence assembles
-   while the stage is held, and only releases once it is fully legible. */
-/* Unlike the full-bleed image stages, this one is type on paper: it pins
-   BELOW the header instead of under it, so the block centres in the area
-   the reader can actually see. */
+   while the stage is held, and only releases once it is fully legible.
+   Unlike the full-bleed image stages, this one is type: it pins BELOW the
+   header instead of under it, so the block centres in what is visible. */
 .bio .stage {
   top: var(--header-h);
   height: calc(100svh - var(--header-h));
@@ -272,6 +276,29 @@
 
 .bio .burn > span {
   --wp: clamp(0, calc(var(--p) / 0.7 * (var(--n) + 2) - var(--i)), 1);
+
+  /* Cast in the same sculptural chrome as the deck statements, and lit on
+     the same clock: the light travels across the sentence as it burns in,
+     so the two type sections read as one material. */
+  filter: blur(calc((1 - var(--wp)) * 26px))
+          drop-shadow(0 2px 5px rgba(0, 0, 0, 0.75));
+  /* Not --chrome-sculpt: that one drops to #757a81 through the middle, which
+     is right for a 112px statement and mud for a 54px paragraph. Same
+     material, floor raised — the darkest stop still reads as light type on
+     black, so the sentence stays a sentence. */
+  background-image: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #eceef1 22%,
+    #b7bcc4 50%,
+    #dfe3e8 74%,
+    #ffffff 100%
+  );
+  background-size: 100% 130%;
+  background-position: 0 calc(var(--p) * 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 
@@ -994,7 +1021,8 @@
   .chronicle-line > span { opacity: 1; filter: none; transform: none; }
 
   /* Chrome still applies, just held at a fixed, legible horizon. */
-  .deck-line > span { background-position: 0 40%; }
+  .deck-line > span,
+  .bio .burn > span { background-position: 0 40%; }
   .bio-inner { transform: none; }
 
   .stack-table { height: auto; }
