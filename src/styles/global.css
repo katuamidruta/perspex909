@@ -63,6 +63,9 @@
   --text-heading: 27px;
   --text-display: clamp(60px, 13vw, 188px);
   --page-pad: clamp(16px, 2.4vw, 34px);
+  /* Height of the sticky header. Reading sections pin below it rather than
+     sliding underneath, so their content stays centred in what is visible. */
+  --header-h: 81px;
   --line: color-mix(in srgb, currentColor 18%, transparent);
 
   /* CHROME. The whole illusion lives in the two stops at 49.9/50.1: real
@@ -87,7 +90,7 @@
 html {
   min-width: 320px;
   scroll-behavior: smooth;
-  scroll-padding-top: 74px;
+  scroll-padding-top: var(--header-h);
   background: var(--color-night);
   color: var(--color-white);
   font-family: var(--font-body);
@@ -303,6 +306,8 @@ body.is-loaded .site-loader {
 
 /* Narrow screens cannot hold three tracks: mark on top, nav split beneath. */
 @media (max-width: 640px) {
+  :root { --header-h: 104px; }
+
   .site-header {
     grid-template-columns: 1fr 1fr;
     gap: 10px 16px;

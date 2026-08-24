@@ -229,7 +229,12 @@
 
 /* Pinned so the page cannot run ahead of the reader: the sentence assembles
    while the stage is held, and only releases once it is fully legible. */
+/* Unlike the full-bleed image stages, this one is type on paper: it pins
+   BELOW the header instead of under it, so the block centres in the area
+   the reader can actually see. */
 .bio .stage {
+  top: var(--header-h);
+  height: calc(100svh - var(--header-h));
   display: flex;
   align-items: center;
   justify-content: center;
