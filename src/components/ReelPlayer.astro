@@ -10,7 +10,7 @@ const thumbUrl = `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`;
 const shortLabel = label.replace(/^(Portal\s)?Reel\s\d+\s?—?\s?/i, "").trim() || label;
 ---
 
-<div class="reel-item" data-reel data-yt={youtubeId}>
+<div class="reel-item" data-reel data-yt={youtubeId} style={`--i:${index}`}>
   <div class="reel-overlay" aria-hidden="true">
     <img src={thumbUrl} alt="" class="reel-overlay__thumb" loading="lazy" decoding="async" />
     <div class="reel-overlay__scrim"></div>

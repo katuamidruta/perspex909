@@ -543,22 +543,6 @@ body.is-loaded .site-loader {
   border-color: var(--color-white);
 }
 
-/* Reels — one contact strip, a column per reel, so the row never breaks
-   into a ragged orphan line. */
-.reels-grid {
-  display: grid;
-  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
-  gap: 10px;
-}
-
-@media (max-width: 1100px) {
-  .reels-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-}
-
-@media (max-width: 620px) {
-  .reels-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
 .reel-item {
   position: relative;
   aspect-ratio: 9 / 16;
@@ -566,6 +550,12 @@ body.is-loaded .site-loader {
   border: 1px solid var(--line);
   overflow: hidden;
   cursor: pointer;
+}
+
+.reel-item.is-playing {
+  /* Once a reel is running it holds focus regardless of where the head is. */
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 .reel-item video {

@@ -322,19 +322,20 @@ const indexRows = [
   </section>
 
   {/* ---------- 07 · FIELD FOOTAGE ---------------------------------- */}
-  <section class="section reels">
-    <div class="section-header" data-in="up">
-      <div>
+  <section class="reels runway--4" data-scrub>
+    <div class="stage">
+      <div class="reels-head">
         <p class="section-kicker">Visual Record</p>
         <h2 class="section-title">Field Footage</h2>
       </div>
-    </div>
-    <div class="reels-grid" data-in="up" style={`--d:120ms; --cols:${reels.length}`}>
-      {
-        reels.map((reel, i) => (
-          <ReelPlayer youtubeId={reel.youtubeId} label={reel.event} index={i} />
-        ))
-      }
+
+      <div class="reel-strip" style={`--n:${reels.length}`}>
+        {
+          reels.map((reel, i) => (
+            <ReelPlayer youtubeId={reel.youtubeId} label={reel.event} index={i} />
+          ))
+        }
+      </div>
     </div>
   </section>
 

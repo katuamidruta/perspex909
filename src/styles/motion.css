@@ -422,12 +422,22 @@
 .dossier-sheet.is-last { --dis: 0; }
 
 /* Flyer and record drift against each other for the whole slot, so the
-   sheet keeps moving long after it is readable. */
+   sheet keeps moving long after it is readable.
+
+   The box takes the poster's own shape rather than the column's: every
+   flyer in the archive is 4:5, and a cover-crop into whatever rectangle
+   the grid happened to leave was cutting the bottom off the artwork. Height
+   drives the size, width follows the ratio, and the figure centres in the
+   column — so the poster is always whole, at whatever width the window
+   allows. contain is the insurance for a future flyer that is not 4:5:
+   it letterboxes instead of cropping. */
 .dossier-flyer {
   position: relative;
-  height: 100%;
-  max-height: 76svh;
-  margin: 0;
+  height: 72svh;
+  max-height: 100%;
+  aspect-ratio: 4 / 5;
+  width: auto;
+  margin: 0 auto;
   transform: translate3d(0, calc((var(--local) - 0.5) * 42px), 0);
   will-change: transform;
 }
@@ -435,7 +445,7 @@
 .dossier-flyer img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   filter: grayscale(1) contrast(1.12);
 }
 
@@ -589,6 +599,67 @@
   opacity: var(--v);
   filter: blur(calc((1 - var(--v)) * 30px));
   will-change: opacity, filter;
+}
+
+/* =========================================================================
+   5a. REEL STRIP — seven reels laid on one track, advanced by scroll.
+   A row of seven thumbnails is a contact sheet, not footage: nothing is
+   big enough to watch and the eye has nowhere to land. One reel holds the
+   centre instead, its neighbours peeking in at the edges, and the strip
+   moves under the same --p as everything else — so the section is scrolled
+   through rather than clicked through, and the page keeps one gesture.
+   ========================================================================= */
+
+.reels {
+  background: var(--color-night);
+}
+
+.reels .stage {
+  top: var(--header-h);
+  height: calc(100svh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(16px, 3vh, 38px);
+}
+
+.reels-head {
+  padding: 0 var(--page-pad);
+  /* Drifts against the strip so the heading is never a static slab. */
+  transform: translate3d(0, calc((0.5 - var(--p)) * -30px), 0);
+}
+
+.reel-strip {
+  --item: min(40svh, 76vw);
+  --gap: clamp(10px, 1.4vw, 20px);
+
+  display: flex;
+  gap: var(--gap);
+  /* Half a viewport of lead-in puts item 0 in the middle at --p 0. */
+  padding-left: calc(50vw - var(--item) / 2);
+  transform: translate3d(
+    calc(var(--p) * (var(--n) - 1) * (var(--item) + var(--gap)) * -1),
+    0,
+    0
+  );
+  will-change: transform;
+}
+
+.reel-strip .reel-item {
+  /* Distance from the head, resolved without abs(): one ramp falling off
+     each side, and the smaller of the two is the focus. */
+  --lead: clamp(0, calc(1 - (var(--p) * (var(--n) - 1) - var(--i))), 1);
+  --trail: clamp(0, calc(1 + (var(--p) * (var(--n) - 1) - var(--i))), 1);
+  --focus: min(var(--lead), var(--trail));
+
+  flex: 0 0 var(--item);
+  opacity: calc(0.22 + var(--focus) * 0.78);
+  transform: scale(calc(0.84 + var(--focus) * 0.16));
+  will-change: opacity, transform;
+}
+
+.reel-strip .reel-play {
+  opacity: var(--focus);
 }
 
 /* =========================================================================
@@ -1058,6 +1129,22 @@
 
   /* --p is never written, so the head has nothing to travel on: hide it and
      hand the counter the total it would have counted up to. */
+  /* No --p to advance the strip, so it becomes what it is underneath:
+     seven reels, wrapped, all of them reachable. */
+  .reels .stage { top: 0; height: auto; }
+  .reel-strip {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: clamp(24px, 5vh, 60px) var(--page-pad);
+    transform: none;
+  }
+  .reel-strip .reel-item {
+    flex: 0 0 min(260px, 40vw);
+    opacity: 1;
+    transform: none;
+  }
+  .reel-strip .reel-play { opacity: 1; }
+
   .ladder { --tn: var(--n); }
   .ladder-cursor { display: none; }
   .ladder-row { opacity: 1; }

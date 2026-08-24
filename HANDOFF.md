@@ -12,7 +12,7 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No U
 
 ## The page, in order
 
-Heights measured at 1440×900. Total **31,600px** (was 21,835px for the old homepage alone).
+Heights measured at 1440×900. Total **34,575px** (was 21,835px for the old homepage alone).
 
 | # | Section | Runway | Note |
 |---|---|---|---|
@@ -23,7 +23,7 @@ Heights measured at 1440×900. Total **31,600px** (was 21,835px for the old home
 | — | `interlude` | 46svh | held breath before the archive |
 | 5 | `stack` `#archive` | 400svh | the three event flyers deal into a pile |
 | 6 | `dossier` | 500svh | **new** — the same three records unroll in place |
-| 7 | `reels` | — | every archive reel, click-to-play, one contact strip |
+| 7 | `reels` | 400svh | every archive reel on one track, advanced by scroll |
 | — | `interlude` | 46svh | empty and unlabelled on purpose |
 | 8 | `split-frame` `#release` | 300svh | compilation.mp4, same mechanism — the two rhyme |
 | 9 | `section--metal` | — | VA01 spec grid, release notes, credits, Bandcamp/SoundCloud |
@@ -46,8 +46,9 @@ Nav and the index rows are **anchors** now (`#label`, `#archive`, `#release`, `#
 
 ### The three new choreographies
 
-- **`dossier`** — one archive record per slice of runway. The flyer is held on the left, the sheet writes itself out on the right: each row unrolls left-to-right on a `clip-path: inset(0 X 0 0)`, in order, like paper coming off a roll. Flyer and record drift against each other for the whole slot so the sheet never sits still. `.is-last` keeps `--dis: 0` so the section doesn't hand back an empty stage.
+- **`dossier`** — one archive record per slice of runway. The flyer box takes the poster's own 4:5 shape (measured: all three flyers are exactly 0.800) with `object-fit: contain`, so the artwork is never cropped at any window width — a cover-crop into whatever rectangle the grid left was cutting the bottom off the posters. The flyer is held on the left, the sheet writes itself out on the right: each row unrolls left-to-right on a `clip-path: inset(0 X 0 0)`, in order, like paper coming off a roll. Flyer and record drift against each other for the whole slot so the sheet never sits still. `.is-last` keeps `--dis: 0` so the section doesn't hand back an empty stage.
 - **`ladder`** — the tracklist as a document being read. An ink head travels the list on `top: calc(var(--p) * 100%)`, rows behind it print from 0.26 to full opacity, and the counter is a registered `@property --tn { syntax: "<integer>" }` computed as `calc(var(--p) * var(--n))` and written straight into `counter-reset`. **Verified in Chrome:** `--tn` reads 2 → 18 → 36 across the section. The total after the slash comes from the same `--n` the rows are sequenced against, so the readout cannot drift out of step.
+- **`reel strip`** — seven reels on one horizontal track, advanced by `--p`. One holds the centre at full size while its neighbours sit at 0.22 opacity and 0.84 scale, so the section is scrolled through rather than clicked through. Focus is resolved without `abs()`: two `clamp()` ramps, one falling off each side, and `min()` of the pair. Measured across the runway: the head lands on reel 2 → 4 → 6 → 7 as `--p` goes 0.11 → 0.52 → 0.93 → 1, and the track travels 0 → −1956px. Under reduced motion it wraps into a plain grid with all seven reachable.
 - **`artifact`** — two columns of tee photographs travelling in opposite directions (`--p * -32%` / `--p * 32% - 32%`) behind an order sheet that fades up and keeps drifting. Measured: columns travel 0 → −845px across the runway.
 
 ## Palette
