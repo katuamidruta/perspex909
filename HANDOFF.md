@@ -12,14 +12,15 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No U
 
 ## The page, in order
 
-Heights measured at 1440×900. Total **31,186px** (was 21,835px for the old homepage alone).
+Heights measured at 1440×900. Total **31,600px** (was 21,835px for the old homepage alone).
 
 | # | Section | Runway | Note |
 |---|---|---|---|
 | 1 | `split-frame` | 300svh | hero.mp4 splits into a five-column band |
 | 2 | `deck` | 400svh | three statements, word-burn + chrome |
-| 3 | `bio` `#label` | 300svh | pinned below the header, word-burn |
+| 3 | `bio` `#label` | 300svh | pinned below the header, word-burn, chrome type on black |
 | 4 | `ledger` | — | the label's own metadata grid + one line of prose (from `about/`) |
+| — | `interlude` | 46svh | held breath before the archive |
 | 5 | `stack` `#archive` | 400svh | the three event flyers deal into a pile |
 | 6 | `dossier` | 500svh | **new** — the same three records unroll in place |
 | 7 | `reels` | — | every archive reel, click-to-play, one contact strip |
@@ -46,15 +47,31 @@ Nav and the index rows are **anchors** now (`#label`, `#archive`, `#release`, `#
 ### The three new choreographies
 
 - **`dossier`** — one archive record per slice of runway. The flyer is held on the left, the sheet writes itself out on the right: each row unrolls left-to-right on a `clip-path: inset(0 X 0 0)`, in order, like paper coming off a roll. Flyer and record drift against each other for the whole slot so the sheet never sits still. `.is-last` keeps `--dis: 0` so the section doesn't hand back an empty stage.
-- **`ladder`** — the tracklist as a document being read. A signal-red head travels the list on `top: calc(var(--p) * 100%)`, rows behind it print from 0.26 to full opacity, and the counter is a registered `@property --tn { syntax: "<integer>" }` computed as `calc(var(--p) * var(--n))` and written straight into `counter-reset`. **Verified in Chrome:** `--tn` reads 2 → 18 → 36 across the section. The total after the slash comes from the same `--n` the rows are sequenced against, so the readout cannot drift out of step.
+- **`ladder`** — the tracklist as a document being read. An ink head travels the list on `top: calc(var(--p) * 100%)`, rows behind it print from 0.26 to full opacity, and the counter is a registered `@property --tn { syntax: "<integer>" }` computed as `calc(var(--p) * var(--n))` and written straight into `counter-reset`. **Verified in Chrome:** `--tn` reads 2 → 18 → 36 across the section. The total after the slash comes from the same `--n` the rows are sequenced against, so the readout cannot drift out of step.
 - **`artifact`** — two columns of tee photographs travelling in opposite directions (`--p * -32%` / `--p * 32% - 32%`) behind an order sheet that fades up and keeps drifting. Measured: columns travel 0 → −845px across the runway.
+
+## Palette
+
+**There is no accent colour.** The signal red (`#e73737`) was removed everywhere — kickers, nav numerals, CTAs, the ladder head, the reel indices, the loader scanline, the price — because on this much black it read as loud rather than sharp. Emphasis is now carried by **light** instead of hue: a white fill for the primary action, dimmed white for rank, and metal for display type.
+
+Three metals, each with one job:
+
+- `--chrome` — the header logo only. Flat mirror, hard horizon at 50%.
+- `--chrome-sculpt` — the deck statements only. Drops to `#757a81` through the middle, which is what makes a 112px letterform read as extruded.
+- `--chrome-type` — the bio paragraph and every display heading on a dark ground (`.reels .section-title`, `.artifact-sheet .section-title`, `.artifact-price`, `.dossier-row--title h2`, `.spec-grid dd`). Same light, floor raised to `#b7bcc4`, because the sculpted gradient turns to mud below display size.
+
+**Chrome needs glyph mass.** Nothing under about 28px wears it — mono metadata, kickers, tracklist rows and the paper sections stay plain, and that contrast is what keeps the metal meaning something. Chrome on the cream paper sections is invisible; do not try it.
+
+Where a heading sits inside a scrubbed stage the light travels with `--p` (or the sheet's `--local`); elsewhere it holds a fixed horizon at 40%.
+
+Archive prints are **bare images now** — the 3px `--chrome-bezel` rim came off both the pile and the dossier flyer at the user's request, and the token went with it.
 
 ## Rules learned the hard way — do not re-break these
 
 1. **A choreography must never fully freeze.** Correct shape: let detail resolve and hold while a slow transform keeps running underneath.
 2. **Amplitude is what reads as intent.** A ±9px parallax is invisible, not subtle.
 3. **Never leave a token or rule that nothing draws.** This session removed 147 orphan CSS rules, five unused tokens (`--color-cocoa`, `--color-oxidized-gold`, `--color-haze-violet`, `--text-heading`, `--text-display`), the `[data-parallax]`/`[data-drift]` engine and its CSS, `[data-reveal]`, `.runway--2`, and a `display:none` credit block that was still downloading a 106KB PNG on every visit.
-4. **Do not label a pause.** The interlude stays empty.
+4. **Do not label a pause.** Both interludes stay empty. They are also the tool for pacing: the run into the archive read as a hard cut off the back of the ledger grid, and 46svh of nothing fixed it. A longer scroll is an acceptable price — the user said so explicitly.
 5. **Prove a CSS deletion changed nothing.** Screenshot bytes are useless here — the grain animates and the video plays, so every frame differs. `browse/digest.mjs` dumps geometry plus paint-critical computed styles for all 603 elements at seven scroll positions; before/after the prune, **20 of 4221 element-states differed, every one of them an animation phase (loader scan position, grain drift, an in-flight transition) or a ±1px rounding**.
 
 ## Page weight — measured on the production build (`astro preview`, dist/)

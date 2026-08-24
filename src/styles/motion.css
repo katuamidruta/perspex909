@@ -282,18 +282,10 @@
      so the two type sections read as one material. */
   filter: blur(calc((1 - var(--wp)) * 26px))
           drop-shadow(0 2px 5px rgba(0, 0, 0, 0.75));
-  /* Not --chrome-sculpt: that one drops to #757a81 through the middle, which
-     is right for a 112px statement and mud for a 54px paragraph. Same
-     material, floor raised — the darkest stop still reads as light type on
-     black, so the sentence stays a sentence. */
-  background-image: linear-gradient(
-    180deg,
-    #ffffff 0%,
-    #eceef1 22%,
-    #b7bcc4 50%,
-    #dfe3e8 74%,
-    #ffffff 100%
-  );
+  /* --chrome-type, not --chrome-sculpt: the sculpted one drops to #757a81
+     through the middle, which is right for a 112px statement and mud for a
+     54px paragraph. */
+  background-image: var(--chrome-type);
   background-size: 100% 130%;
   background-position: 0 calc(var(--p) * 100%);
   -webkit-background-clip: text;
@@ -330,11 +322,6 @@
   --sp: clamp(0, calc(var(--p) * var(--n) - var(--i)), 1);
   position: absolute;
   inset: 0;
-  /* A 3px rim of bezel gradient showing past the image: the frame trick is
-     just padding plus a gradient background. Makes each flyer read as a
-     physical print rather than a picture on a screen. */
-  padding: 3px;
-  background: var(--chrome-bezel);
   z-index: var(--i);
   opacity: var(--sp);
   transform:
@@ -441,8 +428,6 @@
   height: 100%;
   max-height: 76svh;
   margin: 0;
-  padding: 3px;
-  background: var(--chrome-bezel);
   transform: translate3d(0, calc((var(--local) - 0.5) * 42px), 0);
   will-change: transform;
 }
@@ -668,8 +653,8 @@
   right: 0;
   top: calc(var(--p) * 100%);
   height: 2px;
-  background: var(--color-signal);
-  box-shadow: 0 0 22px 2px rgba(231, 55, 55, 0.5);
+  background: var(--color-ink);
+  box-shadow: 0 0 18px 1px rgba(18, 18, 18, 0.35);
   pointer-events: none;
 }
 
@@ -807,7 +792,6 @@
   font-size: clamp(26px, 4vw, 54px);
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--color-signal);
 }
 
 .artifact-credit {
@@ -820,6 +804,33 @@
 }
 
 .artifact-sheet .cta-row { justify-content: center; }
+
+/* =========================================================================
+   5d. HEADING METAL — display type on a dark ground is cast in the same
+   material as the deck statements. Chrome needs glyph mass to hold a
+   gradient, so nothing under about 28px joins in, and nothing on paper:
+   metal on cream is invisible. Where the heading sits inside a scrubbed
+   stage the light travels with it; elsewhere it holds a fixed horizon.
+   ========================================================================= */
+
+.reels .section-title,
+.artifact-sheet .section-title,
+.artifact-price,
+.dossier-row--title h2,
+.spec-grid dd {
+  background-image: var(--chrome-type);
+  background-size: 100% 150%;
+  background-position: 0 40%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.7));
+}
+
+.dossier-row--title h2 { background-position: 0 calc(var(--local) * 100%); }
+
+.artifact-sheet .section-title,
+.artifact-price { background-position: 0 calc(var(--p) * 100%); }
 
 /* =========================================================================
    6. INDEX — the dense archive list. Hovering one row recedes every other
@@ -868,7 +879,10 @@
   text-transform: uppercase;
 }
 
-.index-row:hover .index-row__title { color: var(--color-signal); }
+/* The list already recedes around the cursor; the row under it steps
+   forward. A colour change here would be the only accent on the page. */
+.index-row__title { transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1); }
+.index-row:hover .index-row__title { transform: translateX(12px); }
 
 /* Big number, driven by whichever row the cursor is on. */
 .index-readout {

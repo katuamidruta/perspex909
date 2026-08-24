@@ -47,7 +47,6 @@
   --color-ink: #121212;
   --color-night: #000000;
   --color-white: #ffffff;
-  --color-signal: #e73737;
   --font-display: "Archivo Expanded", "Archivo", "Arial Narrow", Arial, sans-serif;
   --font-body: "Archivo", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   /* Metadata is set in mono on purpose: catalogue codes, dates and durations
@@ -96,16 +95,19 @@
     #ffffff 100%
   );
 
-  /* BEZEL: lit from the top-left, shadowed at 70%, catching again at the
-     far corner — what a metal rim does around a physical print. */
-  --chrome-bezel: linear-gradient(
-    145deg,
-    #d8dbde 0%,
-    #757a81 30%,
-    #a8a9ad 50%,
-    #3a3a48 70%,
-    #c0c4cc 100%
+  /* TYPE: the same light as --chrome-sculpt with the floor raised from
+     #757a81 to #b7bcc4. The sculpted version is right for a 112px statement
+     and mud for a paragraph or a heading — this one keeps its darkest stop
+     above the point where light type on black stops reading. */
+  --chrome-type: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #eceef1 22%,
+    #b7bcc4 50%,
+    #dfe3e8 74%,
+    #ffffff 100%
   );
+
 }
 
 * {
@@ -216,7 +218,7 @@ p {
 }
 
 .site-loader__scan {
-  background: linear-gradient(180deg, transparent 0 46%, rgba(231, 55, 55, 0.22) 49%, transparent 52% 100%);
+  background: linear-gradient(180deg, transparent 0 46%, rgba(255, 255, 255, 0.18) 49%, transparent 52% 100%);
   animation: scanlineDrop 1900ms linear infinite;
 }
 
@@ -369,7 +371,7 @@ body.is-loaded .site-loader {
 }
 
 .site-nav span {
-  color: var(--color-signal);
+  color: color-mix(in srgb, currentColor 42%, transparent);
   margin-right: 5px;
 }
 
@@ -401,7 +403,7 @@ body.is-loaded .site-loader {
 
 .section-kicker {
   margin: 0;
-  color: var(--color-signal);
+  color: color-mix(in srgb, currentColor 58%, transparent);
   font-family: var(--font-meta);
   font-size: var(--text-meta);
   font-weight: 600;
@@ -521,22 +523,23 @@ body.is-loaded .site-loader {
 
 .cta:hover,
 .cta:focus-visible {
-  color: var(--color-white);
-  background: var(--color-signal);
-  border-color: var(--color-signal);
+  color: var(--color-night);
+  background: var(--color-white);
+  border-color: var(--color-white);
   outline: 0;
 }
 
+/* The primary action carries the page's only solid fill. */
 .cta--signal {
-  color: var(--color-white);
-  background: var(--color-signal);
-  border-color: var(--color-signal);
+  color: var(--color-night);
+  background: var(--color-white);
+  border-color: var(--color-white);
 }
 
 .cta--signal:hover,
 .cta--signal:focus-visible {
-  color: var(--color-night);
-  background: var(--color-white);
+  color: var(--color-white);
+  background: transparent;
   border-color: var(--color-white);
 }
 
@@ -621,8 +624,9 @@ body.is-loaded .site-loader {
 }
 
 .reel-play:hover {
-  background: var(--color-signal);
-  border-color: var(--color-signal);
+  color: var(--color-night);
+  background: var(--color-white);
+  border-color: var(--color-white);
   transform: scale(1.08);
 }
 
@@ -650,7 +654,7 @@ body.is-loaded .site-loader {
 }
 
 .reel-label__index {
-  color: var(--color-signal);
+  color: color-mix(in srgb, var(--color-white) 45%, transparent);
   font-size: 10px;
 }
 
