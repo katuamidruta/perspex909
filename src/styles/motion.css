@@ -96,6 +96,22 @@
   overflow: hidden;
 }
 
+/* The clip is 93% one flat grey, and a crisp rectangle of it floats. An
+   edge falloff gives it depth and lets it dissolve into the ground. */
+.split-core::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    transparent 38%,
+    rgba(0, 0, 0, 0.28) 72%,
+    rgba(0, 0, 0, 0.62) 100%
+  );
+}
+
 .split-core video,
 .split-core img {
   position: absolute;
@@ -553,7 +569,12 @@
 .grain {
   position: fixed;
   inset: -120%;
-  z-index: 0;
+  /* Above the content, below the header. At z-index 0 this sat in the same
+     paint layer as the positioned sections and lost to them on tree order,
+     so it rendered nothing at all — removing it changed the page by zero
+     bytes. Shared grain is what welds video and page into one surface;
+     without it the clip reads as a rectangle pasted on top. */
+  z-index: 5;
   pointer-events: none;
   opacity: 0.045;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
