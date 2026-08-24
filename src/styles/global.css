@@ -138,14 +138,19 @@ body.is-loaded .site-loader {
 
 [data-reveal] {
   opacity: 0;
-  transform: translate3d(0, 34px, 0);
+  /* Amplitude is what reads as intent. A 34px throw was below the
+     threshold where the eye registers a move as deliberate. */
+  transform: translate3d(0, 88px, 0);
+  filter: blur(6px);
   transition:
     opacity 900ms ease,
-    transform 1000ms cubic-bezier(0.16, 1, 0.3, 1);
+    filter 900ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-reveal].is-revealed {
   opacity: 1;
+  filter: none;
   transform: translate3d(0, 0, 0);
 }
 
@@ -206,7 +211,6 @@ body.is-loaded .site-loader {
   }
 }
 
-.site-header,
 .site-footer {
   display: flex;
   align-items: center;
@@ -217,20 +221,53 @@ body.is-loaded .site-loader {
   text-transform: uppercase;
 }
 
+/* Three tracks: nav, centred mark, nav. The 1fr side columns are equal, so
+   the mark sits on the true centre of the viewport, not merely between the
+   two navs (which have different widths). */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 12px var(--page-pad);
+  border-bottom: 1px solid var(--line);
+  text-transform: uppercase;
   color: var(--color-white);
   background: color-mix(in srgb, var(--color-night) 88%, transparent);
   backdrop-filter: blur(16px);
 }
 
+/* Narrow screens cannot hold three tracks: mark on top, nav split beneath. */
+@media (max-width: 640px) {
+  .site-header {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;
+    padding: 10px var(--page-pad);
+  }
+
+  .site-mark {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .site-mark img { height: 40px; }
+}
+
 .site-mark {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 900;
-  letter-spacing: 0;
+  display: block;
+  line-height: 0;
+}
+
+.site-mark img {
+  width: auto;
+  height: 56px;
+  /* logo.png is dark artwork (the footer is white so it reads there).
+     Inverting it is what makes it legible on the black header; the
+     brightness lift stops the thin script strokes greying out. */
+  filter: invert(1) grayscale(1) brightness(1.9) contrast(1.4);
 }
 
 .site-nav,
@@ -240,6 +277,9 @@ body.is-loaded .site-loader {
   gap: 16px;
   justify-content: flex-end;
 }
+
+.site-nav--l { justify-content: flex-start; }
+.site-nav--r { justify-content: flex-end; }
 
 .site-nav a,
 .site-footer a {

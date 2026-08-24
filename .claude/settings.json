@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"d:/Data/Code/catherium/perspex909\" && echo \"--- .claude ---\" && ls -la .claude/ 2>/dev/null && echo \"--- mcp config ---\" && cat .claude/settings.json 2>/dev/null; cat .mcp.json 2>/dev/null; echo \"--- user mcp ---\" && ls ~/.claude/ 2>/dev/null | head -20)",
+      "Read(//c/Users/suaka/.claude/**)",
+      "Bash(cd \"d:/Data/Code/catherium/perspex909\" && echo \"=== di project ===\" && ls -d */ 2>/dev/null && echo \"=== cari folder mono ===\" && find . -maxdepth 3 -type d -iname \"*mono*\" -not -path \"*/node_modules/*\" 2>/dev/null; echo \"=== parent ===\" && ls -la .. 2>/dev/null | head -30)",
+      "Read(//d/Data/Code/catherium/**)",
+      "Bash(npx astro *)"
+    ]
+  }
+}

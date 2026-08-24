@@ -4,4 +4,11 @@ dist/
 .wrangler/
 astro-dev*.log
 astro-dev*.err.log
+dev-out.log
 .DS_Store
+
+# Reference material, not part of the site build
+mono/
+
+# Local-only Claude Code settings
+.claude/settings.local.json

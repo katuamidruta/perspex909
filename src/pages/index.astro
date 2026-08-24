@@ -1,6 +1,4 @@
 ---
-import ArchiveRow from "@components/ArchiveRow.astro";
-import GalleryMarquee from "@components/GalleryMarquee.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import { articles } from "@data/articles";
 import { events } from "@data/events";
@@ -10,165 +8,277 @@ import { site } from "@data/site";
 
 const va01 = releases[0];
 const tee = products[0];
-const heroVideo = "/hero.mp4";
 
-// Mixed field + release fragments. `size` drives the staggered "messy" marquee.
-// Size is assigned per item (not via nth-child) so the duplicated loop stays seamless.
-const galleryImages = [
-  { src: "/archive/random1-1.webp", size: "tall" },
-  { src: "/archive/prod1-1.webp", size: "wide" },
-  { src: "/archive/random1-2.webp", size: "short" },
-  { src: "/archive/random1-3.webp", size: "base" },
-  { src: "/archive/random1-4.webp", size: "tall" },
-  { src: "/archive/prod1-2.webp", size: "wide" },
-  { src: "/archive/random1-5.webp", size: "short" },
-  { src: "/archive/random1-6.webp", size: "base" },
-  { src: "/archive/random1-7.webp", size: "tall" },
-  { src: "/archive/prod1-3.webp", size: "wide" },
-  { src: "/archive/random1-8.webp", size: "short" },
-  { src: "/archive/random1-9.webp", size: "base" },
-  { src: "/archive/random1-10.webp", size: "tall" },
-  { src: "/archive/prod1-4.webp", size: "wide" },
-  { src: "/archive/random1-11.webp", size: "short" },
-  { src: "/archive/shirt1-1.webp", size: "base" },
-];
+const words = (line: string) => line.split(" ");
 
-const rows = [
+// 01 — HERO SPLIT. One frame pulled apart into a band.
+const wings = {
+  left: [
+    { src: "/archive/prod1-6.webp", alt: "Perspex floor documentation" },
+    { src: "/archive/random1-7.webp", alt: "Perspex floor documentation" },
+  ],
+  right: [
+    { src: "/archive/random1-11.webp", alt: "Perspex floor documentation" },
+    { src: "/archive/random1-9.webp", alt: "Perspex floor documentation" },
+  ],
+};
+
+// 02 — DECK. Three statements on a split-flap.
+const deck = ["Raw sound.", "Physical records.", "Archive first."];
+
+// 03 — BIO burn-in.
+const bio =
+  "Perspex909 is an independent electronic label and archive from Indonesia. It presses records, runs nights, and keeps account of all of it — flyers, tracklists, field photographs — held in one place instead of scattered across feeds. Everything it releases also exists as an object you can hold.";
+
+// 04 — STACK. Field frames dealt into a pile.
+const stackCards = [
+  { src: "/archive/campout1-3.webp", label: "Campout Vol. I" },
+  { src: "/archive/campout1-2.webp", label: "Portal NYE" },
   {
-    number: "01",
-    type: "Archive",
-    title: events[0].title,
-    meta: events[0].date,
-    href: `/archive/${events[0].slug}/`,
+    src: "/archive/random1-1.webp",
+    label: "Campout Vol. II",
   },
   {
-    number: "02",
-    type: "Release",
+    src: "/archive/prod1-8.webp",
+    label: "Nightspacer × Perspex",
+  },
+];
+
+// 05 — CHRONICLE. Layered frames cross-dissolving under cycling statements.
+const chronicleLayers = [
+  "/archive/prod1-1.webp",
+  "/archive/campout1-4.webp",
+  "/archive/prod1-3.webp",
+  "/archive/prod1-4.webp",
+];
+const chronicleLines = [
+  "Thirty-six tracks.",
+  "One scene document.",
+  "Pressed to hold.",
+];
+
+// 06 — INDEX. The dense list.
+// Numbered after the list is assembled, so the sequence never gaps when the
+// event count changes.
+const indexRows = [
+  ...events.slice(0, 4).map((event) => ({
+    title: event.title,
+    meta: event.location,
+    href: `/archive/${event.slug}/`,
+  })),
+  {
     title: va01.title,
     meta: `${va01.catalogCode} / ${va01.trackCount} tracks`,
     href: `/releases/${va01.slug}/`,
   },
   {
-    number: "03",
-    type: "Shop",
     title: tee.title,
     meta: tee.priceLabel,
     href: `/shop/${tee.slug}/`,
   },
   {
-    number: "04",
-    type: articles[0].type,
     title: articles[0].title,
-    meta: "Manifesto / Now",
+    meta: articles[0].type,
     href: articles[0].href,
   },
+].map((row, i) => ({ ...row, no: String(i + 1).padStart(2, "0") }));
+
+// 07 — SPECS.
+const specs = [
+  { label: "Catalog", value: va01.catalogCode },
+  { label: "Tracks", value: String(va01.trackCount) },
+  { label: "Year", value: va01.releaseDate.slice(0, 4) },
+  { label: "Format", value: "USB + Zine" },
 ];
 ---
 
 <BaseLayout title={site.displayName} description={site.description}>
-  <section class="video-hero home-chapter">
-    <video
-      muted
-      loop
-      playsinline
-      preload="none"
-      poster="/archive/random1-1.webp"
-      data-src={heroVideo}
-      data-bg-video
-      data-no-mobile></video>
-    <picture class="video-hero__gif" aria-hidden="true">
-      <source srcset="/hero.gif" media="(max-width: 800px)" />
-      <img
-        src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-        alt=""
-        decoding="async"
-      />
-    </picture>
-    <div class="video-hero__grain" aria-hidden="true"></div>
-  </section>
+  {/* ---------- 01 · HERO SPLIT ------------------------------------- */}
+  <section class="hero-split runway--3" data-scrub>
+    <div class="stage">
+      <div class="split-band">
+        <div class="split-wing split-wing--l">
+          {
+            wings.left.map((img) => (
+              <figure>
+                <img src={img.src} alt={img.alt} loading="eager" />
+              </figure>
+            ))
+          }
+        </div>
 
-  <section class="scroll-panel scroll-panel--black home-chapter">
-    <div class="scroll-panel__number" data-drift="-0.018">01</div>
-    <div class="scroll-panel__copy" data-reveal>
-      <p class="section-kicker">Transmission Log</p>
-      <h2>perspex909.</h2>
-      <p>
-        Raw sound, physical records, and visual culture from Indonesia — built
-        as an archive first so nothing disappears into a feed.
-      </p>
-    </div>
-  </section>
+        <div class="split-core">
+          <video
+            muted
+            loop
+            playsinline
+            preload="none"
+            poster="/archive/campout1-4.webp"
+            data-src="/hero.mp4"
+            data-bg-video></video>
+        </div>
 
-  <section class="section section--paper section--torn home-chapter">
-    <div class="section-header" data-reveal>
-      <div>
-        <p class="section-kicker">Event Index</p>
-        <h2 class="section-title">Archive First</h2>
-      </div>
-    </div>
-    <div class="archive-list archive-list--slow" data-reveal>
-      {
-        events.map((event, index) => (
-          <ArchiveRow
-            number={String(index + 1).padStart(2, "0")}
-            type={event.date}
-            title={event.title}
-            meta={event.location}
-            href={`/archive/${event.slug}/`}
-          />
-        ))
-      }
-    </div>
-  </section>
-
-  <section class="section section--metal home-chapter">
-    <div class="section-header" data-reveal>
-      <div>
-        <p class="section-kicker">Visual Evidence</p>
-        <h2 class="section-title">Field Archive</h2>
-      </div>
-    </div>
-    <GalleryMarquee images={galleryImages} />
-    <div class="cta-row" data-reveal>
-      <a class="cta cta--signal" href="/archive/">Open Full Archive</a>
-    </div>
-  </section>
-
-  <section class="scroll-panel scroll-panel--metal home-chapter">
-    <video
-      class="panel-video"
-      muted
-      loop
-      playsinline
-      preload="none"
-      poster="/archive/prod1-1.webp"
-      data-src="/archive/compilation.mp4"
-      data-bg-video></video>
-    <div class="panel-video__scrim" aria-hidden="true"></div>
-    <div class="scroll-panel__number" data-drift="0.02">02</div>
-    <div class="scroll-panel__copy" data-reveal>
-      <p class="section-kicker">Release Document</p>
-      <h2>VA01 stays in the archive bloodstream.</h2>
-      <p>
-        Thirty-six tracks are indexed as a cultural document, with official
-        listening paths and full metadata treated like a sleeve sheet.
-      </p>
-      <div class="cta-row">
-        <a class="cta" href={`/releases/${va01.slug}/`}>Open VA01</a>
-        <a class="cta" href={va01.links.preview}>SoundCloud Preview</a>
+        <div class="split-wing split-wing--r">
+          {
+            wings.right.map((img) => (
+              <figure>
+                <img src={img.src} alt={img.alt} loading="eager" />
+              </figure>
+            ))
+          }
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="section section--index-grid home-chapter">
-    <div class="section-header" data-reveal>
+  {/* ---------- 02 · DECK ------------------------------------------- */}
+  <section class="deck runway--4" data-scrub>
+    <div class="stage">
+      <div class="deck-rack" style={`--n:${deck.length}`}>
+        {
+          deck.map((line, i) => (
+            <h2
+              class:list={["deck-line", i === deck.length - 1 && "is-last"]}
+              style={`--i:${i}; --wn:${words(line).length}`}
+            >
+              {words(line).map((w, wi) => (
+                <span style={`--w:${wi}`}>{w}</span>
+              ))}
+            </h2>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- 03 · BIO ------------------------------------------- */}
+  <section class="section--paper bio runway--3" data-scrub>
+    <div class="stage">
+      <div class="bio-inner">
+        <p class="section-kicker">The Label</p>
+        <p class="burn burn--lead" style={`--n:${words(bio).length}`}>
+          {words(bio).map((w, i) => <span style={`--i:${i}`}>{w}</span>)}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- 04 · STACK ------------------------------------------ */}
+  <section class="stack runway--5" data-scrub>
+    <div class="stage">
+      <div class="stack-counter">
+        {String(stackCards.length).padStart(2, "0")}
+      </div>
+      <div class="stack-table" style={`--n:${stackCards.length}`}>
+        {
+          stackCards.map((card, i) => (
+            <div
+              class:list={[
+                "stack-card",
+                i === stackCards.length - 1 && "is-last",
+              ]}
+              style={`--i:${i}`}
+            >
+              <figure>
+                <img src={card.src} alt={card.label} loading="lazy" />
+              </figure>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- 05 · CHRONICLE -------------------------------------- */}
+  <section class="chronicle runway--4" data-scrub>
+    <div class="stage">
+      <div class="chronicle-scene">
+        {
+          chronicleLayers.map((src, i) => (
+            <img
+              class="chronicle-layer"
+              style={`--s:${(i / chronicleLayers.length).toFixed(3)}`}
+              src={src}
+              alt=""
+              loading="lazy"
+            />
+          ))
+        }
+        <div class="chronicle-veil"></div>
+      </div>
+
+      <div class="chronicle-lines" style={`--n:${chronicleLines.length}`}>
+        {
+          chronicleLines.map((line, i) => (
+            <h2
+              class="chronicle-line"
+              style={`--i:${i}; --wn:${words(line).length}`}
+            >
+              {words(line).map((w, wi) => (
+                <span style={`--w:${wi}`}>{w}</span>
+              ))}
+            </h2>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- 06 · INDEX ------------------------------------------ */}
+  <section class="section section--paper index-block" data-readout>
+    <div class="section-header" data-in="up">
       <div>
         <p class="section-kicker">Where To</p>
         <h2 class="section-title">Entry Points</h2>
       </div>
     </div>
-    <div class="archive-list archive-list--slow" data-reveal>
-      {rows.map((row) => <ArchiveRow {...row} />)}
+
+    <div class="index-readout">{String(indexRows.length).padStart(2, "0")}</div>
+
+    <div class="index-list" data-in="up" style="--d:120ms">
+      {
+        indexRows.map((row) => (
+          <a class="index-row" href={row.href} data-no={row.no}>
+            <span class="index-row__no">{row.no}</span>
+            <span class="index-row__title">{row.title}</span>
+            <span class="index-row__meta">{row.meta}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  {/* ---------- 07 · REEL + SPECS ----------------------------------- */}
+  <section class="section--metal" data-scrub>
+    <div class="reel">
+      <video
+        muted
+        loop
+        playsinline
+        preload="none"
+        poster="/archive/prod1-1.webp"
+        data-src="/archive/compilation.mp4"
+        data-bg-video></video>
+    </div>
+
+    <dl class="spec-grid">
+      {
+        specs.map((spec) => (
+          <div>
+            <dt>{spec.label}</dt>
+            <dd>{spec.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <div
+      class="cta-row"
+      data-in="up"
+      style="padding: clamp(28px,5vw,64px) var(--page-pad)"
+    >
+      <a class="cta cta--signal" href={`/releases/${va01.slug}/`}>Open VA01</a>
+      <a class="cta" href={va01.links.preview}>SoundCloud Preview</a>
     </div>
   </section>
 </BaseLayout>

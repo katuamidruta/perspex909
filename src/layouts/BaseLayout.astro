@@ -2,6 +2,7 @@
 import SiteHeader from "@components/SiteHeader.astro";
 import { site } from "@data/site";
 import "../styles/global.css";
+import "../styles/motion.css";
 
 type Props = {
   title?: string;
@@ -57,6 +58,7 @@ const ogImageURL = new URL(image, Astro.site);
       </div>
       <div class="site-loader__scan" aria-hidden="true"></div>
     </div>
+    <div class="grain" aria-hidden="true"></div>
     <SiteHeader />
     <main>
       <slot />
@@ -125,26 +127,93 @@ const ogImageURL = new URL(image, Astro.site);
         }
       }
 
-      const revealTargets = document.querySelectorAll("[data-reveal]");
+      // --- Reveals -------------------------------------------------------
+      // Re-armable: the class comes off only once the element is fully out
+      // of view, so scrolling back up replays it without mid-screen flicker.
+      const revealTargets = document.querySelectorAll("[data-reveal], [data-in]");
 
       if ("IntersectionObserver" in window) {
         const revealObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("is-revealed");
-                revealObserver.unobserve(entry.target);
+              if (entry.intersectionRatio >= 0.15) {
+                entry.target.classList.add("is-revealed", "is-in");
+              } else if (entry.intersectionRatio === 0) {
+                entry.target.classList.remove("is-revealed", "is-in");
               }
             });
           },
-          { threshold: 0.22, rootMargin: "0px 0px -8% 0px" },
+          { threshold: [0, 0.15, 0.5] },
         );
 
         revealTargets.forEach((target) => revealObserver.observe(target));
       } else {
-        revealTargets.forEach((target) => target.classList.add("is-revealed"));
+        revealTargets.forEach((target) =>
+          target.classList.add("is-revealed", "is-in"),
+        );
       }
 
+      // --- Scrub engine ---------------------------------------------------
+      // Each [data-scrub] runway publishes one number, --p (0 → 1), tracking
+      // how far it has travelled. Every choreography in motion.css is a pure
+      // CSS function of that number, so nothing here knows what it animates.
+      const scrubTargets = Array.from(document.querySelectorAll("[data-scrub]"));
+
+      if (scrubTargets.length && !reduceMotion) {
+        let scrubQueued = 0;
+
+        const paintScrub = () => {
+          scrubQueued = 0;
+          const viewport = window.innerHeight;
+
+          for (const target of scrubTargets) {
+            const rect = target.getBoundingClientRect();
+            // Skip runways nowhere near the viewport; their last painted
+            // value (0 below, 1 above) is already the correct end state.
+            if (rect.bottom < -viewport || rect.top > viewport * 2) continue;
+
+            const range = target.offsetHeight - viewport;
+            const progress =
+              range > 0
+                ? -rect.top / range
+                : (viewport - rect.top) / (viewport + rect.height);
+
+            target.style.setProperty(
+              "--p",
+              (progress < 0 ? 0 : progress > 1 ? 1 : progress).toFixed(4),
+            );
+          }
+        };
+
+        const requestScrub = () => {
+          if (!scrubQueued) scrubQueued = requestAnimationFrame(paintScrub);
+        };
+
+        paintScrub();
+        window.addEventListener("scroll", requestScrub, { passive: true });
+        window.addEventListener("resize", requestScrub);
+      }
+
+      // --- Index readout --------------------------------------------------
+      // Hovering a row drives the oversized number, so one cursor move
+      // changes the row, its siblings, and the counter together.
+      document.querySelectorAll("[data-readout]").forEach((block) => {
+        const readout = block.querySelector(".index-readout");
+        if (!readout) return;
+        const resting = readout.textContent;
+
+        block.querySelectorAll(".index-row").forEach((row) => {
+          row.addEventListener("mouseenter", () => {
+            readout.textContent = row.getAttribute("data-no") || resting;
+          });
+        });
+
+        block.addEventListener("mouseleave", () => {
+          readout.textContent = resting;
+        });
+      });
+
+      // --- Legacy parallax (archive pages) --------------------------------
       if (!reduceMotion && !compactViewport) {
         const parallaxTargets = document.querySelectorAll(
           "[data-parallax], [data-drift]",
@@ -160,14 +229,14 @@ const ogImageURL = new URL(image, Astro.site);
 
             if (target.hasAttribute("data-parallax")) {
               const strength = Number(
-                target.getAttribute("data-parallax") || "0.04",
+                target.getAttribute("data-parallax") || "0.18",
               );
               target.style.transform = `translate3d(0, ${distance * strength}px, 0)`;
             }
 
             if (target.hasAttribute("data-drift")) {
               const strength = Number(
-                target.getAttribute("data-drift") || "0.025",
+                target.getAttribute("data-drift") || "0.14",
               );
               target.style.transform = `translate3d(${distance * strength}px, 0, 0)`;
             }
