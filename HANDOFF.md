@@ -4,11 +4,12 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No U
 
 > Background lives in project memory (`MEMORY.md` + files), auto-loaded each session. This file is "where we left off".
 
-## Status (end of session 6 — 2026-08-24)
+## Status (end of session 6 — 2026-08-24 into 08-25)
 
 - **The site is one page.** `archive/`, `releases/`, `shop/` and `about/` are folded into `src/pages/index.astro`; the build emits **1 page**, not 10.
 - `npx astro build` passes. `npx astro check` reports no errors in `src/` (the 747 it prints are all from `mono/`, which is reference material and not part of the build).
 - Dev server on port 4330; `astro preview` on 4331 was used for the production weight numbers.
+- **All committed, working tree clean.** The session shipped 8 commits from `f1cb942`.
 
 ## The page, in order
 
@@ -45,7 +46,7 @@ Nav and the index rows are **anchors** now (`#label`, `#archive`, `#release`, `#
 
 `BaseLayout.astro` runs one rAF loop writing **a single number `--p` (0→1)** onto every `[data-scrub]`. Every choreography in `src/styles/motion.css` is a pure CSS function of `--p`. To add a section: markup plus a CSS block reading `var(--p)`.
 
-### The three new choreographies
+### The new choreographies
 
 - **`dossier`** — one archive record per slice of runway. The flyer box takes the poster's own 4:5 shape (measured: all three flyers are exactly 0.800) with `object-fit: contain`, so the artwork is never cropped at any window width — a cover-crop into whatever rectangle the grid left was cutting the bottom off the posters. The flyer is held on the left, the sheet writes itself out on the right: each row unrolls left-to-right on a `clip-path: inset(0 X 0 0)`, in order, like paper coming off a roll. Flyer and record drift against each other for the whole slot so the sheet never sits still. `.is-last` keeps `--dis: 0` so the section doesn't hand back an empty stage.
 - **`ladder`** — 36 tracks pulled past a fixed head. The list travels under a window held at the centre of the pinned stage, roughly one track per 100px of scroll, and everything outside the window falls into blur, so the section reads at the speed of the record rather than the speed of the page. The counter is a registered `@property --tn { syntax: "<integer>" }` computed as `calc(var(--p) * (var(--n) - 1) + 1)` and written straight into `counter-reset` — the same rounding as the head row, so the number and the framed track can never disagree. **Verified in Chrome:** `--tn` reads 7 / 25 / 36 with the brightest row at track 7 / 25 / 36. Its `::after` carries an explicit colour, because an opacity of its own would break the parent's `background-clip` and paint nothing.
@@ -103,7 +104,7 @@ Still unreferenced in `public/` (~900KB, left in place deliberately): `campout2-
 Not a full pass, but no longer untested:
 
 - **`--header-h` is measured, not guessed.** BaseLayout reads the real header height and writes it back to `:root` (ResizeObserver, with a resize listener fallback). Verified: 127px at 390/640/800, 81px at 1440, and `.dossier .stage`'s `top` follows exactly. The CSS value is now only the pre-script fallback.
-- **Runways are shorter below 800px** (`--3/--4/--5` → 220/280/340svh). Every choreography is a function of `--p`, so a shorter runway just plays it faster — nothing needed retiming. Mobile went from 37 viewports of scrolling to **28.6** (24,166px at 390×844).
+- **Runways are shorter below 800px** (`--3/--4/--5` → 220/280/340svh). Every choreography is a function of `--p`, so a shorter runway just plays it faster — nothing needed retiming. Mobile went from 37 viewports of scrolling to **31.6** (26,698px at 390×844) — shorter than it would otherwise be, on a page that has grown two runways since.
 - `dossier` drops the flyer and goes single-column; `ladder` folds to a two-line row; `reels` goes 7 → 4 → 2 columns.
 
 ## Verification tooling — use it, do not guess
@@ -112,6 +113,12 @@ Playwright with real Chrome lives in the session scratchpad under `browse/`. Scr
 
 If the scratchpad is gone: `npm install playwright` anywhere and use `chromium.launch({ channel: "chrome" })`. **Use `waitUntil: "domcontentloaded"`, never `networkidle`.** Measure numbers — opacity, transform, `--p`, byte counts, SSIM — rather than only looking. Note that editing files while `astro dev` is running can push an HMR error overlay into an in-flight screenshot run; reload and re-shoot.
 
+## Menu, not entry points
+
+The closing block and the header are the same menu, both built from `navItems` in `src/data/site.ts`, so they cannot drift apart. **Off-site accounts (Bandcamp, SoundCloud, Instagram) live in the footer and only there** — the user's call, and the right one: a menu that points out of the document is not a menu. Row metadata is looked up by href in `index.astro`, so adding a nav item without metadata degrades to an empty cell rather than breaking.
+
+The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the kicker, the price slot and the menu row, and turns the WhatsApp CTA into "Ask about the next run". `priceLabel` stays in the data as the record of what it cost.
+
 ## Constraints
 
 - **Never use the word "underground"** in copy. Use "club culture" or "raw sound".
@@ -119,17 +126,11 @@ If the scratchpad is gone: `npm install playwright` anywhere and use `chromium.l
 - This is a **portfolio / pitch piece** for the user. The bar is work they could not trivially do themselves.
 - Commerce lives **off-site** on a subdomain (Shopify/Gumroad). This repo keeps the artifact's content and the WhatsApp order button, nothing more.
 
-## Menu, not entry points
-
-The closing block and the header are the same menu, both built from `navItems` in `src/data/site.ts`, so they cannot drift apart. **Off-site accounts (Bandcamp, SoundCloud, Instagram) live in the footer and only there** — the user's call, and the right one: a menu that points out of the document is not a menu. Row metadata is looked up by href in `index.astro`, so adding a nav item without metadata degrades to an empty cell rather than breaking.
-
-The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the kicker, the price slot and the menu row, and turns the WhatsApp CTA into "Ask about the next run". `priceLabel` stays in the data as the record of what it cost.
-
 ## Still open
 
-- **A real mobile pass.** The numbers above are geometry, not judgement — nobody has read the page on a phone. 28.6 viewports is still long.
+- **A real mobile pass. Highest-risk item.** The numbers are geometry, not judgement — nobody has read this page on a phone. 31.6 viewports is a lot of thumb, and the reel strip and ladder scan have only been checked as screenshots there, never felt.
 - `docs/design.md` still contradicts the build (it says "motion restrained", "no decorative gradients"). The user has said it can be rewritten.
-- Optional: the second `split-frame` could run in reverse — five frames converging into one — so the pair reads as bookends rather than the same effect twice. One line: invert `--pi`.
+- Optional: one of the three `split-frame`s could run in reverse — five frames converging into one instead of pulling apart — so the set reads as a sequence rather than the same effect three times. One line: invert `--pi`.
 - The reel strip labels repeat the event name five times for Portal. Honest for an index, but a per-reel label would read better.
 - The heavy webps are only lightly compressed (`campout2-2.webp` is 569KB). A q74 re-encode pass measured SSIM 0.98+ for about 200KB total — judged not worth the binary churn, but it is there if weight matters again.
 - A WebGL liquid-metal background was offered and not taken up. If revisited: behind the **deck only**, raw WebGL2 (no library, ~5KB), driven by `--p`, gated on reduced-motion and saveData, paused off-screen, plain-black fallback.
@@ -140,15 +141,24 @@ The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the ki
 Lanjutin project perspex909 (working dir sama, Bahasa Indonesia, ringkas, langsung fix).
 Baca HANDOFF.md di root repo dulu. Jangan pernah pakai kata "underground" di copy.
 
-Situs udah one-page (satu index.astro, 13 section, anchor-based nav). Jangan
-dipecah lagi jadi multi-page.
+Situs udah one-page: semua ada di src/pages/index.astro, nav-nya anchor,
+menu atas dan menu penutup dibangun dari navItems yang sama. Jangan dipecah
+lagi jadi multi-page, dan jangan taro link keluar (IG/SC/Bandcamp) di menu —
+itu tempatnya di footer.
 
 Yang WAJIB dijaga:
 - Koreografi nggak boleh pernah benar-benar beku
 - Jangan ninggalin token/rule yang nggak ada yang pakai
 - Jangan kasih label di jeda antar section
+- Nggak ada warna aksen. Emphasis pakai cahaya: putih solid, putih redup,
+  dan chrome buat display type di ground gelap (min ~28px, jangan di kertas)
+- Halaman panjang (43 layar) itu disengaja, jangan dipotong tanpa nanya
+
+Prioritas berikutnya: pass mobile beneran — buka di HP, baca, rasain.
+Angka-angka di HANDOFF itu geometri, belum penilaian.
 
 Playwright ada di scratchpad browse/. Ukur angkanya, jangan cuma dilihat —
-weight2.mjs buat berat halaman, digest.mjs buat buktiin perubahan CSS nggak
-ngubah apa-apa yang kegambar, rm2.mjs buat reduced-motion + mobile.
+one.mjs buat peta section + error, weight2.mjs buat berat halaman,
+digest.mjs buat buktiin perubahan CSS nggak ngubah apa-apa yang kegambar,
+rm2.mjs buat reduced-motion + mobile.
 ```
