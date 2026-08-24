@@ -71,49 +71,32 @@
      metal has a hard horizon, dark ground below and bright sky above. A
      smooth ramp between them reads as plastic. Hue sits near 210 deg — a
      neutral grey reads as concrete, warm reads as cheap gold. */
-  /* Perspex prints on holographic foil. That material — not flat chrome —
-     is the one the site borrows. */
-  /* HOLOGRAPHIC FOIL — the actual Perspex sticker stock.
+  /* Two different metals, not one.
 
-     Three stacked layers, because that is what the real material is:
-       1. a fine diffraction grating (the woven micro-pattern in the foil)
-       2. an iridescent sheen, SEMI-TRANSPARENT so silver shows through
-       3. a silver base with the same top/bottom bevel as the sculpt ramp
+     FLAT MIRROR: a hard horizon at 50%. Polished sheet reflecting an
+     environment — bright sky above the break, dark ground below. */
+  --chrome: linear-gradient(
+    180deg,
+    #8f979e 0%,
+    #eef3f6 34%,
+    #d4dbe0 49.9%,
+    #5b636b 50.1%,
+    #8d959d 66%,
+    #cdd4da 100%
+  );
 
-     The sheen is deliberately partial. Foil is silver that blooms colour,
-     not a rainbow — keeping it translucent is what stops the site turning
-     vaporwave and losing black/white/signal. */
-  --foil-base: linear-gradient(
+     /* SCULPTURAL: bright at BOTH edges, dark through the middle. Reads as
+        an extruded letterform whose top and bottom bevels catch light — a
+        solid object rather than a mirror. Smooth on purpose: a curved
+        surface falls off gradually, only a flat one breaks hard. */
+  --chrome-sculpt: linear-gradient(
     180deg,
     #ffffff 0%,
-    #dfe4e8 22%,
-    #9aa1a8 50%,
-    #c9d0d6 66%,
-    #ffffff 92%,
-    #f2f5f7 100%
-  );
-
-  --foil-sheen: linear-gradient(
-    100deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(126, 247, 214, 0.4) 7%,
-    rgba(255, 255, 255, 0) 16%,
-    rgba(150, 170, 255, 0.44) 25%,
-    rgba(200, 140, 255, 0.42) 33%,
-    rgba(255, 255, 255, 0) 42%,
-    rgba(255, 130, 210, 0.38) 52%,
-    rgba(255, 255, 255, 0) 61%,
-    rgba(255, 208, 150, 0.32) 70%,
-    rgba(140, 255, 220, 0.38) 78%,
-    rgba(255, 255, 255, 0) 88%,
-    rgba(255, 255, 255, 0) 100%
-  );
-
-  --foil-grate: repeating-linear-gradient(
-    72deg,
-    rgba(255, 255, 255, 0.11) 0 1px,
-    rgba(0, 0, 0, 0.07) 1px 2px,
-    rgba(255, 255, 255, 0) 2px 5px
+    #d8dbde 20%,
+    #757a81 48%,
+    #a8a9ad 62%,
+    #f0f2f5 85%,
+    #ffffff 100%
   );
 
   /* BEZEL: lit from the top-left, shadowed at 70%, catching again at the
@@ -374,17 +357,15 @@ body.is-loaded .site-loader {
 .site-mark {
   display: block;
   line-height: 0;
-  background-image: var(--foil-grate), var(--foil-sheen), var(--foil-base);
-  background-size: 100% 100%, 260% 100%, 100% 170%;
-  background-position: 0 0, 0% 0, 0 24%;
+  background: var(--chrome);
+  background-size: 100% 180%;
+  background-position: 0 22%;
   -webkit-mask: url("/logo.png") center / contain no-repeat;
   mask: url("/logo.png") center / contain no-repeat;
-  transition: background-position 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-position 700ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Hover drags the sheen right across the mark — the gesture of
-   tilting a foil sticker to make the colour move. */
-.site-mark:hover { background-position: 0 0, 100% 0, 0 72%; }
+.site-mark:hover { background-position: 0 74%; }
 
 /* Kept in the tree for its alt text and to size the mask box. */
 .site-mark img {
