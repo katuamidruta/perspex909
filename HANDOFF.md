@@ -4,12 +4,12 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No U
 
 > Background lives in project memory (`MEMORY.md` + files), auto-loaded each session. This file is "where we left off".
 
-## Status (end of session 8 — 2026-08-27)
+## Status (end of session 9 — 2026-08-27)
 
 - **The site is one page.** `archive/`, `releases/`, `shop/` and `about/` are folded into `src/pages/index.astro`; the build emits **1 page**, not 10.
 - `npx astro build` passes. `npx astro check` reports no errors in `src/` (the 747 it prints are all from `mono/`, which is reference material and not part of the build).
 - Dev server on port 4330; `astro preview` on 4331 was used for the production weight numbers.
-- **All committed, working tree clean.** Session 6 shipped 8 commits from `f1cb942`; session 7 added 2 more (`6cf4393` the mobile defect pass, `a284a0d` caching + the phone-sized encode); session 8 added `094c44c`, the archive poster coming back on a phone.
+- **All committed, working tree clean.** Session 6 shipped 8 commits from `f1cb942`; session 7 added 2 more (`6cf4393` the mobile defect pass, `a284a0d` caching + the phone-sized encode); session 8 added `094c44c`, the archive poster coming back on a phone. Session 9 (same day): `2867a5a`+`c5ad957` — the pile's images are a literal `stackCards` array in `index.astro` now, seeded with `random1-{2,4,8}` as placeholders **the user intends to swap by hand**; `f6864d2` — six reels, no captions.
 
 ## The page, in order
 
@@ -24,7 +24,7 @@ Heights measured at 1440×900. Total **38,953px**, 43 viewports (mobile 27,508px
 | — | `interlude` | 46svh | held breath before the archive |
 | 5 | `stack` `#archive` | 400svh | the three event flyers deal into a pile |
 | 6 | `dossier` | 500svh | the same three records unroll in place (440svh on a phone — two beats each) |
-| 7 | `reels` | 400svh | every archive reel on one track, advanced by scroll |
+| 7 | `reels` | 400svh | six reels on one track, advanced by scroll — ids are a literal list in index.astro, no captions |
 | — | `interlude` | 46svh | empty and unlabelled on purpose |
 | 8 | `split-frame` `#release` | 300svh | compilation.mp4, same mechanism — the two rhyme |
 | 9 | `section--metal` | — | VA01 spec grid, release notes, credits, Bandcamp/SoundCloud |
@@ -50,7 +50,7 @@ Nav and the index rows are **anchors** now (`#label`, `#archive`, `#release`, `#
 
 - **`dossier`** — one archive record per slice of runway. The flyer box takes the poster's own 4:5 shape (measured: all three flyers are exactly 0.800) with `object-fit: contain`, so the artwork is never cropped at any window width — a cover-crop into whatever rectangle the grid left was cutting the bottom off the posters. The flyer is held on the left, the sheet writes itself out on the right: each row unrolls left-to-right on a `clip-path: inset(0 X 0 0)`, in order, like paper coming off a roll. Flyer and record drift against each other for the whole slot so the sheet never sits still. `.is-last` keeps `--dis: 0` so the section doesn't hand back an empty stage. **On a phone the same record plays two beats instead of one** — see Mobile below.
 - **`ladder`** — 36 tracks pulled past a fixed head. The list travels under a window held at the centre of the pinned stage, roughly one track per 100px of scroll, and everything outside the window falls into blur, so the section reads at the speed of the record rather than the speed of the page. The counter is a registered `@property --tn { syntax: "<integer>" }` computed as `calc(var(--p) * (var(--n) - 1) + 1)` and written straight into `counter-reset` — the same rounding as the head row, so the number and the framed track can never disagree. **Verified in Chrome:** `--tn` reads 7 / 25 / 36 with the brightest row at track 7 / 25 / 36. Its `::after` carries an explicit colour, because an opacity of its own would break the parent's `background-clip` and paint nothing.
-- **`reel strip`** — seven reels on one horizontal track, advanced by `--p`. One holds the centre at full size while its neighbours sit at 0.22 opacity and 0.84 scale, so the section is scrolled through rather than clicked through. Focus is resolved without `abs()`: two `clamp()` ramps, one falling off each side, and `min()` of the pair. Measured across the runway: the head lands on reel 2 → 4 → 6 → 7 as `--p` goes 0.11 → 0.52 → 0.93 → 1, and the track travels 0 → −1956px. Under reduced motion it wraps into a plain grid with all seven reachable.
+- **`reel strip`** — six reels on one horizontal track, advanced by `--p`. One holds the centre at full size while its neighbours sit at 0.22 opacity and 0.84 scale, so the section is scrolled through rather than clicked through. Focus is resolved without `abs()`: two `clamp()` ramps, one falling off each side, and `min()` of the pair. Measured across the runway with six: track travels 0 → −1815px, focus hands over one at a time. Under reduced motion it wraps into a plain grid with all six reachable. **The tiles carry no captions** — session 9, the user's call: thumbnail, scrim, play button, nothing else; the play button keeps an invisible `aria-label`. The ids are a **literal array in `index.astro`** (`reels`), in strip order, next to `stackCards` — `events.ts` no longer holds videos at all.
 - **`artifact`** — two columns of tee photographs travelling in opposite directions (`--p * -32%` / `--p * 32% - 32%`) behind an order sheet that fades up and keeps drifting. Measured: columns travel 0 → −845px across the runway.
 
 ### Split-frame, three times
@@ -117,7 +117,7 @@ Still unreferenced in `public/` (~900KB, left in place deliberately): `campout2-
 - Nothing freezes: both the flyer's translate and the record's run on `--local` for the whole slot, so the poster keeps drifting under the sheet after it has dimmed (measured 19px of travel across the hold).
 - **Reduced motion at phone width printed no poster either.** It does now — `@media (prefers-reduced-motion: reduce) and (max-width: 900px)` puts the flyer back in flow above its record at `min(62svh, 110vw)`.
 
-Measured after: **mobile production weight unchanged, 39 requests / 4,529KB** — the pile in 05 has already fetched these three URLs, so the poster costs nothing. Desktop proved unchanged by layout digest: **9 of 4,249 element-states differ**, every one an animation phase (loader scanline, grain drift, one in-flight transition). No console errors and no x-overflow at 390 / 320 / 820 / 1440; no flat frames on a full mobile scroll or under reduced motion.
+Measured after: **mobile production weight unchanged, 39 requests / 4,529KB** — at the time the pile drew the same three URLs, so the poster cost nothing. (Session 9 split the pile onto its own images; mobile is 40 requests / 4,551KB with the placeholders, and moves with whatever the user swaps in.) Desktop proved unchanged by layout digest: **9 of 4,249 element-states differ**, every one an animation phase (loader scanline, grain drift, one in-flight transition). No console errors and no x-overflow at 390 / 320 / 820 / 1440; no flat frames on a full mobile scroll or under reduced motion.
 
 Session 7 audited it properly and it turned up six real defects, not polish items. All fixed and measured:
 
@@ -164,7 +164,6 @@ The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the ki
 - 320px still stacks the header into three rows (111px). It degrades without overflowing, so it was left; worth a look if that width matters.
 - `docs/design.md` still contradicts the build (it says "motion restrained", "no decorative gradients"). The user has said it can be rewritten.
 - Optional: one of the three `split-frame`s could run in reverse — five frames converging into one instead of pulling apart — so the set reads as a sequence rather than the same effect three times. One line: invert `--pi`.
-- The reel strip labels repeat the event name five times for Portal. Honest for an index, but a per-reel label would read better.
 - The heavy webps are only lightly compressed (`campout2-2.webp` is 569KB). A q74 re-encode pass measured SSIM 0.98+ for about 200KB total — judged not worth the binary churn, but it is there if weight matters again.
 - A WebGL liquid-metal background was offered and not taken up. If revisited: behind the **deck only**, raw WebGL2 (no library, ~5KB), driven by `--p`, gated on reduced-motion and saveData, paused off-screen, plain-black fallback.
 
