@@ -38,9 +38,9 @@ const ledger = [
   { label: "Order", value: "Bandcamp / WA" },
 ];
 
-// 05 — STACK. The archive flyers themselves deal into a pile, and the same
-// three records unroll underneath it in 06.
-const stackCards = events.map((entry) => entry.flyerImage);
+// 05 — STACK. What deals into the pile. Its own image per event when one is
+// given; otherwise the flyer, which 06 is fetching regardless.
+const stackCards = events.map((entry) => entry.stackImage ?? entry.flyerImage);
 
 // 06 — DOSSIER. Each record unrolls in place: the flyer held on the left,
 // the sheet writing itself out on the right, one row at a time.
