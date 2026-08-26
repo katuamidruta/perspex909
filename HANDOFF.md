@@ -145,6 +145,18 @@ The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the ki
 
 ## Still open
 
+- **The archive flyers are missing on a phone. Start here.** `motion.css` hides them under `@media (max-width: 900px)` — `.dossier-flyer { display: none }`, and the sheet goes single-column. The reasoning was that the pile in section 05 has just shown all three posters full-screen, so the dossier could be the *record* alone. The user read it as broken: on desktop each record has its poster beside it and on mobile it simply is not there.
+
+  Facts to design against, measured at 390×844:
+  - **It costs zero extra bytes.** The pile and the dossier draw the same three URLs (`events[].flyerImage`), so the images are already fetched. Weight is not an argument for hiding them.
+  - Room is the real constraint. Stage is `100svh − --header-h`; the record itself runs **523–535px**. In the emulator (no URL bar, svh = 844) that leaves ~230px spare; **on a real phone svh is nearer 740, so the spare is ~125px** — enough for a strip, not for a 4:5 poster at any size worth showing (125px tall would be 100px wide).
+  - All three flyers are exactly 4:5, and `.dossier-flyer` already carries `aspect-ratio: 4/5` + `object-fit: contain` so it is never cropped. Keep that.
+
+  Three ways out, in the page's own language:
+  1. **Give the flyer its own beat.** Each record already owns a slice of the runway; split that slice in two — poster full-height first, then it recedes as the record writes itself. Costs no layout space, uses the mechanism the whole page is built on, and is the most expressive option.
+  2. **Poster as the ground.** Put it behind the record, dimmed under a scrim, exactly as `.artifact` does with the tee photographs. Cheapest, zero layout cost, and it rhymes with a section that already works.
+  3. Shrink the record on mobile (drop `--note` rows) to free ~150px for a small poster above it. Loses content; weakest of the three.
+
 - **Read it on an actual phone. This is the one thing left that nobody else can do.** The audit is done and the defects are fixed, but every number here is still emulation: Chromium has no URL bar, so the exact condition behind the worst bug cannot be reproduced here, only simulated. iOS Safari is entirely untested — `position: sticky` inside `overflow: hidden`, and `svh` behaviour, are where it most often differs.
   - Fastest route, no deploy: `npx astro dev --host`, then open the printed LAN address on the phone (same wifi).
   - The deployed route: `npm run deploy`, which is also what finally verifies `_headers`.
@@ -175,11 +187,20 @@ Yang WAJIB dijaga:
   dan chrome buat display type di ground gelap (min ~28px, jangan di kertas)
 - Halaman panjang (43 layar) itu disengaja, jangan dipotong tanpa nanya
 
+MULAI DARI SINI: di HP, flyer arsip nggak muncul sama sekali — di
+motion.css ada `@media (max-width: 900px)` yang bikin `.dossier-flyer`
+display:none. Di desktop tiap record ada posternya di sebelah, di HP ilang.
+Ini kerasa kayak rusak, bukan kayak keputusan. Baca HANDOFF bagian "Still
+open" — udah ada angkanya (ruang sisa cuma ~125px di HP beneran, dan
+nampilin flyer-nya NOL biaya byte karena gambarnya sama persis sama yang
+di tumpukan section 05) plus tiga jalan keluar. Jangan main tempel doang;
+ruangnya emang sempit, jadi pilih mekanismenya dulu.
+
 Mobile udah diaudit dan 6 bug asli udah difix (detailnya di HANDOFF bagian
-"Mobile"). Yang tersisa cuma yang nggak bisa gue kerjain sendiri: baca di HP
-beneran. Semua angka di HANDOFF masih emulasi — Chromium nggak punya URL bar.
-Cara paling cepet tanpa deploy: `npx astro dev --host`, buka alamat LAN-nya
-di HP (wifi yang sama). iOS Safari sama sekali belum kesentuh.
+"Mobile"). Sisanya yang nggak bisa gue kerjain sendiri: baca di HP beneran.
+Semua angka di HANDOFF masih emulasi — Chromium nggak punya URL bar. Cara
+paling cepet tanpa deploy: `npx astro dev --host`, buka alamat LAN-nya di HP
+(wifi yang sama). iOS Safari sama sekali belum kesentuh.
 
 Satu lagi yang belum keverifikasi: public/_headers baru bisa dicek setelah
 deploy — `curl -I https://perspex909.com/archive/compilation.mp4`, cari
