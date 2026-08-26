@@ -1,27 +1,21 @@
 ---
 type Props = {
   youtubeId: string;
-  label: string;
   index: number;
 };
 
-const { youtubeId, label, index } = Astro.props;
+const { youtubeId, index } = Astro.props;
 const thumbUrl = `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`;
-const shortLabel = label.replace(/^(Portal\s)?Reel\s\d+\s?—?\s?/i, "").trim() || label;
 ---
 
 <div class="reel-item" data-reel data-yt={youtubeId} style={`--i:${index}`}>
   <div class="reel-overlay" aria-hidden="true">
     <img src={thumbUrl} alt="" class="reel-overlay__thumb" loading="lazy" decoding="async" />
     <div class="reel-overlay__scrim"></div>
-    <button class="reel-play" type="button" aria-label={`Play ${label}`}>
+    <button class="reel-play" type="button" aria-label={`Play reel ${index + 1}`}>
       <svg width="22" height="24" viewBox="0 0 22 24" fill="none" aria-hidden="true">
         <path d="M2 2L20 12L2 22V2Z" fill="currentColor"/>
       </svg>
     </button>
-    <p class="reel-label">
-      <span class="reel-label__index">{String(index + 1).padStart(2, "0")}</span>
-      {shortLabel}
-    </p>
   </div>
 </div>

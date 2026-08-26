@@ -3,11 +3,6 @@ export type ArchiveImage = {
   alt: string;
 };
 
-export type ArchiveVideo = {
-  youtubeId: string;
-  label: string;
-};
-
 export type ArchiveSection = {
   title: string;
   items: string[];
@@ -23,7 +18,6 @@ export type ArchiveEntry = {
   summary: string;
   description: string[];
   flyerImage: ArchiveImage;
-  videos?: ArchiveVideo[];
   sections: ArchiveSection[];
   tags: string[];
   soundcloudUrl?: string;
@@ -43,10 +37,6 @@ export const events: ArchiveEntry[] = [
       src: "/archive/nightspacer-x-perspex.webp",
       alt: "Nightspacer x Perspex — event flyer, Ciherang, August 2025",
     },
-    videos: [
-      { youtubeId: "dWe98fos33A", label: "Reel 01 — Ciherang August 2025" },
-      { youtubeId: "fs6pc7NOq8o", label: "Reel 02 — Ciherang August 2025" }
-    ],
     sections: [
       { title: "Lighting & Multimedia", items: ["Convert"] },
       { title: "Live Visual Installation", items: ["Glasoon"] },
@@ -112,13 +102,6 @@ export const events: ArchiveEntry[] = [
       src: "/archive/PortalNYE-1.webp",
       alt: "Entering 2026 Portal — New Year's Eve event flyer, December 2025",
     },
-    videos: [
-      { youtubeId: "SHYedt95ZnU", label: "Portal Reel 01" },
-      { youtubeId: "E5gSY3IxGwQ", label: "Portal Reel 02" },
-      { youtubeId: "EtSjMNwOeTY", label: "Portal Reel 03" },
-      { youtubeId: "Kr8HWULuBz4", label: "Portal Reel 04" },
-      { youtubeId: "4lk_baLjrtw", label: "Portal Reel 05" }
-    ],
     sections: [
       {
         title: "Sumbu Stage",

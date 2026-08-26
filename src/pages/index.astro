@@ -14,28 +14,28 @@ const words = (line: string) => line.split(" ");
 // 01 — HERO SPLIT. One frame pulled apart into a band.
 const wings = {
   left: [
-    { src: "/archive/prod1-6.webp", alt: "Perspex floor documentation" },
+    { src: "/archive/campout1-2.webp", alt: "Perspex floor documentation" },
     { src: "/archive/random1-7.webp", alt: "Perspex floor documentation" },
   ],
   right: [
-    { src: "/archive/random1-11.webp", alt: "Perspex floor documentation" },
-    { src: "/archive/random1-9.webp", alt: "Perspex floor documentation" },
+    { src: "/archive/random1-12.webp", alt: "Perspex floor documentation" },
+    { src: "/archive/random1-13.webp", alt: "Perspex floor documentation" },
   ],
 };
 
 // 02 — DECK. Three statements on a split-flap.
-const deck = ["Raw sound.", "Physical records.", "Archive first."];
+const deck = ["Platform & Space.", "Sound & Vision.", "Without Boundaries."];
 
 // 03 — BIO burn-in.
 const bio =
-  "Perspex909 is an independent electronic label and archive from Indonesia. It presses records, runs nights, and keeps account of all of it — flyers, tracklists, field photographs — held in one place instead of scattered across feeds. Everything it releases also exists as an object you can hold.";
+  "Perspex909 is a platform and space for exploring sound, vision, and expression without boundaries, built around experimentation and independence, beyond rigid structures, trends, and expectations; not a collective, not a label, just a space to explore, create, and experiment.";
 
 // 04 — LEDGER. The label metadata that used to live on the manifesto page.
 const ledger = [
-  { label: "Base", value: "Indonesia / SEA" },
-  { label: "Format", value: "Label + Archive" },
-  { label: "Signals", value: "Flyers / USB / Zines" },
-  { label: "Order", value: "Bandcamp / WA" },
+  { label: "Base", value: "Bali" },
+  { label: "Format", value: "Spaces + Archives" },
+  { label: "Signals", value: "Collaborations" },
+  { label: "Platform", value: "Digital" },
 ];
 
 // 05 — STACK. What deals into the pile — one card per event, top to bottom
@@ -43,9 +43,18 @@ const ledger = [
 // flyers from events.ts either way. (While these were the same three files,
 // the pile cost nothing extra; each different src here is one more image.)
 const stackCards = [
-  { src: "/archive/random1-2.webp", alt: "Nightspacer x Perspex — field documentation" },
-  { src: "/archive/random1-4.webp", alt: "Campout Vol. II — field documentation" },
-  { src: "/archive/random1-8.webp", alt: "Entering 2026 Portal — field documentation" },
+  {
+    src: "/archive/random1-12.webp",
+    alt: "Perspex909 — field documentation",
+  },
+  {
+    src: "/archive/campout1-3.webp",
+    alt: "Campout Vol. II — field documentation",
+  },
+  {
+    src: "/archive/random1-14.webp",
+    alt: "Entering 2026 Portal — field documentation",
+  },
 ];
 
 // 06 — DOSSIER. Each record unrolls in place: the flyer held on the left,
@@ -68,11 +77,17 @@ const dossier = events.map((entry) => {
   return { entry, rows };
 });
 
-// 07 — FIELD FOOTAGE. Every reel the archive pages used to hold. Click to
-// play: no YouTube iframe is requested until someone asks for one.
-const reels = events.flatMap((entry) =>
-  (entry.videos ?? []).map((video) => ({ ...video, event: entry.title })),
-);
+// 07 — FIELD FOOTAGE. One YouTube id per reel, in strip order — swap or
+// reorder here. Click to play: no iframe is requested until someone asks.
+// The reels carry no captions; the footage is the label.
+const reels = [
+  "dWe98fos33A",
+  "eYIwajoW79E",
+  "WLbuRljvAQI",
+  "9reRu_1P1LQ",
+  "2XaIlZDpxMI",
+  "x3HOoeCP6Z4",
+];
 
 // 08 — RELEASE REEL. Same split mechanism as the opening frame, so the two
 // video moments rhyme.
@@ -203,7 +218,7 @@ const menuRows = navItems.map((item, i) => ({
   <section class="bio runway--3" id="label" data-scrub>
     <div class="stage">
       <div class="bio-inner">
-        <p class="section-kicker">The Label</p>
+        <p class="section-kicker">Perspex909</p>
         <p class="burn burn--lead" style={`--n:${words(bio).length}`}>
           {words(bio).map((w, i) => <span style={`--i:${i}`}>{w}</span>)}
         </p>
@@ -224,22 +239,23 @@ const menuRows = navItems.map((item, i) => ({
       }
     </dl>
     <p class="ledger-line" data-in="up">
-      Part archive, part label, part release portal, part artifact shop. One
-      document, not five.
+      Space where sound, vision, and ideas take form.
     </p>
   </section>
 
-  {/* The archive arrives off the back of a metadata grid, which is a hard
+  {
+    /* The archive arrives off the back of a metadata grid, which is a hard
       stop to read against. Same held breath as the one before the release
-      reel — unlabelled, so it stays a gap and not an announcement. */}
+      reel — unlabelled, so it stays a gap and not an announcement. */
+  }
   <div class="interlude" aria-hidden="true"></div>
 
   {/* ---------- 05 · STACK ------------------------------------------ */}
   <section class="stack runway--4" id="archive" data-scrub>
     <div class="stage">
-      <div class="stack-counter">
+      <!-- <div class="stack-counter">
         {String(stackCards.length).padStart(2, "0")}
-      </div>
+      </div> -->
       <div class="stack-table" style={`--n:${stackCards.length}`}>
         {
           stackCards.map((card, i) => (
@@ -335,16 +351,16 @@ const menuRows = navItems.map((item, i) => ({
 
       <div class="reel-strip" style={`--n:${reels.length}`}>
         {
-          reels.map((reel, i) => (
-            <ReelPlayer youtubeId={reel.youtubeId} label={reel.event} index={i} />
-          ))
+          reels.map((id, i) => <ReelPlayer youtubeId={id} index={i} />)
         }
       </div>
     </div>
   </section>
 
-  {/* A held breath. Deliberately empty and unlabelled — naming what is
-      coming spends the surprise that carries the scroll. */}
+  {
+    /* A held breath. Deliberately empty and unlabelled — naming what is
+      coming spends the surprise that carries the scroll. */
+  }
   <div class="interlude" aria-hidden="true"></div>
 
   {/* ---------- 08 · RELEASE REEL (split II) ------------------------ */}
@@ -554,13 +570,17 @@ const menuRows = navItems.map((item, i) => ({
 
       <div class="artifact-sheet">
         <p class="section-kicker">
-          {tee.artifactType} / {tee.soldOut ? "Sold out" : tee.availability} /{" "}
+          {tee.artifactType} / {tee.soldOut ? "Sold out" : tee.availability} /{
+            " "
+          }
           {tee.catalogCode}
         </p>
         <h2 class="section-title">{tee.title}</h2>
         <p class="artifact-lead">{tee.summary}</p>
         <p class="artifact-note">{tee.description[0]}</p>
-        <p class="artifact-price">{tee.soldOut ? "Sold out" : tee.priceLabel}</p>
+        <p class="artifact-price">
+          {tee.soldOut ? "Sold out" : tee.priceLabel}
+        </p>
         <p class="artifact-note">{tee.description[1]}</p>
         <p class="artifact-credit">
           {
@@ -574,9 +594,8 @@ const menuRows = navItems.map((item, i) => ({
             class="cta cta--signal"
             href={tee.whatsappUrl}
             target="_blank"
-            rel="noopener noreferrer">{
-              tee.soldOut ? "Ask about the next run" : "Order via WhatsApp"
-            }</a
+            rel="noopener noreferrer"
+            >{tee.soldOut ? "Ask about the next run" : "Order via WhatsApp"}</a
           >
         </div>
       </div>

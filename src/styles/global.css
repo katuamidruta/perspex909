@@ -651,30 +651,6 @@ body.is-loaded .site-loader {
   margin-left: 3px;
 }
 
-.reel-label {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  margin: 0;
-  padding: 10px 12px;
-  font-family: var(--font-display);
-  font-size: var(--text-meta);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: color-mix(in srgb, var(--color-white) 72%, transparent);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.reel-label__index {
-  color: color-mix(in srgb, var(--color-white) 45%, transparent);
-  font-size: 10px;
-}
-
 /* Footer logo */
 .footer-logo-link {
   display: flex;
