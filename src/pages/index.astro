@@ -93,12 +93,12 @@ const reels = [
 // video moments rhyme.
 const reelWings = {
   left: [
-    { src: "/archive/shirt1-2.webp", alt: "PRSPX tee" },
-    { src: "/archive/random1-5.webp", alt: "Field documentation" },
+    { src: "/archive/prod1-12.webp", alt: "PRSPX tee" },
+    { src: "/archive/prod1-10.webp", alt: "Field documentation" },
   ],
   right: [
-    { src: "/archive/prod1-7.webp", alt: "VA01 USB" },
-    { src: "/archive/random1-3.webp", alt: "Field documentation" },
+    { src: "/archive/prod1-6.webp", alt: "VA01 USB" },
+    { src: "/archive/prod1-11.webp", alt: "Field documentation" },
   ],
 };
 
@@ -350,9 +350,7 @@ const menuRows = navItems.map((item, i) => ({
       </div>
 
       <div class="reel-strip" style={`--n:${reels.length}`}>
-        {
-          reels.map((id, i) => <ReelPlayer youtubeId={id} index={i} />)
-        }
+        {reels.map((id, i) => <ReelPlayer youtubeId={id} index={i} />)}
       </div>
     </div>
   </section>
@@ -428,7 +426,16 @@ const menuRows = navItems.map((item, i) => ({
     <div class="release-note" data-in="up">
       <p class="release-lead">{va01.summary}</p>
       {va01.notes.map((note) => <p>{note}</p>)}
-      <p class="release-credits">{va01.credits.join(" · ")}</p>
+      <p class="release-credits">
+        {
+          va01.credits.map((credit, i) => (
+            <Fragment>
+              {i > 0 && " · "}
+              {credit.role + " "}<strong>{credit.names.join(" & ")}</strong>
+            </Fragment>
+          ))
+        }
+      </p>
       <div class="cta-row">
         <a class="cta cta--signal" href={va01.links.bandcamp}>Bandcamp</a>
         <a class="cta" href={va01.links.preview}>SoundCloud Preview</a>

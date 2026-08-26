@@ -493,7 +493,15 @@ body.is-loaded .site-loader {
   line-height: 1.9;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  opacity: 0.5;
+  /* Dimmed by colour, not opacity: opacity would cap the names too, and
+     the names are the bright half of the line. */
+  opacity: 1;
+  color: color-mix(in srgb, var(--color-white) 48%, transparent);
+}
+
+.release-note .release-credits strong {
+  font-weight: 700;
+  color: var(--color-white);
 }
 
 .sr-only {

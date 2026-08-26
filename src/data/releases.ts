@@ -18,7 +18,9 @@ export type Release = {
   coverAlt: string;
   summary: string;
   notes: string[];
-  credits: string[];
+  /* role reads dim, names read bright — split so the markup can tell them
+     apart. */
+  credits: Array<{ role: string; names: string[] }>;
   links: {
     bandcamp: string;
     preview: string;
@@ -48,17 +50,20 @@ export const releases: Release[] = [
       { src: "/archive/prod1-7.webp", alt: "VA01 — release documentation" }
     ],
     summary:
-      "Thirty-six tracks from Perspex orbit: club pressure, rupture, rebuild, and post-floor transmissions documented as VA01.",
+      "Thirty-six tracks from the Perspex orbit—club pressure, rupture, rebuild, and post-floor transmissions, documented as VA01.",
     notes: [
-      "VA01 is the first Perspex compilation, built as a wide scene document rather than a single-lane label statement.",
-      "The page prioritizes artwork, release notes, the complete tracklist, and direct listening routes through Bandcamp and SoundCloud."
+      "More than a compilation, VA01 is a time capsule: a document of sound, vision, and emotion shaped through experimentation, transformation, and collective energy.",
+      "The first volume exists as a physical artifact—a hard-covered printed zine with an embossed 16GB USB 3.0 containing all 36 tracks. Made to be held, kept, and returned to.",
+      "VA01 brings together artists from different corners of the scene without forcing them into a single sound or direction. Each contribution stands on its own, while the collection becomes a wider document of a particular moment.",
+      "Available online and offline."
     ],
     credits: [
-      "Published by Studio Pancaroba",
-      "Printed by Kape Hood Connection",
-      "Perspex logo design by Tekknovoid",
-      "Perspex photography assets by Gloria Stephanie",
-      "Layout by pu.ra.ssu and calfskinmack"
+      { role: "Published by", names: ["Studio Pancaroba"] },
+      { role: "Printed by", names: ["Kape Hood Connection"] },
+      { role: "Logo Design by", names: ["Tekknovoid"] },
+      { role: "Photography by", names: ["Gloria Stephanie"] },
+      { role: "Layout by", names: ["Calfskinmack", "Pu.ra.ssu"] },
+      { role: "Mastered by", names: ["The Pandora Labs"] }
     ],
     links: {
       bandcamp: "https://perspex.bandcamp.com/album/various-artists-vol-01",
