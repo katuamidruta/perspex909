@@ -110,7 +110,14 @@ const specs = [
   { label: "Format", value: "USB + Zine" },
 ];
 
-// 11 — CHRONICLE. Layered frames cross-dissolving under cycling statements.
+// 10 — PRODUCT GALLERY. The record as an object, on the reel strip's own
+// mechanism: one image per slice of runway, advanced by scroll, no words.
+// Swap or reorder files here.
+const galleryProd = [1, 2, 3, 4, 5, 6].map(
+  (n) => `/archive/galleryprod1-${n}.webp`,
+);
+
+// 12 — CHRONICLE. Layered frames cross-dissolving under cycling statements.
 // Drawn from the release's own documentation, so the scene under the
 // tracklist is the record it is counting.
 const chronicleLayers = [
@@ -123,7 +130,7 @@ const chronicleLines = [
   "Pressed to hold.",
 ];
 
-// 12 — ARTIFACT OVERTURE. The same split mechanism that opens the page and
+// 13 — ARTIFACT OVERTURE. The same split mechanism that opens the page and
 // the release chapter, opening the last one — the tee's own photographs
 // pulled apart into a band, with the product shot holding the core.
 const teeWings = {
@@ -131,14 +138,14 @@ const teeWings = {
   right: [tee.userPhotos[1], tee.reviewPhotos[1]],
 };
 
-// 13 — ARTIFACT. Two columns of field photographs travelling in opposite
+// 14 — ARTIFACT. Two columns of field photographs travelling in opposite
 // directions behind the order sheet.
 const teeColumns = [
   [tee.heroImage, tee.reviewPhotos[0], tee.userPhotos[0]],
   [tee.userPhotos[1], tee.reviewPhotos[1], tee.userPhotos[2]],
 ];
 
-// 14 — MENU. The closing block is the same menu as the header, built from
+// 15 — MENU. The closing block is the same menu as the header, built from
 // the same array, so the two can never drift apart. Off-site accounts live
 // in the footer; a menu that points out of the document is not a menu.
 const menuMeta: Record<string, string> = {
@@ -443,7 +450,22 @@ const menuRows = navItems.map((item, i) => ({
     </div>
   </section>
 
-  {/* ---------- 10 · TRACKLIST LADDER ------------------------------- */}
+  {/* ---------- 10 · PRODUCT GALLERY -------------------------------- */}
+  <section class="gallery runway--4" aria-label="VA01 product gallery" data-scrub>
+    <div class="stage">
+      <div class="gallery-strip" style={`--n:${galleryProd.length}`}>
+        {
+          galleryProd.map((src, i) => (
+            <figure class="gallery-item" style={`--i:${i}`}>
+              <img src={src} alt="" loading="lazy" decoding="async" />
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- 11 · TRACKLIST LADDER ------------------------------- */}
   <section
     class="ladder runway--4"
     style={`--n:${va01.tracklist.length}`}
@@ -475,7 +497,7 @@ const menuRows = navItems.map((item, i) => ({
     </div>
   </section>
 
-  {/* ---------- 11 · CHRONICLE -------------------------------------- */}
+  {/* ---------- 12 · CHRONICLE -------------------------------------- */}
   <section class="chronicle runway--4" data-scrub>
     <div class="stage">
       <div class="chronicle-scene">
@@ -511,7 +533,7 @@ const menuRows = navItems.map((item, i) => ({
     </div>
   </section>
 
-  {/* ---------- 12 · ARTIFACT OVERTURE (split III) ------------------ */}
+  {/* ---------- 13 · ARTIFACT OVERTURE (split III) ------------------ */}
   <section class="split-frame runway--3" data-scrub>
     <div class="stage">
       <div class="split-band">
@@ -557,7 +579,7 @@ const menuRows = navItems.map((item, i) => ({
     </div>
   </section>
 
-  {/* ---------- 13 · ARTIFACT --------------------------------------- */}
+  {/* ---------- 14 · ARTIFACT --------------------------------------- */}
   <section class="artifact runway--3" id="artifact" data-scrub>
     <div class="stage">
       <div class="artifact-columns" aria-hidden="true">
@@ -609,7 +631,7 @@ const menuRows = navItems.map((item, i) => ({
     </div>
   </section>
 
-  {/* ---------- 14 · MENU ------------------------------------------- */}
+  {/* ---------- 15 · MENU ------------------------------------------- */}
   <section class="section section--paper index-block" data-readout>
     <div class="section-header" data-in="up">
       <div>
