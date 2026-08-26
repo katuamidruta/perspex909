@@ -30,7 +30,7 @@ export const products: Product[] = [
   {
     id: "limited-unisex-prspx-tee",
     slug: "limited-unisex-prspx-tee",
-    title: "Limited Unisex \"PRSPX\" Tee",
+    title: 'Limited Unisex "PRSPX" Tee',
     artifactType: "Apparel",
     catalogCode: "PRSPX-TEE-01",
     availability: "Limited run",
@@ -41,47 +41,47 @@ export const products: Product[] = [
       "A limited unisex PRSPX tee for bodies moving through club rooms, campouts, and archive photographs.",
     description: [
       "One wearable artifact: a black PRSPX tee treated as field uniform, not seasonal merch.",
-      "The first run is gone. Sizing, stock and whatever comes next are settled person to person over WhatsApp."
+      "The first run is gone. Sizing, stock and whatever comes next are settled person to person over WhatsApp.",
     ],
     heroImage: {
       src: "/archive/shirt1-1.webp",
       alt: "Limited Unisex PRSPX Tee — product photo",
-      label: "Product photo"
+      label: "Product photo",
     },
     reviewPhotos: [
       {
         src: "/archive/shirt1-2.webp",
         alt: "PRSPX Tee — review photo 01",
-        label: "Review 01"
+        label: "Review 01",
       },
       {
         src: "/archive/shirt1-3.webp",
         alt: "PRSPX Tee — review photo 02",
-        label: "Review 02"
-      }
+        label: "Review 02",
+      },
     ],
     userPhotos: [
       {
         src: "/archive/shirt1-4.webp",
         alt: "PRSPX Tee — fit photo 01",
-        label: "Fit 01"
+        label: "Fit 01",
       },
       {
         src: "/archive/shirt1-5.webp",
         alt: "PRSPX Tee — fit photo 02",
-        label: "Fit 02"
+        label: "Fit 02",
       },
       {
         src: "/archive/shirt1-6.webp",
         alt: "PRSPX Tee — fit photo 03",
-        label: "Fit 03"
-      }
+        label: "Fit 03",
+      },
     ],
     credits: [
       { label: "Photo", value: "@guampardd" },
-      { label: "Model", value: "@6rutal6rat" }
+      { label: "Model", value: "@6rutal6rat" },
     ],
     whatsappUrl:
-      "https://wa.me/000000000000?text=Hi%20Perspex%2C%20I%20want%20to%20order%20the%20Limited%20Unisex%20PRSPX%20Tee."
-  }
+      "https://wa.me/000000000000?text=Hi%20Perspex%2C%20I%20want%20to%20order%20the%20Limited%20Unisex%20PRSPX%20Tee.",
+  },
 ];

@@ -52,7 +52,7 @@ const stackCards = [
     alt: "Campout Vol. II — field documentation",
   },
   {
-    src: "/archive/random1-14.webp",
+    src: "/archive/random1-15.webp",
     alt: "Entering 2026 Portal — field documentation",
   },
 ];
@@ -124,18 +124,20 @@ const chronicleLayers = [
   va01.coverImage,
   ...va01.galleryImages!.slice(0, 3).map((img) => img.src),
 ];
-const chronicleLines = [
-  "Thirty-six tracks.",
-  "One scene document.",
-  "Pressed to hold.",
-];
+const chronicleLines = ["Perspex909.", "Still exploring.", "Still evolving."];
 
 // 13 — ARTIFACT OVERTURE. The same split mechanism that opens the page and
 // the release chapter, opening the last one — the tee's own photographs
 // pulled apart into a band, with the product shot holding the core.
 const teeWings = {
-  left: [tee.reviewPhotos[0], tee.userPhotos[0]],
-  right: [tee.userPhotos[1], tee.reviewPhotos[1]],
+  left: [
+    { src: "/archive/shirt1-6.webp", alt: "PRSPX Tee — review photo 01" },
+    { src: "/archive/shirt1-3.webp", alt: "PRSPX Tee — fit photo 01" },
+  ],
+  right: [
+    { src: "/archive/shirt1-2.webp", alt: "PRSPX Tee — fit photo 02" },
+    { src: "/archive/shirt1-5.webp", alt: "PRSPX Tee — review photo 02" },
+  ],
 };
 
 // 14 — ARTIFACT. Two columns of field photographs travelling in opposite
@@ -438,7 +440,8 @@ const menuRows = navItems.map((item, i) => ({
           va01.credits.map((credit, i) => (
             <Fragment>
               {i > 0 && " · "}
-              {credit.role + " "}<strong>{credit.names.join(" & ")}</strong>
+              {credit.role + " "}
+              <strong>{credit.names.join(" & ")}</strong>
             </Fragment>
           ))
         }
@@ -451,7 +454,11 @@ const menuRows = navItems.map((item, i) => ({
   </section>
 
   {/* ---------- 10 · PRODUCT GALLERY -------------------------------- */}
-  <section class="gallery runway--4" aria-label="VA01 product gallery" data-scrub>
+  <section
+    class="gallery runway--4"
+    aria-label="VA01 product gallery"
+    data-scrub
+  >
     <div class="stage">
       <div class="gallery-strip" style={`--n:${galleryProd.length}`}>
         {
