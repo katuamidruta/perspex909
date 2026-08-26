@@ -205,6 +205,21 @@ const ogImageURL = new URL(image, Astro.site);
       if (scrubTargets.length && !reduceMotion) {
         let scrubQueued = 0;
 
+        // A runway's travel is measured against ITS OWN STAGE, not the window.
+        // Runways are authored in svh, which is fixed to the small viewport,
+        // while window.innerHeight grows the moment a phone's URL bar
+        // retracts. Dividing the first by the second made --p jump ~4% at
+        // that exact moment — every choreography on the page snapped at once
+        // — and made --p hit 1 while the stage was still pinned, which is the
+        // frozen hold this project has twice been told off for. The stage is
+        // the thing that actually unpins, so it is the correct ruler.
+        const measure = (target) => {
+          const stage = target.querySelector(".stage");
+          target._stageH = stage ? stage.offsetHeight : window.innerHeight;
+        };
+
+        const measureAll = () => scrubTargets.forEach(measure);
+
         const paintScrub = () => {
           scrubQueued = 0;
           const viewport = window.innerHeight;
@@ -215,11 +230,12 @@ const ogImageURL = new URL(image, Astro.site);
             // value (0 below, 1 above) is already the correct end state.
             if (rect.bottom < -viewport || rect.top > viewport * 2) continue;
 
-            const range = target.offsetHeight - viewport;
+            const stageH = target._stageH || viewport;
+            const range = target.offsetHeight - stageH;
             const progress =
               range > 0
                 ? -rect.top / range
-                : (viewport - rect.top) / (viewport + rect.height);
+                : (stageH - rect.top) / (stageH + rect.height);
 
             target.style.setProperty(
               "--p",
@@ -232,9 +248,13 @@ const ogImageURL = new URL(image, Astro.site);
           if (!scrubQueued) scrubQueued = requestAnimationFrame(paintScrub);
         };
 
+        measureAll();
         paintScrub();
         window.addEventListener("scroll", requestScrub, { passive: true });
-        window.addEventListener("resize", requestScrub);
+        window.addEventListener("resize", () => {
+          measureAll();
+          requestScrub();
+        });
       }
 
       // --- Index readout --------------------------------------------------
@@ -244,40 +264,93 @@ const ogImageURL = new URL(image, Astro.site);
         const readout = block.querySelector(".index-readout");
         if (!readout) return;
         const resting = readout.textContent;
+        const rows = block.querySelectorAll(".index-row");
 
-        block.querySelectorAll(".index-row").forEach((row) => {
-          row.addEventListener("mouseenter", () => {
-            readout.textContent = row.getAttribute("data-no") || resting;
+        if (window.matchMedia("(hover: hover)").matches) {
+          rows.forEach((row) => {
+            row.addEventListener("mouseenter", () => {
+              readout.textContent = row.getAttribute("data-no") || resting;
+            });
           });
-        });
 
-        block.addEventListener("mouseleave", () => {
-          readout.textContent = resting;
-        });
+          block.addEventListener("mouseleave", () => {
+            readout.textContent = resting;
+          });
+        } else {
+          // A phone has no cursor, so the counter was frozen at its resting
+          // number for the whole session — the block's one piece of
+          // interaction, dead. Scroll position cannot stand in for the cursor
+          // here: the menu is the last block on the page, so its rows can
+          // never be scrolled to the middle of the screen (measured — the
+          // document ends 125px below the last row). The touch itself is the
+          // input that does exist. The number lands before the anchor jump,
+          // so it reads as "you left from 03".
+          rows.forEach((row) => {
+            row.addEventListener(
+              "pointerdown",
+              () => {
+                readout.textContent = row.getAttribute("data-no") || resting;
+              },
+              { passive: true },
+            );
+          });
+        }
       });
 
-      // Reel click-to-play (YouTube Shorts embed)
+      // Reel click-to-play (YouTube Shorts embed).
+      // Only the reel under the head answers a tap: every other tile in the
+      // strip renders its play button at opacity 0 but stayed fully
+      // clickable, so on a phone a tap on an apparently empty tile started a
+      // video. And a reel that scrolls out from under the head gives its
+      // iframe back, rather than playing on off-screen inside a clipped
+      // stage — which also re-arms the tile for the next time round.
+      const playingReels = new Set();
+
+      const focusOf = (reel) =>
+        parseFloat(getComputedStyle(reel).getPropertyValue("--focus")) || 0;
+
+      const stopReel = (reel) => {
+        const frame = reel.querySelector("iframe");
+        if (frame) frame.remove();
+        reel.classList.remove("is-playing");
+        playingReels.delete(reel);
+      };
+
       document.querySelectorAll("[data-reel]").forEach((reel) => {
         const overlay = reel.querySelector(".reel-overlay");
-        if (!overlay) return;
+        const ytId = reel.dataset.yt;
+        if (!overlay || !ytId) return;
 
-        overlay.addEventListener(
-          "click",
-          () => {
-            const ytId = reel.dataset.yt;
-            if (!ytId) return;
-            reel.classList.add("is-playing");
-            const iframe = document.createElement("iframe");
-            iframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&playsinline=1`;
-            iframe.allow = "autoplay; fullscreen; picture-in-picture";
-            iframe.allowFullscreen = true;
-            iframe.style.cssText =
-              "position:absolute;inset:0;width:100%;height:100%;border:0;";
-            reel.appendChild(iframe);
-          },
-          { once: true },
-        );
+        overlay.addEventListener("click", () => {
+          // In the strip the tile has a --focus; anywhere else it does not,
+          // and every tile answers.
+          const inStrip = reel.closest(".reel-strip");
+          if (inStrip && focusOf(reel) < 0.5) return;
+          if (reel.classList.contains("is-playing")) return;
+
+          reel.classList.add("is-playing");
+          playingReels.add(reel);
+
+          const iframe = document.createElement("iframe");
+          iframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&playsinline=1`;
+          iframe.allow = "autoplay; fullscreen; picture-in-picture";
+          iframe.allowFullscreen = true;
+          iframe.style.cssText =
+            "position:absolute;inset:0;width:100%;height:100%;border:0;";
+          reel.appendChild(iframe);
+        });
       });
+
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (!playingReels.size) return;
+          playingReels.forEach((reel) => {
+            if (focusOf(reel) < 0.3) stopReel(reel);
+          });
+        },
+        { passive: true },
+      );
     </script>
   </body>
 </html>

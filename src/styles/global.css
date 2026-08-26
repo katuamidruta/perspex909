@@ -308,23 +308,31 @@ body.is-loaded .site-loader {
   backdrop-filter: blur(16px);
 }
 
-/* Narrow screens cannot hold three tracks: mark on top, nav split beneath. */
+/* Narrow screens cannot hold three tracks: mark on top, nav split beneath.
+   Two rows, not three. `grid-column: 1 / -1` alone was not enough — the DOM
+   order is nav, mark, nav, so without an explicit row the mark pushed the
+   second nav onto a third line. Five sections pin at calc(100svh -
+   --header-h), so a row of header is a row taken off all of them. */
 @media (max-width: 800px) {
-  /* Measured, not guessed: the header stacks into three rows below 800px. */
-  :root { --header-h: 128px; }
+  /* Pre-script fallback only; BaseLayout measures the real height. */
+  :root { --header-h: 92px; }
 
   .site-header {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 16px;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    gap: 6px 16px;
     padding: 10px var(--page-pad);
   }
 
+  /* The four labels are 289px of type; a fixed 16px gap tipped them onto a
+     second row at 360px. Fluid gap keeps one row down to ~375px. */
+  .site-nav { gap: clamp(8px, 3vw, 16px); }
+
   .site-mark {
+    grid-row: 1;
     grid-column: 1 / -1;
     justify-self: center;
   }
-
-  .site-mark img { height: 40px; }
 }
 
 /* The mark is the brand material, so it is cast in chrome rather than
@@ -364,6 +372,12 @@ body.is-loaded .site-loader {
 
 .site-nav a,
 .site-footer a {
+  /* A bare 12px line box is a ~15px tap target. The padding is what makes
+     these thumbable; the negative margin keeps the visual rhythm the
+     unpadded version had. */
+  display: inline-block;
+  padding: 11px 6px;
+  margin: -11px -6px;
   font-family: var(--font-meta);
   font-size: var(--text-meta);
   font-weight: 600;
@@ -517,12 +531,24 @@ body.is-loaded .site-loader {
   margin-top: 24px;
 }
 
+/* Display type sits in grid tracks whose floor is its own min-content width,
+   so one long unbreakable word pushes a section wider than the viewport.
+   Nothing else in the page can break these, and there is no horizontal
+   scroll to absorb it. */
+.spec-grid dd,
+.index-row__title,
+.ladder-row__artist,
+.ladder-row__title,
+.dossier-row--group p {
+  overflow-wrap: anywhere;
+}
+
 .cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
-  padding: 0 14px;
+  min-height: 44px;
+  padding: 0 16px;
   border: 1px solid currentColor;
   font-size: var(--text-meta);
   font-weight: 900;
@@ -564,13 +590,6 @@ body.is-loaded .site-loader {
   /* Once a reel is running it holds focus regardless of where the head is. */
   opacity: 1 !important;
   transform: none !important;
-}
-
-.reel-item video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .reel-overlay {
@@ -668,19 +687,20 @@ body.is-loaded .site-loader {
 }
 
 @media (max-width: 800px) {
-  .site-header,
+  /* Below the base .site-mark img rule on purpose: at equal specificity the
+     later declaration wins, and the earlier mobile block was losing. */
+  .site-mark img { height: 40px; }
+
   .site-footer,
   .section-header {
     grid-template-columns: 1fr;
   }
 
-  .site-header,
   .site-footer {
     display: grid;
     align-items: start;
   }
 
-  .site-nav,
   .site-footer div {
     justify-content: flex-start;
   }
@@ -690,6 +710,20 @@ body.is-loaded .site-loader {
   body::before {
     display: none;
   }
+}
+
+/* Below 375px the four labels no longer fit one row at 12px. Tightening the
+   type buys the row back rather than letting the header eat a third of a
+   small screen — every pinned section is calc(100svh - --header-h). */
+@media (max-width: 374px) {
+  .site-nav a {
+    padding: 11px 3px;
+    margin: -11px -3px;
+    font-size: 11px;
+    letter-spacing: 0.01em;
+  }
+
+  .site-nav span { margin-right: 3px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

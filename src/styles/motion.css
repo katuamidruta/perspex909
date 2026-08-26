@@ -611,6 +611,16 @@
    through rather than clicked through, and the page keeps one gesture.
    ========================================================================= */
 
+/* Registered so it computes to a real number: the click handler reads this
+   to decide whether a tap landed on the reel under the head, and an
+   unregistered custom property would hand it the calc() expression as a
+   string. It inherits because .reel-play, a child, fades with it. */
+@property --focus {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
 .reels {
   background: var(--color-night);
 }
@@ -621,7 +631,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: clamp(16px, 3vh, 38px);
+  gap: clamp(16px, 3svh, 38px);
 }
 
 .reels-head {
@@ -631,7 +641,15 @@
 }
 
 .reel-strip {
-  --item: min(40svh, 76vw);
+  /* Sized from the height it actually has, not a guess. A 9:16 tile whose
+     width came from 40svh stood 71svh tall — taller than the stage minus the
+     heading — so on a phone the reel's own label was clipped off the bottom
+     by the stage's overflow. The first branch is that height budget converted
+     back to a width; the second keeps it from swallowing a narrow screen. */
+  --item: min(
+    calc((100svh - var(--header-h) - 190px) * 9 / 16),
+    76vw
+  );
   --gap: clamp(10px, 1.4vw, 20px);
 
   display: flex;
@@ -1030,6 +1048,17 @@
 }
 
 .index-block:hover .index-readout { opacity: 0.24; }
+
+/* Touch: nothing here recedes, brightens or nudges on its own, because none
+   of it is reachable without a cursor. The counter carries its own contrast
+   and the press states stand in for hover. */
+@media (hover: none) {
+  .index-readout { opacity: 0.2; }
+
+  .index-row:active .index-row__title { transform: translateX(12px); }
+
+  .index-list:active .index-row:not(:active) { opacity: 0.26; }
+}
 
 /* A held breath between two pinned chapters. Empty on purpose: the moving
    grain keeps it from reading as dead, and saying nothing preserves the
