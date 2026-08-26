@@ -4,16 +4,16 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No U
 
 > Background lives in project memory (`MEMORY.md` + files), auto-loaded each session. This file is "where we left off".
 
-## Status (end of session 7 — 2026-08-27)
+## Status (end of session 8 — 2026-08-27)
 
 - **The site is one page.** `archive/`, `releases/`, `shop/` and `about/` are folded into `src/pages/index.astro`; the build emits **1 page**, not 10.
 - `npx astro build` passes. `npx astro check` reports no errors in `src/` (the 747 it prints are all from `mono/`, which is reference material and not part of the build).
 - Dev server on port 4330; `astro preview` on 4331 was used for the production weight numbers.
-- **All committed, working tree clean.** Session 6 shipped 8 commits from `f1cb942`; session 7 added 2 more (`6cf4393` the mobile defect pass, `a284a0d` caching + the phone-sized encode).
+- **All committed, working tree clean.** Session 6 shipped 8 commits from `f1cb942`; session 7 added 2 more (`6cf4393` the mobile defect pass, `a284a0d` caching + the phone-sized encode); session 8 added `094c44c`, the archive poster coming back on a phone.
 
 ## The page, in order
 
-Heights measured at 1440×900. Total **38,953px**, 43 viewports (mobile 26,698px at 390×844). The user has twice said explicitly that a longer scroll is an acceptable price for pacing — do not trim runways to save length without asking.
+Heights measured at 1440×900. Total **38,953px**, 43 viewports (mobile 27,508px at 390×844, 32.6 viewports). The user has twice said explicitly that a longer scroll is an acceptable price for pacing — do not trim runways to save length without asking.
 
 | # | Section | Runway | Note |
 |---|---|---|---|
@@ -23,7 +23,7 @@ Heights measured at 1440×900. Total **38,953px**, 43 viewports (mobile 26,698px
 | 4 | `ledger` | — | the label's own metadata grid + one line of prose (from `about/`) |
 | — | `interlude` | 46svh | held breath before the archive |
 | 5 | `stack` `#archive` | 400svh | the three event flyers deal into a pile |
-| 6 | `dossier` | 500svh | **new** — the same three records unroll in place |
+| 6 | `dossier` | 500svh | the same three records unroll in place (440svh on a phone — two beats each) |
 | 7 | `reels` | 400svh | every archive reel on one track, advanced by scroll |
 | — | `interlude` | 46svh | empty and unlabelled on purpose |
 | 8 | `split-frame` `#release` | 300svh | compilation.mp4, same mechanism — the two rhyme |
@@ -48,7 +48,7 @@ Nav and the index rows are **anchors** now (`#label`, `#archive`, `#release`, `#
 
 ### The new choreographies
 
-- **`dossier`** — one archive record per slice of runway. The flyer box takes the poster's own 4:5 shape (measured: all three flyers are exactly 0.800) with `object-fit: contain`, so the artwork is never cropped at any window width — a cover-crop into whatever rectangle the grid left was cutting the bottom off the posters. The flyer is held on the left, the sheet writes itself out on the right: each row unrolls left-to-right on a `clip-path: inset(0 X 0 0)`, in order, like paper coming off a roll. Flyer and record drift against each other for the whole slot so the sheet never sits still. `.is-last` keeps `--dis: 0` so the section doesn't hand back an empty stage.
+- **`dossier`** — one archive record per slice of runway. The flyer box takes the poster's own 4:5 shape (measured: all three flyers are exactly 0.800) with `object-fit: contain`, so the artwork is never cropped at any window width — a cover-crop into whatever rectangle the grid left was cutting the bottom off the posters. The flyer is held on the left, the sheet writes itself out on the right: each row unrolls left-to-right on a `clip-path: inset(0 X 0 0)`, in order, like paper coming off a roll. Flyer and record drift against each other for the whole slot so the sheet never sits still. `.is-last` keeps `--dis: 0` so the section doesn't hand back an empty stage. **On a phone the same record plays two beats instead of one** — see Mobile below.
 - **`ladder`** — 36 tracks pulled past a fixed head. The list travels under a window held at the centre of the pinned stage, roughly one track per 100px of scroll, and everything outside the window falls into blur, so the section reads at the speed of the record rather than the speed of the page. The counter is a registered `@property --tn { syntax: "<integer>" }` computed as `calc(var(--p) * (var(--n) - 1) + 1)` and written straight into `counter-reset` — the same rounding as the head row, so the number and the framed track can never disagree. **Verified in Chrome:** `--tn` reads 7 / 25 / 36 with the brightest row at track 7 / 25 / 36. Its `::after` carries an explicit colour, because an opacity of its own would break the parent's `background-clip` and paint nothing.
 - **`reel strip`** — seven reels on one horizontal track, advanced by `--p`. One holds the centre at full size while its neighbours sit at 0.22 opacity and 0.84 scale, so the section is scrolled through rather than clicked through. Focus is resolved without `abs()`: two `clamp()` ramps, one falling off each side, and `min()` of the pair. Measured across the runway: the head lands on reel 2 → 4 → 6 → 7 as `--p` goes 0.11 → 0.52 → 0.93 → 1, and the track travels 0 → −1956px. Under reduced motion it wraps into a plain grid with all seven reachable.
 - **`artifact`** — two columns of tee photographs travelling in opposite directions (`--p * -32%` / `--p * 32% - 32%`) behind an order sheet that fades up and keeps drifting. Measured: columns travel 0 → −845px across the runway.
@@ -107,6 +107,18 @@ Still unreferenced in `public/` (~900KB, left in place deliberately): `campout2-
 
 ## Mobile
 
+**Session 8: the archive poster is back, as its own beat.** Below 900px `.dossier-flyer` was `display: none`, and on a phone the record simply had no poster — read as broken, not as a decision. There is no column to give it: at 390 the record runs 523–535px and a real phone leaves about 125px spare, which is not a 4:5 poster at any size worth showing. So it is paid for in **runway**, which this page has plenty of.
+
+- Each record's slice now **opens on its poster alone**, edge to edge — the flyer goes `position: absolute; inset: 0 calc(var(--page-pad) * -1)` inside the sheet, so it bleeds out of the stage padding and the whole 390px width is poster (390×487 painted, `object-fit: contain`, never cropped).
+- The poster then **recedes to 0.18 opacity and 0.95 scale and becomes the ground** the record is written on. It never leaves the screen; it stops competing for it. This is the `.artifact` move, applied to a section that needed it.
+- **The handover finishes before the first row writes.** First attempt overlapped them and the title was unreadable over a full-brightness flyer. `--recede` now runs `--local` 0.28→0.44 and the rows start at 0.44. Measured at 390: flyer opacity is 1 → 0.64 → 0.18 while rows are 0/9, 0/9, 1/9.
+- Rows are on a **named clock** now. `.dossier-sheet` carries `--rc: var(--local)` and `.dossier-row` reads `var(--rc)`; the phone overrides `--rc` alone to delay them. Desktop timing is untouched by construction.
+- **`.runway--5` goes 340 → 440svh below 800px.** It is the dossier and only the dossier. Two beats per record where the desktop plays one, so the slot needs the time: 26,698 → 27,508px at 390×844, **31.6 → 32.6 viewports**. Nothing was cut — one viewport was added for a poster that was missing.
+- Nothing freezes: both the flyer's translate and the record's run on `--local` for the whole slot, so the poster keeps drifting under the sheet after it has dimmed (measured 19px of travel across the hold).
+- **Reduced motion at phone width printed no poster either.** It does now — `@media (prefers-reduced-motion: reduce) and (max-width: 900px)` puts the flyer back in flow above its record at `min(62svh, 110vw)`.
+
+Measured after: **mobile production weight unchanged, 39 requests / 4,529KB** — the pile in 05 has already fetched these three URLs, so the poster costs nothing. Desktop proved unchanged by layout digest: **9 of 4,249 element-states differ**, every one an animation phase (loader scanline, grain drift, one in-flight transition). No console errors and no x-overflow at 390 / 320 / 820 / 1440; no flat frames on a full mobile scroll or under reduced motion.
+
 Session 7 audited it properly and it turned up six real defects, not polish items. All fixed and measured:
 
 - **The scrub engine was measuring against the wrong ruler.** Runways are authored in `svh` (fixed to the small viewport); the JS divided by `window.innerHeight` (live). Those agree on a desktop and disagree on a phone the instant the URL bar retracts — `--p` jumped ~4%, snapping every choreography at once, and reached 1 while the stage was still pinned, which is the frozen hold rule 1 forbids. Each runway now measures against **its own stage**, the thing that actually unpins. Verified by forcing a 30% stage/window mismatch: `--p` lands on exactly 1.0 at the unpin point at both stage heights (`browse/scrubfix.mjs`).
@@ -120,7 +132,7 @@ Earlier groundwork that still holds:
 
 - **`--header-h` is measured, not guessed.** BaseLayout reads the real header height and writes it back to `:root` (ResizeObserver, with a resize listener fallback). Verified: 127px at 390/640/800, 81px at 1440, and `.dossier .stage`'s `top` follows exactly. The CSS value is now only the pre-script fallback.
 - **Runways are shorter below 800px** (`--3/--4/--5` → 220/280/340svh). Every choreography is a function of `--p`, so a shorter runway just plays it faster — nothing needed retiming. Mobile went from 37 viewports of scrolling to **31.6** (26,698px at 390×844) — shorter than it would otherwise be, on a page that has grown two runways since.
-- `dossier` drops the flyer and goes single-column; `ladder` folds to a two-line row; `reels` goes 7 → 4 → 2 columns.
+- `dossier` goes single-column (the flyer is now the ground behind it, above); `ladder` folds to a two-line row; `reels` goes 7 → 4 → 2 columns.
 
 ## Verification tooling — use it, do not guess
 
@@ -145,22 +157,10 @@ The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the ki
 
 ## Still open
 
-- **The archive flyers are missing on a phone. Start here.** `motion.css` hides them under `@media (max-width: 900px)` — `.dossier-flyer { display: none }`, and the sheet goes single-column. The reasoning was that the pile in section 05 has just shown all three posters full-screen, so the dossier could be the *record* alone. The user read it as broken: on desktop each record has its poster beside it and on mobile it simply is not there.
-
-  Facts to design against, measured at 390×844:
-  - **It costs zero extra bytes.** The pile and the dossier draw the same three URLs (`events[].flyerImage`), so the images are already fetched. Weight is not an argument for hiding them.
-  - Room is the real constraint. Stage is `100svh − --header-h`; the record itself runs **523–535px**. In the emulator (no URL bar, svh = 844) that leaves ~230px spare; **on a real phone svh is nearer 740, so the spare is ~125px** — enough for a strip, not for a 4:5 poster at any size worth showing (125px tall would be 100px wide).
-  - All three flyers are exactly 4:5, and `.dossier-flyer` already carries `aspect-ratio: 4/5` + `object-fit: contain` so it is never cropped. Keep that.
-
-  Three ways out, in the page's own language:
-  1. **Give the flyer its own beat.** Each record already owns a slice of the runway; split that slice in two — poster full-height first, then it recedes as the record writes itself. Costs no layout space, uses the mechanism the whole page is built on, and is the most expressive option.
-  2. **Poster as the ground.** Put it behind the record, dimmed under a scrim, exactly as `.artifact` does with the tee photographs. Cheapest, zero layout cost, and it rhymes with a section that already works.
-  3. Shrink the record on mobile (drop `--note` rows) to free ~150px for a small poster above it. Loses content; weakest of the three.
-
-- **Read it on an actual phone. This is the one thing left that nobody else can do.** The audit is done and the defects are fixed, but every number here is still emulation: Chromium has no URL bar, so the exact condition behind the worst bug cannot be reproduced here, only simulated. iOS Safari is entirely untested — `position: sticky` inside `overflow: hidden`, and `svh` behaviour, are where it most often differs.
-  - Fastest route, no deploy: `npx astro dev --host`, then open the printed LAN address on the phone (same wifi).
+- **Read it on an actual phone. START HERE — it is the one thing left that nobody else can do.** The audit is done and the defects are fixed, but every number here is still emulation: Chromium has no URL bar, so the exact condition behind the worst bug cannot be reproduced here, only simulated. iOS Safari is entirely untested — `position: sticky` inside `overflow: hidden`, and `svh` behaviour, are where it most often differs.
+  - Fastest route, no deploy: `npx astro dev --host`, then open the printed LAN address on the phone (same wifi). Session 8 left one running at `http://192.168.18.39:4350/` (the `100.120.77.230` address it also prints is Tailscale, not the LAN).
   - The deployed route: `npm run deploy`, which is also what finally verifies `_headers`.
-  - Worth feeling specifically: the URL-bar moment (scroll down, let the bar hide, watch whether anything snaps); the reel strip under a thumb; 36 tracks of the ladder scan; and whether 31 viewports is a journey or a chore.
+  - Worth feeling specifically: the URL-bar moment (scroll down, let the bar hide, watch whether anything snaps); **the new dossier beat — does the poster get long enough alone at 440svh, and does 0.18 read as ground or as dirt under the text?**; the reel strip under a thumb; 36 tracks of the ladder scan; and whether 32.6 viewports is a journey or a chore.
 - 320px still stacks the header into three rows (111px). It degrades without overflowing, so it was left; worth a look if that width matters.
 - `docs/design.md` still contradicts the build (it says "motion restrained", "no decorative gradients"). The user has said it can be rewritten.
 - Optional: one of the three `split-frame`s could run in reverse — five frames converging into one instead of pulling apart — so the set reads as a sequence rather than the same effect three times. One line: invert `--pi`.
@@ -187,20 +187,22 @@ Yang WAJIB dijaga:
   dan chrome buat display type di ground gelap (min ~28px, jangan di kertas)
 - Halaman panjang (43 layar) itu disengaja, jangan dipotong tanpa nanya
 
-MULAI DARI SINI: di HP, flyer arsip nggak muncul sama sekali — di
-motion.css ada `@media (max-width: 900px)` yang bikin `.dossier-flyer`
-display:none. Di desktop tiap record ada posternya di sebelah, di HP ilang.
-Ini kerasa kayak rusak, bukan kayak keputusan. Baca HANDOFF bagian "Still
-open" — udah ada angkanya (ruang sisa cuma ~125px di HP beneran, dan
-nampilin flyer-nya NOL biaya byte karena gambarnya sama persis sama yang
-di tumpukan section 05) plus tiga jalan keluar. Jangan main tempel doang;
-ruangnya emang sempit, jadi pilih mekanismenya dulu.
+MULAI DARI SINI: baca situsnya di HP beneran. Itu satu-satunya yang
+nggak bisa dikerjain dari sini — semua angka di HANDOFF masih emulasi,
+Chromium nggak punya URL bar, dan iOS Safari sama sekali belum kesentuh.
+Cara paling cepet tanpa deploy: `npx astro dev --host`, buka alamat LAN-nya
+di HP (wifi yang sama). Yang paling perlu dirasain: momen URL bar nyembunyi
+(ada yang nyentak nggak), beat dossier yang baru (poster cukup lama sendirian
+nggak, dan 0.18 kebaca sebagai ground apa jadi kotor di belakang teks),
+reel strip pakai jempol, sama 32.6 layar itu perjalanan apa siksaan.
 
-Mobile udah diaudit dan 6 bug asli udah difix (detailnya di HANDOFF bagian
-"Mobile"). Sisanya yang nggak bisa gue kerjain sendiri: baca di HP beneran.
-Semua angka di HANDOFF masih emulasi — Chromium nggak punya URL bar. Cara
-paling cepet tanpa deploy: `npx astro dev --host`, buka alamat LAN-nya di HP
-(wifi yang sama). iOS Safari sama sekali belum kesentuh.
+Flyer arsip di HP udah dibenerin (commit 094c44c): tiap record sekarang
+buka dengan posternya sendirian edge-to-edge, baru posternya mundur jadi
+ground di belakang record. Runway dossier di HP 340 -> 440svh. Nol biaya
+byte, desktop nggak berubah — angkanya di HANDOFF bagian "Mobile".
+
+Mobile udah diaudit dan 7 bug asli udah difix — detailnya di HANDOFF
+bagian "Mobile".
 
 Satu lagi yang belum keverifikasi: public/_headers baru bisa dicek setelah
 deploy — `curl -I https://perspex909.com/archive/compilation.mp4`, cari
