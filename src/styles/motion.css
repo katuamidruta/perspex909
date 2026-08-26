@@ -361,20 +361,6 @@
 }
 
 
-.stack-counter {
-  position: absolute;
-  top: clamp(70px, 12vh, 130px);
-  right: var(--page-pad);
-  z-index: 5;
-  font-family: var(--font-display);
-  font-size: clamp(40px, 8vw, 132px);
-  font-weight: 700;
-  line-height: 1;
-  color: var(--color-white);
-  opacity: 0.16;
-  pointer-events: none;
-}
-
 /* =========================================================================
    4b. DOSSIER — the pile from section 4, read one record at a time.
    The flyer is held on the left while the sheet writes itself out on the
@@ -1260,9 +1246,6 @@
 }
 
 [data-in="up"]    { transform: translate3d(0, 96px, 0); }
-[data-in="left"]  { transform: translate3d(-88px, 0, 0); }
-[data-in="right"] { transform: translate3d(88px, 0, 0); }
-[data-in="scale"] { transform: scale(1.09); filter: blur(10px); }
 
 [data-in].is-in {
   opacity: 1;

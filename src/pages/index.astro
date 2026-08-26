@@ -11,6 +11,44 @@ const tee = products[0];
 
 const words = (line: string) => line.split(" ");
 
+// Every archive image wider than 820px has an -800.webp companion in
+// public/archive (regenerate with sharp if a new file joins). srcset lets
+// the browser stop pulling a 1170px master to paint a 400px column.
+const wide: Record<string, number> = {
+  "campout2-2": 1080,
+  "prod1-3": 1080,
+  "prod1-4": 1080,
+  "random1-7": 1080,
+  "shirt1-1": 1080,
+  "shirt1-2": 1080,
+  "shirt1-3": 1080,
+  "shirt1-4": 1080,
+  "shirt1-5": 1080,
+  "shirt1-6": 1080,
+  "campout1-4": 1080,
+  "prod1-1": 1080,
+  "galleryprod1-1": 1170,
+  "galleryprod1-2": 1170,
+  "galleryprod1-3": 1170,
+  "galleryprod1-4": 1170,
+  "galleryprod1-5": 1170,
+  "galleryprod1-6": 1170,
+  "prod1-10": 1170,
+  "prod1-11": 1170,
+  "prod1-12": 1170,
+  "random1-12": 1170,
+  "random1-13": 1170,
+  "random1-14": 1170,
+  "random1-15": 1170,
+};
+const srcset = (src: string) => {
+  const name = src.split("/").pop()!.replace(".webp", "");
+  const w = wide[name];
+  return w
+    ? `${src.replace(".webp", "-800.webp")} 800w, ${src} ${w}w`
+    : undefined;
+};
+
 // 01 — HERO SPLIT. One frame pulled apart into a band.
 const wings = {
   left: [
@@ -28,7 +66,7 @@ const deck = ["Platform & Space.", "Sound & Vision.", "Without Boundaries."];
 
 // 03 — BIO burn-in.
 const bio =
-  "Perspex909 is a platform and space for exploring sound, vision, and expression without boundaries, built around experimentation and independence, beyond rigid structures, trends, and expectations; not a collective, not a label, just a space to explore, create, and experiment.";
+  "Perspex909 is a platform and space for exploring sound, vision, and expression without boundaries, built around experimentation and independence, beyond rigid structures, trends, and expectations, not a collective, not a label, just a space to explore, create, and experiment.";
 
 // 04 — LEDGER. The label metadata that used to live on the manifesto page.
 const ledger = [
@@ -173,7 +211,13 @@ const menuRows = navItems.map((item, i) => ({
           {
             wings.left.map((img) => (
               <figure>
-                <img src={img.src} alt={img.alt} loading="eager" />
+                <img
+                  src={img.src}
+                  srcset={srcset(img.src)}
+                  sizes="(max-width: 800px) 50vw, 13vw"
+                  alt={img.alt}
+                  loading="eager"
+                />
               </figure>
             ))
           }
@@ -194,7 +238,13 @@ const menuRows = navItems.map((item, i) => ({
           {
             wings.right.map((img) => (
               <figure>
-                <img src={img.src} alt={img.alt} loading="eager" />
+                <img
+                  src={img.src}
+                  srcset={srcset(img.src)}
+                  sizes="(max-width: 800px) 50vw, 13vw"
+                  alt={img.alt}
+                  loading="eager"
+                />
               </figure>
             ))
           }
@@ -262,9 +312,6 @@ const menuRows = navItems.map((item, i) => ({
   {/* ---------- 05 · STACK ------------------------------------------ */}
   <section class="stack runway--4" id="archive" data-scrub>
     <div class="stage">
-      <!-- <div class="stack-counter">
-        {String(stackCards.length).padStart(2, "0")}
-      </div> -->
       <div class="stack-table" style={`--n:${stackCards.length}`}>
         {
           stackCards.map((card, i) => (
@@ -278,6 +325,8 @@ const menuRows = navItems.map((item, i) => ({
               <figure>
                 <img
                   src={card.src}
+                  srcset={srcset(card.src)}
+                  sizes="(max-width: 800px) 92vw, 58vw"
                   alt={card.alt}
                   loading="lazy"
                   decoding="async"
@@ -306,6 +355,8 @@ const menuRows = navItems.map((item, i) => ({
               <figure class="dossier-flyer">
                 <img
                   src={entry.flyerImage.src}
+                  srcset={srcset(entry.flyerImage.src)}
+                  sizes="(max-width: 900px) 100vw, 40vw"
                   alt={entry.flyerImage.alt}
                   loading="lazy"
                   decoding="async"
@@ -380,6 +431,8 @@ const menuRows = navItems.map((item, i) => ({
               <figure>
                 <img
                   src={img.src}
+                  srcset={srcset(img.src)}
+                  sizes="(max-width: 800px) 50vw, 13vw"
                   alt={img.alt}
                   loading="lazy"
                   decoding="async"
@@ -407,6 +460,8 @@ const menuRows = navItems.map((item, i) => ({
               <figure>
                 <img
                   src={img.src}
+                  srcset={srcset(img.src)}
+                  sizes="(max-width: 800px) 50vw, 13vw"
                   alt={img.alt}
                   loading="lazy"
                   decoding="async"
@@ -464,7 +519,14 @@ const menuRows = navItems.map((item, i) => ({
         {
           galleryProd.map((src, i) => (
             <figure class="gallery-item" style={`--i:${i}`}>
-              <img src={src} alt="" loading="lazy" decoding="async" />
+              <img
+                src={src}
+                srcset={srcset(src)}
+                sizes="(max-width: 800px) 76vw, 42vw"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
             </figure>
           ))
         }
@@ -514,6 +576,8 @@ const menuRows = navItems.map((item, i) => ({
               class="chronicle-layer"
               style={`--s:${(i / chronicleLayers.length).toFixed(3)}`}
               src={src}
+              srcset={srcset(src)}
+              sizes="100vw"
               alt=""
               loading="lazy"
               decoding="async"
@@ -550,6 +614,8 @@ const menuRows = navItems.map((item, i) => ({
               <figure>
                 <img
                   src={img.src}
+                  srcset={srcset(img.src)}
+                  sizes="(max-width: 800px) 50vw, 13vw"
                   alt={img.alt}
                   loading="lazy"
                   decoding="async"
@@ -562,6 +628,8 @@ const menuRows = navItems.map((item, i) => ({
         <div class="split-core">
           <img
             src={tee.heroImage.src}
+            srcset={srcset(tee.heroImage.src)}
+            sizes="(max-width: 800px) 100vw, 48vw"
             alt={tee.heroImage.alt}
             loading="lazy"
             decoding="async"
@@ -574,6 +642,8 @@ const menuRows = navItems.map((item, i) => ({
               <figure>
                 <img
                   src={img.src}
+                  srcset={srcset(img.src)}
+                  sizes="(max-width: 800px) 50vw, 13vw"
                   alt={img.alt}
                   loading="lazy"
                   decoding="async"
@@ -595,7 +665,14 @@ const menuRows = navItems.map((item, i) => ({
             <div class={`artifact-column artifact-column--${c}`}>
               {[...column, ...column].map((img) => (
                 <figure>
-                  <img src={img.src} alt="" loading="lazy" decoding="async" />
+                  <img
+                    src={img.src}
+                    srcset={srcset(img.src)}
+                    sizes="(max-width: 800px) 50vw, 34vw"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </figure>
               ))}
             </div>

@@ -155,11 +155,6 @@ body::before {
   mix-blend-mode: screen;
 }
 
-[data-theme="paper"] body {
-  background: var(--color-paper);
-  color: var(--color-ink);
-}
-
 a {
   color: inherit;
   text-decoration: none;
@@ -405,13 +400,6 @@ body.is-loaded .site-loader {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.55;
-}
-
-.site-footer p {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 900;
 }
 
 .section-kicker {

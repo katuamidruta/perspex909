@@ -50,7 +50,7 @@ export const releases: Release[] = [
       { src: "/archive/prod1-7.webp", alt: "VA01 — release documentation" },
     ],
     summary:
-      "Thirty-six tracks from the Perspex orbit—club pressure, rupture, rebuild, and post-floor transmissions, documented as VA01.",
+      "Thirty-six tracks from the Perspex orbit club pressure, rupture, rebuild, and post-floor transmissions, documented as VA01.",
     notes: [
       "More than a compilation, VA01 is a time capsule: a document of sound, vision, and emotion shaped through experimentation, transformation, and collective energy.",
       "The first volume exists as a physical artifact—a hard-covered printed zine with an embossed 16GB USB 3.0 containing all 36 tracks. Made to be held, kept, and returned to.",
