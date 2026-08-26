@@ -944,7 +944,10 @@
   height: calc(100svh - var(--header-h));
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* The sheet starts at the page edge like every other block of prose —
+     the release note, the dossier record, the bio. Centred, it read as a
+     different document. */
+  justify-content: flex-start;
 }
 
 .artifact-columns {
@@ -982,8 +985,10 @@
 .artifact-veil {
   position: absolute;
   inset: 0;
+  /* The dark core follows the sheet to the left edge, where the reading
+     matter lives now. */
   background: radial-gradient(
-    ellipse at 50% 50%,
+    ellipse at 26% 50%,
     rgba(0, 0, 0, 0.84) 26%,
     rgba(0, 0, 0, 0.58) 100%
   );
@@ -995,7 +1000,6 @@
   z-index: 2;
   width: min(100%, 760px);
   padding: 0 var(--page-pad);
-  text-align: center;
   opacity: var(--a);
   transform: translate3d(0, calc((0.5 - var(--p)) * 72px), 0);
   will-change: opacity, transform;
@@ -1009,7 +1013,7 @@
 }
 
 .artifact-lead {
-  margin: 16px auto 0;
+  margin: 16px 0 0;
   max-width: 54ch;
   font-size: var(--text-lead);
   line-height: 1.4;
@@ -1017,7 +1021,7 @@
 }
 
 .artifact-note {
-  margin: 10px auto 0;
+  margin: 10px 0 0;
   max-width: 52ch;
   font-size: var(--text-body);
   line-height: 1.5;
@@ -1040,8 +1044,6 @@
   text-transform: uppercase;
   opacity: 0.55;
 }
-
-.artifact-sheet .cta-row { justify-content: center; }
 
 /* =========================================================================
    5d. HEADING METAL — display type on a dark ground is cast in the same
