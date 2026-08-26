@@ -4,12 +4,14 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No U
 
 > Background lives in project memory (`MEMORY.md` + files), auto-loaded each session. This file is "where we left off".
 
-## Status (end of session 9 — 2026-08-27)
+## Status (end of session 10 — 2026-08-27)
 
 - **The site is one page.** `archive/`, `releases/`, `shop/` and `about/` are folded into `src/pages/index.astro`; the build emits **1 page**, not 10.
 - `npx astro build` passes. `npx astro check` reports no errors in `src/` (the 747 it prints are all from `mono/`, which is reference material and not part of the build).
 - Dev server on port 4330; `astro preview` on 4331 was used for the production weight numbers.
-- **All committed, working tree clean.** Session 6 shipped 8 commits from `f1cb942`; session 7 added 2 more (`6cf4393` the mobile defect pass, `a284a0d` caching + the phone-sized encode); session 8 added `094c44c`, the archive poster coming back on a phone. Session 9 (same day): `2867a5a`+`c5ad957` — the pile's images are a literal `stackCards` array in `index.astro` now, seeded with `random1-{2,4,8}` as placeholders **the user intends to swap by hand**; `f6864d2` — six reels, no captions.
+- **All committed, working tree clean.** Session 6 shipped 8 commits from `f1cb942`; session 7 added 2 more (`6cf4393` the mobile defect pass, `a284a0d` caching + the phone-sized encode); session 8 added `094c44c`, the archive poster coming back on a phone. Session 9 (same day): the pile's images became a literal `stackCards` array in `index.astro` (the user swaps them by hand); six reels, no captions; VA01's real copy with credit names lit; the product gallery (section 10); chronicle speaking for the label. Session 10: `03b69cf` sheets centred-but-wide + menu in document order + footer line + dossier CTA unblocked; `b8a0a61` 17 unused files out of public/; `cf84152` srcset everywhere + dead-CSS sweep.
+
+**Image swapping is all literals in `index.astro` now**: `wings`, `stackCards`, `reels` (YouTube ids), `galleryProd`, `reelWings`, `teeWings`; `chronicleLayers` follows `releases.ts`. **A new archive image wider than 820px needs an `-800.webp` companion (sharp, q80) and an entry in the `wide` map at the top of index.astro** — the srcset helper reads that map.
 
 ## The page, in order
 
@@ -93,10 +95,11 @@ Archive prints are **bare images now** — the 3px `--chrome-bezel` rim came off
 
 | | requests | bytes |
 |---|---|---|
-| First paint, no scroll | 15 | **1.26MB** |
-| Whole document, full scroll | 39 | **5.87MB** |
+| First paint, no scroll | 15 | **1.09MB** |
+| Full scroll, desktop 1440@1x | 49 | **5.76MB** (3.28MB is the two clips) |
+| Full scroll, mobile 390@2x | 47 | **4.06MB** |
 
-Was 14.5MB for the merged page before this pass, and the old multi-page build measured ~13MB.
+Was 14.5MB before session 6's pass; mobile was 5.87MB before session 10's srcset. Every archive image wider than 820px ships an -800.webp companion and all 36 rendered archive imgs carry srcset + per-context sizes, so a phone no longer pulls 1170px masters for 400px columns. public/ holds **only referenced files** — 17 unreferenced (1.8MB) moved to unused/ at the repo root. Full scroll at DPR1, DPR2 and 390@2x: zero 4xx, clean consoles.
 
 What moved:
 
@@ -105,7 +108,6 @@ What moved:
 - Reel thumbnails are `loading="lazy"` (they were eager, seven of them, mid-document).
 - The below-fold video's poster is attached by an observer via `data-poster`. A `poster` attribute is eager by definition, so a still for a clip 18,000px down was on the critical path. The observer runs for everyone, including reduced-motion and save-data readers who never get the video itself.
 
-Still unreferenced in `public/` (~900KB, left in place deliberately): `campout2-1.webp`, `campout1-1..3.webp`, `prod1-8.webp`, `random1-{1,2,4,6,8,10}.webp`, `hero.gif`, `kucingdigital.png`.
 
 ## Mobile
 
