@@ -4,12 +4,12 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No U
 
 > Background lives in project memory (`MEMORY.md` + files), auto-loaded each session. This file is "where we left off".
 
-## Status (end of session 10 — 2026-08-27)
+## Status (end of session 10 — 2026-08-27, pushed to GitHub)
 
 - **The site is one page.** `archive/`, `releases/`, `shop/` and `about/` are folded into `src/pages/index.astro`; the build emits **1 page**, not 10.
 - `npx astro build` passes. `npx astro check` reports no errors in `src/` (the 747 it prints are all from `mono/`, which is reference material and not part of the build).
 - Dev server on port 4330; `astro preview` on 4331 was used for the production weight numbers.
-- **All committed, working tree clean.** Session 6 shipped 8 commits from `f1cb942`; session 7 added 2 more (`6cf4393` the mobile defect pass, `a284a0d` caching + the phone-sized encode); session 8 added `094c44c`, the archive poster coming back on a phone. Session 9 (same day): the pile's images became a literal `stackCards` array in `index.astro` (the user swaps them by hand); six reels, no captions; VA01's real copy with credit names lit; the product gallery (section 10); chronicle speaking for the label. Session 10: `03b69cf` sheets centred-but-wide + menu in document order + footer line + dossier CTA unblocked; `b8a0a61` 17 unused files out of public/; `cf84152` srcset everywhere + dead-CSS sweep.
+- **All committed, working tree clean, and pushed** (`0a65da1` on `origin/main`). Deploy (`npm run deploy`) has NOT been run — `_headers` is still unverified in production. Session 6 shipped 8 commits from `f1cb942`; session 7 added 2 more (`6cf4393` the mobile defect pass, `a284a0d` caching + the phone-sized encode); session 8 added `094c44c`, the archive poster coming back on a phone. Session 9 (same day): the pile's images became a literal `stackCards` array in `index.astro` (the user swaps them by hand); six reels, no captions; VA01's real copy with credit names lit; the product gallery (section 10); chronicle speaking for the label. Session 10: `03b69cf` sheets centred-but-wide + menu in document order + footer line + dossier CTA unblocked; `b8a0a61` 17 unused files out of public/; `cf84152` srcset everywhere + dead-CSS sweep.
 
 **Image swapping is all literals in `index.astro` now**: `wings`, `stackCards`, `reels` (YouTube ids), `galleryProd`, `reelWings`, `teeWings`; `chronicleLayers` follows `releases.ts`. **A new archive image wider than 820px needs an `-800.webp` companion (sharp, q80) and an entry in the `wide` map at the top of index.astro** — the srcset helper reads that map.
 
@@ -161,10 +161,14 @@ The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the ki
 
 ## Still open
 
-- **Read it on an actual phone. START HERE — it is the one thing left that nobody else can do.** The audit is done and the defects are fixed, but every number here is still emulation: Chromium has no URL bar, so the exact condition behind the worst bug cannot be reproduced here, only simulated. iOS Safari is entirely untested — `position: sticky` inside `overflow: hidden`, and `svh` behaviour, are where it most often differs.
-  - Fastest route, no deploy: `npx astro dev --host`, then open the printed LAN address on the phone (same wifi). Session 8 left one running at `http://192.168.18.39:4350/` (the `100.120.77.230` address it also prints is Tailscale, not the LAN).
-  - The deployed route: `npm run deploy`, which is also what finally verifies `_headers`.
-  - Worth feeling specifically: the URL-bar moment (scroll down, let the bar hide, watch whether anything snaps); **the new dossier beat — does the poster get long enough alone at 440svh, and does 0.18 read as ground or as dirt under the text?**; the reel strip under a thumb; 36 tracks of the ladder scan; and whether 32.6 viewports is a journey or a chore.
+- **The real-phone read happened (end of session 10) and found two real bugs. START WITH THESE.** Everything below is the user's own report from their phone; neither has been reproduced or measured here yet — do that first (Playwright device emulation with `hasTouch: true, isMobile: true, deviceScaleFactor: 2`; the URL-bar condition itself still can't be emulated).
+
+  1. **Ladder (tracksheet): the artist + track text blurs away as you scroll.** "makin di scroll makin ilang" — the further into the section, the more the text disappears. The out-of-window rows are *meant* to fall into blur, but on the phone the reading row itself is going with them. Suspects: the two-line mobile fold changing row heights so the focus window drifts off the rows; svh vs the URL bar moving the window's centre; or the blur ramp being tuned for the desktop row height. Measure the focused row's blur/opacity at several --p on a 390@2x context first.
+  2. **Dossier records 2 and 3: the poster vanishes before it becomes the ground for the description.** Record 1 behaves. Suspects, in order: the flyers are `loading="lazy"` and records 2/3's images arrive after their beat has started (record 1's is on screen early — check network timing); the sheet handover (`--app` ramp) dipping the flyer to invisible between records; or --recede firing early on short slices. If it is lazy-loading, the fix is eager/preload for the two below-fold flyers, not a retimed choreography.
+
+  What the phone confirmed good: **video loads fine, quickly** (the 720 encode + lazy-attach doing its job), and **desktop is where the user wants it** ("overall desktop udah bagus").
+
+  iOS Safari remains untested — `position: sticky` inside `overflow: hidden`, and `svh`, are where it most often differs. LAN route for the next read: `npx astro dev --host`, open the LAN address on the phone (same wifi).
 - 320px still stacks the header into three rows (111px). It degrades without overflowing, so it was left; worth a look if that width matters.
 - `docs/design.md` still contradicts the build (it says "motion restrained", "no decorative gradients"). The user has said it can be rewritten.
 - Optional: one of the three `split-frame`s could run in reverse — five frames converging into one instead of pulling apart — so the set reads as a sequence rather than the same effect three times. One line: invert `--pi`.
@@ -177,10 +181,13 @@ The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the ki
 Lanjutin project perspex909 (working dir sama, Bahasa Indonesia, ringkas, langsung fix).
 Baca HANDOFF.md di root repo dulu. Jangan pernah pakai kata "underground" di copy.
 
-Situs udah one-page: semua ada di src/pages/index.astro, nav-nya anchor,
-menu atas dan menu penutup dibangun dari navItems yang sama. Jangan dipecah
-lagi jadi multi-page, dan jangan taro link keluar (IG/SC/Bandcamp) di menu —
-itu tempatnya di footer.
+Situs one-page di src/pages/index.astro, nav anchor, menu atas + penutup dari
+navItems yang sama (urutannya udah urutan dokumen: About, Archive, Release,
+Shop). Semua gambar di-swap lewat list literal di index.astro (wings,
+stackCards, reels, galleryProd, reelWings, teeWings). Gambar arsip baru yang
+lebarnya >820px WAJIB dibikinin companion -800.webp (sharp q80) dan
+ditambahin ke map `wide` di atas index.astro. File yang gak direferensi
+jangan ditaro di public/ — tarunya di unused/.
 
 Yang WAJIB dijaga:
 - Koreografi nggak boleh pernah benar-benar beku
@@ -188,31 +195,28 @@ Yang WAJIB dijaga:
 - Jangan kasih label di jeda antar section
 - Nggak ada warna aksen. Emphasis pakai cahaya: putih solid, putih redup,
   dan chrome buat display type di ground gelap (min ~28px, jangan di kertas)
-- Halaman panjang (43 layar) itu disengaja, jangan dipotong tanpa nanya
+- Halaman panjang (47 layar desktop) itu disengaja, jangan dipotong tanpa nanya
 
-MULAI DARI SINI: baca situsnya di HP beneran. Itu satu-satunya yang
-nggak bisa dikerjain dari sini — semua angka di HANDOFF masih emulasi,
-Chromium nggak punya URL bar, dan iOS Safari sama sekali belum kesentuh.
-Cara paling cepet tanpa deploy: `npx astro dev --host`, buka alamat LAN-nya
-di HP (wifi yang sama). Yang paling perlu dirasain: momen URL bar nyembunyi
-(ada yang nyentak nggak), beat dossier yang baru (poster cukup lama sendirian
-nggak, dan 0.18 kebaca sebagai ground apa jadi kotor di belakang teks),
-reel strip pakai jempol, sama 32.6 layar itu perjalanan apa siksaan.
+MULAI DARI SINI — dua bug dari HP BENERAN (laporan gue sendiri, belum
+direproduksi di emulator, ukur dulu baru fix):
+1. Tracksheet/ladder di HP: makin di-scroll, teks artis + track makin
+   keblur ilang. Row yang lagi dibaca ikut kena blur, bukan cuma yang di
+   luar window. Detail + dugaan penyebab di HANDOFF bagian "Still open".
+2. Dossier record 2 & 3: posternya ilang duluan sebelum sempet jadi
+   background deskripsi. Record 1 normal. Cek dulu apakah ini lazy-loading
+   (flyer 2/3 telat dateng) sebelum nyalahin koreografi.
 
-Flyer arsip di HP udah dibenerin (commit 094c44c): tiap record sekarang
-buka dengan posternya sendirian edge-to-edge, baru posternya mundur jadi
-ground di belakang record. Runway dossier di HP 340 -> 440svh. Nol biaya
-byte, desktop nggak berubah — angkanya di HANDOFF bagian "Mobile".
+Yang udah dikonfirmasi dari HP: video aman & cepet, desktop overall udah
+bagus — jangan diutak-atik tanpa alasan.
 
-Mobile udah diaudit dan 7 bug asli udah difix — detailnya di HANDOFF
-bagian "Mobile".
-
-Satu lagi yang belum keverifikasi: public/_headers baru bisa dicek setelah
-deploy — `curl -I https://perspex909.com/archive/compilation.mp4`, cari
-cache-control-nya.
+Status: semua di-push ke origin/main (0a65da1). Deploy BELUM — npm run
+deploy, abis itu verifikasi _headers:
+curl -I https://perspex909.com/archive/compilation.mp4 (cari cache-control).
+iOS Safari juga masih belum kesentuh sama sekali.
 
 Playwright ada di scratchpad browse/. Ukur angkanya, jangan cuma dilihat —
-one.mjs buat peta section + error, weight2.mjs buat berat halaman,
-digest.mjs buat buktiin perubahan CSS nggak ngubah apa-apa yang kegambar,
-rm2.mjs buat reduced-motion + mobile.
+buat bug HP pakai context {hasTouch:true, isMobile:true, deviceScaleFactor:2}.
+one.mjs peta section + error, weight2/weightm2 berat halaman, digest.mjs
+bukti CSS nggak ngubah yang kegambar, scan404.mjs cek 4xx, orphans.mjs
+selector mati, rm2.mjs reduced-motion.
 ```
