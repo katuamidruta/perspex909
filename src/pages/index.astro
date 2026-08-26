@@ -38,9 +38,15 @@ const ledger = [
   { label: "Order", value: "Bandcamp / WA" },
 ];
 
-// 05 — STACK. What deals into the pile. Its own image per event when one is
-// given; otherwise the flyer, which 06 is fetching regardless.
-const stackCards = events.map((entry) => entry.stackImage ?? entry.flyerImage);
+// 05 — STACK. What deals into the pile — one card per event, top to bottom
+// in this order. Swap any src here; the dossier in 06 keeps drawing the
+// flyers from events.ts either way. (While these were the same three files,
+// the pile cost nothing extra; each different src here is one more image.)
+const stackCards = [
+  { src: "/archive/random1-2.webp", alt: "Nightspacer x Perspex — field documentation" },
+  { src: "/archive/random1-4.webp", alt: "Campout Vol. II — field documentation" },
+  { src: "/archive/random1-8.webp", alt: "Entering 2026 Portal — field documentation" },
+];
 
 // 06 — DOSSIER. Each record unrolls in place: the flyer held on the left,
 // the sheet writing itself out on the right, one row at a time.

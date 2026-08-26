@@ -22,13 +22,7 @@ export type ArchiveEntry = {
   location: string;
   summary: string;
   description: string[];
-  /* 06, the dossier: the record's own poster. */
   flyerImage: ArchiveImage;
-  /* 05, the pile: what deals onto the table. Leave it out and the pile
-     draws the flyer, which costs nothing because the dossier fetches that
-     one anyway. Set it and the two sections show different pictures — and
-     the page pays for a second image per event. */
-  stackImage?: ArchiveImage;
   videos?: ArchiveVideo[];
   sections: ArchiveSection[];
   tags: string[];
