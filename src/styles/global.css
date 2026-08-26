@@ -391,7 +391,6 @@ body.is-loaded .site-loader {
 
 .site-footer {
   margin-top: 0;
-  border-top: 1px solid var(--line);
   border-bottom: 0;
   background: var(--color-paper);
   color: var(--color-ink);
@@ -451,6 +450,9 @@ body.is-loaded .site-loader {
 
 .ledger-line,
 .release-note {
+  /* Same plan as the bio and the tee sheet: centred, wide, filled. */
+  width: min(100%, calc(1080px + 2 * var(--page-pad)));
+  margin: 0 auto;
   padding: clamp(28px, 5vw, 64px) var(--page-pad);
 }
 

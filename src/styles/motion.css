@@ -413,6 +413,9 @@
   position: absolute;
   inset: 0;
   z-index: var(--i);
+  /* The sheets stack; an invisible one on top must not eat the visible
+     one's clicks. Only the CTA answers the pointer (re-enabled below). */
+  pointer-events: none;
   display: grid;
   grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
   gap: clamp(20px, 4vw, 68px);
@@ -529,7 +532,10 @@
 
 .dossier-row--link { margin-top: clamp(10px, 2vh, 22px); }
 
-.dossier-row--link .cta { border-color: color-mix(in srgb, currentColor 46%, transparent); }
+.dossier-row--link .cta {
+  border-color: color-mix(in srgb, currentColor 46%, transparent);
+  pointer-events: auto;
+}
 
 /* Below 900px there is no column to hold the flyer beside the record.
    Measured at 390: the record runs 523-535px and a real phone leaves about
@@ -944,10 +950,9 @@
   height: calc(100svh - var(--header-h));
   display: flex;
   align-items: center;
-  /* The sheet starts at the page edge like every other block of prose —
-     the release note, the dossier record, the bio. Centred, it read as a
-     different document. */
-  justify-content: flex-start;
+  /* Centred on the bio's plan: the block sits mid-stage but runs wide
+     (min(100%, 1080px)), so the sides are filled rather than empty. */
+  justify-content: center;
 }
 
 .artifact-columns {
@@ -985,10 +990,8 @@
 .artifact-veil {
   position: absolute;
   inset: 0;
-  /* The dark core follows the sheet to the left edge, where the reading
-     matter lives now. */
   background: radial-gradient(
-    ellipse at 26% 50%,
+    ellipse at 50% 50%,
     rgba(0, 0, 0, 0.84) 26%,
     rgba(0, 0, 0, 0.58) 100%
   );
@@ -998,7 +1001,7 @@
   --a: clamp(0, calc(var(--p) / 0.24), 1);
   position: relative;
   z-index: 2;
-  width: min(100%, 760px);
+  width: min(100%, 1080px);
   padding: 0 var(--page-pad);
   opacity: var(--a);
   transform: translate3d(0, calc((0.5 - var(--p)) * 72px), 0);

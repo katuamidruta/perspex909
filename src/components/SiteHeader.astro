@@ -9,7 +9,7 @@ const numbered = navItems.map((item, index) => ({
 ---
 
 <header class="site-header">
-  <nav class="site-nav site-nav--l" aria-label="Archive and releases">
+  <nav class="site-nav site-nav--l" aria-label="Label and archive">
     {
       numbered.slice(0, half).map((item) => (
         <a href={item.href}>
@@ -24,7 +24,7 @@ const numbered = navItems.map((item, index) => ({
     <img src="/logo.png" alt={site.displayName} />
   </a>
 
-  <nav class="site-nav site-nav--r" aria-label="Shop and information">
+  <nav class="site-nav site-nav--r" aria-label="Release and shop">
     {
       numbered.slice(half).map((item) => (
         <a href={item.href}>
