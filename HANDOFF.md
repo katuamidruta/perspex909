@@ -9,7 +9,7 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No U
 - **The site is one page.** `archive/`, `releases/`, `shop/` and `about/` are folded into `src/pages/index.astro`; the build emits **1 page**, not 10.
 - `npx astro build` passes. `npx astro check` reports no errors in `src/` (the 747 it prints are all from `mono/`, which is reference material and not part of the build).
 - Dev server on port 4330; `astro preview` on 4331 was used for the production weight numbers.
-- **All committed, working tree clean.** Session 6 shipped 8 commits from `f1cb942`; session 7 added the mobile pass on top.
+- **All committed, working tree clean.** Session 6 shipped 8 commits from `f1cb942`; session 7 added 2 more (`6cf4393` the mobile defect pass, `a284a0d` caching + the phone-sized encode).
 
 ## The page, in order
 
@@ -124,7 +124,9 @@ Earlier groundwork that still holds:
 
 ## Verification tooling — use it, do not guess
 
-Playwright with real Chrome lives in the session scratchpad under `browse/`. Scripts: `one.mjs` (full-scroll shoot + section map + console errors), `probe1.mjs` (computed values at set offsets), `fixed.mjs` (shots at fixed offsets), `digest.mjs` (the layout digest described above), `weight2.mjs` (production weight, split into first-paint and full-scroll), `rm2.mjs` (reduced-motion + 390px, flags any frame that collapses to a flat colour), plus the older `shoot/diag/hover/grain/weight` scripts.
+Playwright with real Chrome lives in the session scratchpad under `browse/`. Scripts: `one.mjs` (full-scroll shoot + section map + console errors), `probe1.mjs` (computed values at set offsets), `fixed.mjs` (shots at fixed offsets), `digest.mjs` (the layout digest described above), `weight2.mjs` (production weight, split into first-paint and full-scroll), `rm2.mjs` (reduced-motion + 390px, flags any frame that collapses to a flat colour), `scrubfix.mjs` (forces a stage/window height mismatch to prove `--p` tracks the stage), plus the older `shoot/diag/hover/grain/weight` scripts.
+
+For anything touch-related, emulate a real device rather than just a narrow window — `browser.newContext({ viewport, hasTouch: true, isMobile: true })`. That is what makes `(hover: none)` match and `page.touchscreen.tap()` behave; a plain 390px desktop context still reports `hover: hover` and will hide exactly the bugs you are looking for.
 
 If the scratchpad is gone: `npm install playwright` anywhere and use `chromium.launch({ channel: "chrome" })`. **Use `waitUntil: "domcontentloaded"`, never `networkidle`.** Measure numbers — opacity, transform, `--p`, byte counts, SSIM — rather than only looking. Note that editing files while `astro dev` is running can push an HMR error overlay into an in-flight screenshot run; reload and re-shoot.
 
@@ -143,7 +145,10 @@ The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the ki
 
 ## Still open
 
-- **Read it on an actual phone.** The audit is done and the defects are fixed, but every number here is still emulation: Chromium has no URL bar, so the exact condition that caused the worst bug cannot be reproduced here, only reasoned about and simulated. iOS Safari is entirely untested — `position: sticky` inside `overflow: hidden`, and `svh` behaviour, are where it most often differs.
+- **Read it on an actual phone. This is the one thing left that nobody else can do.** The audit is done and the defects are fixed, but every number here is still emulation: Chromium has no URL bar, so the exact condition behind the worst bug cannot be reproduced here, only simulated. iOS Safari is entirely untested — `position: sticky` inside `overflow: hidden`, and `svh` behaviour, are where it most often differs.
+  - Fastest route, no deploy: `npx astro dev --host`, then open the printed LAN address on the phone (same wifi).
+  - The deployed route: `npm run deploy`, which is also what finally verifies `_headers`.
+  - Worth feeling specifically: the URL-bar moment (scroll down, let the bar hide, watch whether anything snaps); the reel strip under a thumb; 36 tracks of the ladder scan; and whether 31 viewports is a journey or a chore.
 - 320px still stacks the header into three rows (111px). It degrades without overflowing, so it was left; worth a look if that width matters.
 - `docs/design.md` still contradicts the build (it says "motion restrained", "no decorative gradients"). The user has said it can be rewritten.
 - Optional: one of the three `split-frame`s could run in reverse — five frames converging into one instead of pulling apart — so the set reads as a sequence rather than the same effect three times. One line: invert `--pi`.
@@ -170,8 +175,15 @@ Yang WAJIB dijaga:
   dan chrome buat display type di ground gelap (min ~28px, jangan di kertas)
 - Halaman panjang (43 layar) itu disengaja, jangan dipotong tanpa nanya
 
-Prioritas berikutnya: pass mobile beneran — buka di HP, baca, rasain.
-Angka-angka di HANDOFF itu geometri, belum penilaian.
+Mobile udah diaudit dan 6 bug asli udah difix (detailnya di HANDOFF bagian
+"Mobile"). Yang tersisa cuma yang nggak bisa gue kerjain sendiri: baca di HP
+beneran. Semua angka di HANDOFF masih emulasi — Chromium nggak punya URL bar.
+Cara paling cepet tanpa deploy: `npx astro dev --host`, buka alamat LAN-nya
+di HP (wifi yang sama). iOS Safari sama sekali belum kesentuh.
+
+Satu lagi yang belum keverifikasi: public/_headers baru bisa dicek setelah
+deploy — `curl -I https://perspex909.com/archive/compilation.mp4`, cari
+cache-control-nya.
 
 Playwright ada di scratchpad browse/. Ukur angkanya, jangan cuma dilihat —
 one.mjs buat peta section + error, weight2.mjs buat berat halaman,
