@@ -144,9 +144,17 @@ const ogImageURL = new URL(image, Astro.site);
         }
       }
 
+      // A phone was pulling a 960px-wide clip to paint it 390px wide, and at
+      // the moment the split narrows, 187px wide. That is not a trade-off to
+      // weigh, it is waste: the narrow encode is half the bytes for pixels
+      // the screen cannot resolve anyway.
+      const narrowScreen = window.matchMedia("(max-width: 800px)").matches;
+
       if (bgVideos.length && !reduceMotion && !saveData) {
         const attachVideo = (video) => {
-          const src = video.getAttribute("data-src");
+          const src =
+            (narrowScreen && video.getAttribute("data-src-narrow")) ||
+            video.getAttribute("data-src");
           if (!src || video.src) return;
           video.src = src;
           video.load();

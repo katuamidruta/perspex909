@@ -4,12 +4,12 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No U
 
 > Background lives in project memory (`MEMORY.md` + files), auto-loaded each session. This file is "where we left off".
 
-## Status (end of session 6 — 2026-08-24 into 08-25)
+## Status (end of session 7 — 2026-08-27)
 
 - **The site is one page.** `archive/`, `releases/`, `shop/` and `about/` are folded into `src/pages/index.astro`; the build emits **1 page**, not 10.
 - `npx astro build` passes. `npx astro check` reports no errors in `src/` (the 747 it prints are all from `mono/`, which is reference material and not part of the build).
 - Dev server on port 4330; `astro preview` on 4331 was used for the production weight numbers.
-- **All committed, working tree clean.** The session shipped 8 commits from `f1cb942`.
+- **All committed, working tree clean.** Session 6 shipped 8 commits from `f1cb942`; session 7 added the mobile pass on top.
 
 ## The page, in order
 
@@ -81,6 +81,12 @@ Archive prints are **bare images now** — the 3px `--chrome-bezel` rim came off
 4. **Do not label a pause.** Both interludes stay empty. They are also the tool for pacing: the run into the archive read as a hard cut off the back of the ledger grid, and 46svh of nothing fixed it. A longer scroll is an acceptable price — the user said so explicitly.
 5. **Prove a CSS deletion changed nothing.** Screenshot bytes are useless here — the grain animates and the video plays, so every frame differs. `browse/digest.mjs` dumps geometry plus paint-critical computed styles for all 603 elements at seven scroll positions; before/after the prune, **20 of 4221 element-states differed, every one of them an animation phase (loader scan position, grain drift, an in-flight transition) or a ±1px rounding**.
 
+## Caching and the mobile video budget
+
+- **`public/_headers` now ships.** Without it a repeat visit paid full price — measured 39 requests / 5.87MB on the *second* load, zero 304s. Hashed `_astro/*` and `fonts/*` get the immutable year; media gets 30 days, deliberately not a year, because those filenames are hand-written and replacing a flyer under the same name should not be a year-long lie. **Unverified in production** — the sandbox cannot reach `perspex909.com` (DNS is intercepted). After the next deploy, confirm with `curl -I https://perspex909.com/archive/compilation.mp4` and look for the `cache-control`.
+- **A phone gets a narrower encode of the release clip.** It was pulling the 960px master to paint it 390px wide, and 187px wide once the split narrows — waste, not a trade-off. `compilation-720.mp4` (720×406, 1.31MB, SSIM 0.923 against the master) is picked by the existing lazy-attach via `data-src-narrow`, gated on `(max-width: 800px)`. **Mobile full-scroll: 5.87MB → 4.53MB**, with no content dropped. Desktop is unchanged.
+- Dropping video on mobile altogether was offered and *not* taken — the waste was the resolution, not the video.
+
 ## Page weight — measured on the production build (`astro preview`, dist/)
 
 | | requests | bytes |
@@ -101,7 +107,16 @@ Still unreferenced in `public/` (~900KB, left in place deliberately): `campout2-
 
 ## Mobile
 
-Not a full pass, but no longer untested:
+Session 7 audited it properly and it turned up six real defects, not polish items. All fixed and measured:
+
+- **The scrub engine was measuring against the wrong ruler.** Runways are authored in `svh` (fixed to the small viewport); the JS divided by `window.innerHeight` (live). Those agree on a desktop and disagree on a phone the instant the URL bar retracts — `--p` jumped ~4%, snapping every choreography at once, and reached 1 while the stage was still pinned, which is the frozen hold rule 1 forbids. Each runway now measures against **its own stage**, the thing that actually unpins. Verified by forcing a 30% stage/window mismatch: `--p` lands on exactly 1.0 at the unpin point at both stage heights (`browse/scrubfix.mjs`).
+- **Two source-order bugs in the header.** A second `@media (max-width: 800px)` block in `global.css` overrode the first, making `.site-mark`'s `grid-column` a no-op and stacking the header into three rows; and the mobile `40px` mark sat *above* the base `56px` rule at equal specificity, so it never applied. Header on a phone: **131px → 82px**, returned to each of the five sections that pin below it. One nav row from 344px up; below that it wraps rather than overflowing.
+- **Off-centre reels were invisible but tappable** — a tap on an apparently empty tile started a video. Only the reel under the head answers now, and one that scrolls out from under the head gives its iframe back instead of playing on off-screen inside a clipped stage. `--focus` is registered with `@property` so the handler reads a number, not the `calc()` expression as a string.
+- **The reel tile was 71svh tall in a stage with ~62svh to give it**, so the reel's own label was clipped off the bottom. Sized from its height budget now; fits at 390 and 1440 alike.
+- **Tap targets.** Nav links were a bare 12px line box — a ~15px target, the smallest on the site. Now 37px. CTAs 42 → 44px.
+- **The menu's counter was frozen on touch.** Scroll position cannot stand in for the cursor there: the menu is the last block on the page, so its rows can never reach the middle of the screen (measured — the document ends 125px below the last row). The touch itself is the input instead, via `pointerdown`, verified across all four rows.
+
+Earlier groundwork that still holds:
 
 - **`--header-h` is measured, not guessed.** BaseLayout reads the real header height and writes it back to `:root` (ResizeObserver, with a resize listener fallback). Verified: 127px at 390/640/800, 81px at 1440, and `.dossier .stage`'s `top` follows exactly. The CSS value is now only the pre-script fallback.
 - **Runways are shorter below 800px** (`--3/--4/--5` → 220/280/340svh). Every choreography is a function of `--p`, so a shorter runway just plays it faster — nothing needed retiming. Mobile went from 37 viewports of scrolling to **31.6** (26,698px at 390×844) — shorter than it would otherwise be, on a page that has grown two runways since.
@@ -128,7 +143,8 @@ The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the ki
 
 ## Still open
 
-- **A real mobile pass. Highest-risk item.** The numbers are geometry, not judgement — nobody has read this page on a phone. 31.6 viewports is a lot of thumb, and the reel strip and ladder scan have only been checked as screenshots there, never felt.
+- **Read it on an actual phone.** The audit is done and the defects are fixed, but every number here is still emulation: Chromium has no URL bar, so the exact condition that caused the worst bug cannot be reproduced here, only reasoned about and simulated. iOS Safari is entirely untested — `position: sticky` inside `overflow: hidden`, and `svh` behaviour, are where it most often differs.
+- 320px still stacks the header into three rows (111px). It degrades without overflowing, so it was left; worth a look if that width matters.
 - `docs/design.md` still contradicts the build (it says "motion restrained", "no decorative gradients"). The user has said it can be rewritten.
 - Optional: one of the three `split-frame`s could run in reverse — five frames converging into one instead of pulling apart — so the set reads as a sequence rather than the same effect three times. One line: invert `--pi`.
 - The reel strip labels repeat the event name five times for Portal. Honest for an index, but a per-reel label would read better.

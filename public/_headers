@@ -1,0 +1,29 @@
+# Cloudflare Workers Static Assets reads this file from the assets directory.
+# Without it a repeat visit pays full price: measured 39 requests / 5.87MB on
+# the second load, with zero 304s.
+#
+# The media is content-addressed by hand, not by hash, so it does not get the
+# immutable year — a month is long enough to make return visits free and short
+# enough that replacing a flyer under the same name is not a year-long lie.
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/archive/*
+  Cache-Control: public, max-age=2592000
+
+/*.mp4
+  Cache-Control: public, max-age=2592000
+
+/*.png
+  Cache-Control: public, max-age=2592000
+
+/*.svg
+  Cache-Control: public, max-age=2592000
+
+# The document itself must always be revalidated, or a deploy never lands.
+/
+  Cache-Control: public, max-age=0, must-revalidate
