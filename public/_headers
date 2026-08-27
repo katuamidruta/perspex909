@@ -15,13 +15,18 @@
 /archive/*
   Cache-Control: public, max-age=2592000
 
-/*.mp4
+# Root-level media, named explicitly: the * glob crosses slashes, so a
+# /*.mp4 rule would double up with /archive/* on every archive clip.
+/hero.mp4
   Cache-Control: public, max-age=2592000
 
-/*.png
+/logo.png
   Cache-Control: public, max-age=2592000
 
-/*.svg
+/logo-loading.png
+  Cache-Control: public, max-age=2592000
+
+/favicon.svg
   Cache-Control: public, max-age=2592000
 
 # The document itself must always be revalidated, or a deploy never lands.
