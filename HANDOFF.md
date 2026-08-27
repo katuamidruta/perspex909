@@ -170,46 +170,18 @@ The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the ki
 
 ## Resume prompt
 
+The task queue is empty — the site is live (perspex909.kucingdigital.workers.dev,
+newest version verified byte-identical), both phone bugs are confirmed fixed on a
+real phone, iOS Safari is clean, _headers is verified in production. Only the
+domain connect remains, and that is the user's dashboard work.
+
+For any future session, this is enough:
+
 ```
-Lanjutin project perspex909 (working dir sama, Bahasa Indonesia, ringkas, langsung fix).
-Baca HANDOFF.md di root repo dulu. Jangan pernah pakai kata "underground" di copy.
-
-Situs one-page di src/pages/index.astro, nav anchor, menu atas + penutup dari
-navItems yang sama (urutannya udah urutan dokumen: About, Archive, Release,
-Shop). Semua gambar di-swap lewat list literal di index.astro (wings,
-stackCards, reels, galleryProd, reelWings, teeWings). Gambar arsip baru yang
-lebarnya >820px WAJIB dibikinin companion -800.webp (sharp q80) dan
-ditambahin ke map `wide` di atas index.astro. File yang gak direferensi
-jangan ditaro di public/ — tarunya di unused/.
-
-Yang WAJIB dijaga:
-- Koreografi nggak boleh pernah benar-benar beku
-- Jangan ninggalin token/rule yang nggak ada yang pakai
-- Jangan kasih label di jeda antar section
-- Nggak ada warna aksen. Emphasis pakai cahaya: putih solid, putih redup,
-  dan chrome buat display type di ground gelap (min ~28px, jangan di kertas)
-- Halaman panjang (47 layar desktop) itu disengaja, jangan dipotong tanpa nanya
-
-MULAI DARI SINI — dua bug dari HP BENERAN (laporan gue sendiri, belum
-direproduksi di emulator, ukur dulu baru fix):
-1. Tracksheet/ladder di HP: makin di-scroll, teks artis + track makin
-   keblur ilang. Row yang lagi dibaca ikut kena blur, bukan cuma yang di
-   luar window. Detail + dugaan penyebab di HANDOFF bagian "Still open".
-2. Dossier record 2 & 3: posternya ilang duluan sebelum sempet jadi
-   background deskripsi. Record 1 normal. Cek dulu apakah ini lazy-loading
-   (flyer 2/3 telat dateng) sebelum nyalahin koreografi.
-
-Yang udah dikonfirmasi dari HP: video aman & cepet, desktop overall udah
-bagus — jangan diutak-atik tanpa alasan.
-
-Status: semua di-push ke origin/main (0a65da1). Deploy BELUM — npm run
-deploy, abis itu verifikasi _headers:
-curl -I https://perspex909.com/archive/compilation.mp4 (cari cache-control).
-iOS Safari juga masih belum kesentuh sama sekali.
-
-Playwright ada di scratchpad browse/. Ukur angkanya, jangan cuma dilihat —
-buat bug HP pakai context {hasTouch:true, isMobile:true, deviceScaleFactor:2}.
-one.mjs peta section + error, weight2/weightm2 berat halaman, digest.mjs
-bukti CSS nggak ngubah yang kegambar, scan404.mjs cek 4xx, orphans.mjs
-selector mati, rm2.mjs reduced-motion.
+Lanjutin project perspex909 (working dir sama, Bahasa Indonesia, ringkas,
+langsung fix). Baca HANDOFF.md di root repo dulu — konvensi swap gambar,
+aturan -800/srcset, unused/, dan semua rule desain ada di situ.
+Jangan pernah pakai kata "underground" di copy.
 ```
+
+…plus whatever the new task is.
