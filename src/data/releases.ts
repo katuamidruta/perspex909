@@ -14,7 +14,8 @@ export type Release = {
   releaseDate: string;
   format: string;
   trackCount: number;
-  coverImage?: string;
+  /* Required: the chronicle draws it and srcset() reads it. */
+  coverImage: string;
   coverAlt: string;
   summary: string;
   notes: string[];

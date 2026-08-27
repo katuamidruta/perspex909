@@ -1,5 +1,6 @@
 export type ProductImage = {
-  src?: string;
+  /* Required: every product image renders an <img> and feeds srcset(). */
+  src: string;
   alt: string;
   label: string;
   credit?: string;
