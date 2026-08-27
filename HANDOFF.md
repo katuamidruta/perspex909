@@ -4,7 +4,7 @@ Astro v5 static site for the Perspex909 electronic-music label (Indonesia). No U
 
 > Background lives in project memory (`MEMORY.md` + files), auto-loaded each session. This file is "where we left off".
 
-## Status (end of session 10 — 2026-08-27, pushed to GitHub)
+## Status (end of session 11 — 2026-08-28)
 
 - **The site is one page.** `archive/`, `releases/`, `shop/` and `about/` are folded into `src/pages/index.astro`; the build emits **1 page**, not 10.
 - `npx astro build` passes. `npx astro check` reports no errors in `src/` (the 747 it prints are all from `mono/`, which is reference material and not part of the build).
@@ -161,14 +161,7 @@ The tee is **sold out**: `soldOut: true` in `src/data/products.ts` drives the ki
 
 ## Still open
 
-- **The real-phone read happened (end of session 10) and found two real bugs. START WITH THESE.** Everything below is the user's own report from their phone; neither has been reproduced or measured here yet — do that first (Playwright device emulation with `hasTouch: true, isMobile: true, deviceScaleFactor: 2`; the URL-bar condition itself still can't be emulated).
-
-  1. **Ladder (tracksheet): the artist + track text blurs away as you scroll.** "makin di scroll makin ilang" — the further into the section, the more the text disappears. The out-of-window rows are *meant* to fall into blur, but on the phone the reading row itself is going with them. Suspects: the two-line mobile fold changing row heights so the focus window drifts off the rows; svh vs the URL bar moving the window's centre; or the blur ramp being tuned for the desktop row height. Measure the focused row's blur/opacity at several --p on a 390@2x context first.
-  2. **Dossier records 2 and 3: the poster vanishes before it becomes the ground for the description.** Record 1 behaves. Suspects, in order: the flyers are `loading="lazy"` and records 2/3's images arrive after their beat has started (record 1's is on screen early — check network timing); the sheet handover (`--app` ramp) dipping the flyer to invisible between records; or --recede firing early on short slices. If it is lazy-loading, the fix is eager/preload for the two below-fold flyers, not a retimed choreography.
-
-  What the phone confirmed good: **video loads fine, quickly** (the 720 encode + lazy-attach doing its job), and **desktop is where the user wants it** ("overall desktop udah bagus").
-
-  iOS Safari remains untested — `position: sticky` inside `overflow: hidden`, and `svh`, are where it most often differs. LAN route for the next read: `npx astro dev --host`, open the LAN address on the phone (same wifi).
+- **The two real-phone bugs are fixed (session 11, `d2a0b36`) — but the fixes are verified in emulation only. The next phone read should confirm them.** What to feel for: the tracksheet stays sharp inside the cursor window all the way to track 36 (the mobile row fold had desynced the row ruler from the list's travel — one `--rowh` variable now rules row height, list transform and cursor); and dossier records 2/3 hold their poster at full for a real beat before it settles to a 0.30 ground behind the text (was ~130px of full poster, then an 0.18 ground that read as gone; not a loading problem — all three flyers measured loaded). Video and desktop were confirmed good by the user on the phone; desktop proven untouched by digest (15/4,179 diffs, all animation phase).
 - 320px still stacks the header into three rows (111px). It degrades without overflowing, so it was left; worth a look if that width matters.
 - `docs/design.md` still contradicts the build (it says "motion restrained", "no decorative gradients"). The user has said it can be rewritten.
 - Optional: one of the three `split-frame`s could run in reverse — five frames converging into one instead of pulling apart — so the set reads as a sequence rather than the same effect three times. One line: invert `--pi`.
