@@ -534,6 +534,9 @@
 @media (max-width: 900px) {
   .dossier-sheet {
     grid-template-columns: minmax(0, 1fr);
+    /* A quicker entry: the old 0.16 ramp overlapped the poster's beat, so
+       posters 2 and 3 never reached full brightness before receding. */
+    --app: clamp(0, calc(var(--local) / 0.08), 1);
     /* The record starts writing only once the poster has had its beat. */
     --rc: clamp(0, calc((var(--local) - 0.44) / 0.46), 1);
   }
@@ -547,9 +550,11 @@
     height: auto;
     aspect-ratio: auto;
     margin: 0;
-    /* 0 while the poster owns the stage, 1 once it is the ground. */
-    --recede: clamp(0, calc((var(--local) - 0.28) / 0.16), 1);
-    opacity: calc(1 - 0.82 * var(--recede));
+    /* 0 while the poster owns the stage, 1 once it is the ground. Full
+       from 0.08 to 0.34 — a beat the thumb can actually see — and the
+       ground holds 0.30, because 0.18 on a phone panel reads as gone. */
+    --recede: clamp(0, calc((var(--local) - 0.34) / 0.12), 1);
+    opacity: calc(1 - 0.7 * var(--recede));
     transform: translate3d(0, calc((var(--local) - 0.5) * 42px), 0)
       scale(calc(1 - 0.05 * var(--recede)));
   }
@@ -788,6 +793,9 @@
      track number, so the number and the framed row can never disagree. */
   --tn: calc(var(--p) * (var(--n) - 1) + 1);
   --row: clamp(50px, 7svh, 76px);
+  /* THE row ruler. Every consumer — row height, list travel, cursor —
+     reads this one, so a taller mobile row cannot desync the head. */
+  --rowh: var(--row);
   background: var(--color-night);
 }
 
@@ -840,10 +848,10 @@
    and gives the blur outside it something to be outside of. */
 .ladder-cursor {
   position: absolute;
-  top: calc(50% - var(--row) / 2);
+  top: calc(50% - var(--rowh) / 2);
   left: 0;
   right: 0;
-  height: var(--row);
+  height: var(--rowh);
   border-top: 1px solid rgba(255, 255, 255, 0.42);
   border-bottom: 1px solid rgba(255, 255, 255, 0.42);
   background: linear-gradient(
@@ -863,7 +871,7 @@
   padding: 0 var(--page-pad);
   transform: translate3d(
     0,
-    calc(var(--row) * -0.5 - var(--p) * (var(--n) - 1) * var(--row)),
+    calc(var(--rowh) * -0.5 - var(--p) * (var(--n) - 1) * var(--rowh)),
     0
   );
   will-change: transform;
@@ -879,7 +887,7 @@
   grid-template-columns: 68px minmax(0, 1fr) minmax(0, 1.1fr) 74px;
   gap: clamp(12px, 2vw, 30px);
   align-items: center;
-  height: var(--row);
+  height: var(--rowh);
   text-transform: uppercase;
   opacity: calc(0.08 + var(--near) * 0.92);
   filter: blur(calc((1 - var(--near)) * 4px));
@@ -909,11 +917,15 @@
 .ladder-row__dur { text-align: right; }
 
 @media (max-width: 800px) {
+  /* The two-line fold needs a taller row — set it on the ruler, so the
+     list's travel and the cursor stretch with it. Setting it on the row
+     alone is the desync that blurred the whole sheet on a phone. */
+  .ladder { --rowh: calc(var(--row) * 1.3); }
+
   .ladder-row {
     grid-template-columns: 46px minmax(0, 1fr) 62px;
     align-content: center;
     gap: 4px 12px;
-    height: calc(var(--row) * 1.3);
   }
 
   .ladder-row__title { grid-column: 2 / 3; }
